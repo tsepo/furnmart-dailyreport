@@ -24,7 +24,7 @@ public class ReplicationServlet extends GenericServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        
-        if (!response.isCommitted()) {
+        if (response.isCommitted()) {
             return;
         }
         
@@ -36,7 +36,7 @@ public class ReplicationServlet extends GenericServlet {
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        doGet(request, response);
     }
 
    
