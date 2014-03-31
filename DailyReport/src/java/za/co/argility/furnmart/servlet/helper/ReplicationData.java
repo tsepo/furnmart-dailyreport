@@ -4,13 +4,15 @@
  * and open the template in the editor.
  */
 
-package za.co.argility.furnmart.servlet;
+package za.co.argility.furnmart.servlet.helper;
 
 /**
  *
  * @author tmaleka
  */
-public interface SessionAttribute {
-    public static final String OVERVIEW_DATA_TAG = "overview_data";
-    public static final String REPLICATION_DATA_TAG = "replication-data";
+public class ReplicationData {
+    
+    public ReplicationData() {
+    }
+    
 }

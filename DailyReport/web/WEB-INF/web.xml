@@ -4,17 +4,25 @@
         <servlet-name>OverviewServlet</servlet-name>
         <servlet-class>za.co.argility.furnmart.servlet.OverviewServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ReplicationServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.ReplicationServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OverviewServlet</servlet-name>
         <url-pattern>/overview</url-pattern>
     </servlet-mapping>
-     <servlet>
+    <servlet>
         <servlet-name>GenericServlet</servlet-name>
         <servlet-class>za.co.argility.furnmart.servlet.GenericServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GenericServlet</servlet-name>
         <url-pattern>/generic</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReplicationServlet</servlet-name>
+        <url-pattern>/replication</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
