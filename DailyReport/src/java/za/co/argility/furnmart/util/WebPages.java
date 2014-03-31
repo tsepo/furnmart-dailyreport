@@ -16,5 +16,6 @@ public interface WebPages {
     
     public static final String STARTUP_PAGE = BASE_APP_URL + "/index.jsp";
     public static final String OVERVIEW_PAGE = BASE_APP_URL + "/overview.jsp";
+    public static final String REPLICATION_PAGE = BASE_APP_URL + "/replication.jsp";
     
 }

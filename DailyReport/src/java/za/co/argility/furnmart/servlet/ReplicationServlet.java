@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import za.co.argility.furnmart.util.WebPages;
 
 /**
  *
@@ -23,6 +24,13 @@ public class ReplicationServlet extends GenericServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        
+        if (!response.isCommitted()) {
+            return;
+        }
+        
+        // this can be changed later - just for now
+        response.sendRedirect(WebPages.REPLICATION_PAGE);
+        
     }
 
     

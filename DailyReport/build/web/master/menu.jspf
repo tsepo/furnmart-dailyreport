@@ -16,10 +16,10 @@
 
 <!-- Menu Items -->
 <div class="menuSection">
-    <div class="menuItem" onclick="processMenuItem('overview')">
+    <div class="menuItem" onclick="processMenuItem('overview')" >
         <p>OVERVIEW</p>
     </div>
-     <div class="menuItem">
+     <div class="menuItem" onclick="processMenuItem('replication')" >
         <p>REPLICATION</p>
     </div>
      <div class="menuItem">

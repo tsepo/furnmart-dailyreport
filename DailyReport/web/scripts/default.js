@@ -47,4 +47,9 @@ function processMenuItem(option) {
         toggleLoadingTopBar(true);
     }
     
+    // if the REPLICATION menu item is clicked
+    if (option == "replication") {
+        window.location = BASE_URL + "/replication";
+        toggleLoadingTopBar(true);
+    }
 }
