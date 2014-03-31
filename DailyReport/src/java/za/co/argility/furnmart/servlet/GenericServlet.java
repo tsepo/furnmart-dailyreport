@@ -7,7 +7,6 @@
 package za.co.argility.furnmart.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,16 +29,39 @@ public class GenericServlet extends HttpServlet {
        
     }
     
+    /**
+     * Serialises the data to the current 
+     * session
+     * @param request
+     * @param data
+     * @param attribute 
+     */
     protected void saveSession(HttpServletRequest request, Object data, String attribute) {
         HttpSession session = request.getSession(true);
         session.setAttribute(attribute, data);
     }
     
+    /**
+     * Obtains any serialised data from this
+     * current session
+     * 
+     * @param request
+     * @param attribute
+     * @return 
+     */
     protected Object getSessionData(HttpServletRequest request, String attribute) {
         HttpSession session = request.getSession(true);
         return session.getAttribute(SessionAttribute.OVERVIEW_DATA_TAG);
     }
     
+    /**
+     * Redirects to an error page
+     * 
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException 
+     */
     protected void showErrorPage(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); 

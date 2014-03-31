@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import za.co.argility.furnmart.data.DataFactory;
 import za.co.argility.furnmart.servlet.helper.OverviewData;
+import za.co.argility.furnmart.util.WebPages;
 
 /**
  *
@@ -19,7 +20,6 @@ import za.co.argility.furnmart.servlet.helper.OverviewData;
  */
 public class OverviewServlet extends GenericServlet {
 
-    private static final String WEB_PAGE = "/DailyReport/overview.jsp";
    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -44,7 +44,7 @@ public class OverviewServlet extends GenericServlet {
             saveSession(request, data, SessionAttribute.OVERVIEW_DATA_TAG); 
             
             // send a redirect to page 
-            response.sendRedirect(WEB_PAGE); 
+            response.sendRedirect(WebPages.OVERVIEW_PAGE); 
         }
         
         catch (Exception ex) {

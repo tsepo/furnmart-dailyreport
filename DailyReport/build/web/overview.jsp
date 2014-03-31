@@ -4,17 +4,24 @@
     Author     : tmaleka
 --%>
 
+<%@page import="za.co.argility.furnmart.util.WebPages"%>
 <%@page import="java.util.*"%>
 <%@page import="za.co.argility.furnmart.servlet.*" %>
 <%@page import="za.co.argility.furnmart.servlet.helper.*" %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-
 <%
+    // get the data from the session
     OverviewData data = (OverviewData)session.getAttribute(SessionAttribute.OVERVIEW_DATA_TAG);
+    if (data == null) {
+        response.sendRedirect(WebPages.STARTUP_PAGE); 
+        return;
+    }
+
     // the network overview data
     Map<String, Integer> networkOverview = data.getNetworkOverview();
 %>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <html>
     <head>
