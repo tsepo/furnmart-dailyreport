@@ -103,7 +103,7 @@
                             }
                         },
                         tooltip: {
-                            valueSuffix: ' unit'
+                            valueSuffix: ' branch(es)'
                         },
                         plotOptions: {
                             bar: {
@@ -204,7 +204,24 @@
         
     </head>
     <body>
-         
+        
+        <div id="loadingPanel" class="topBar">
+            
+            <div class="wrapper">
+                <table border="0" cellpadding="2" cellspacing="2" id="loadingPanelTable">
+                    <tr>
+                        <td>
+                            <img alt="loading-gif" src="images/loader.gif" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Processing request...</td>
+                    </tr>
+                </table>
+            </div>
+            
+        </div>
+        
         <div class="content" id="content">
             
             <table border="0" width="100%">
@@ -216,8 +233,8 @@
             
             <div style="background: gray; height:1px; width:100%"></div>
             
-            <div class="menuSection" onclick="processMenuItem('overview')">
-                <div class="menuItem">
+            <div class="menuSection">
+                <div class="menuItem" onclick="processMenuItem('overview')">
                     <p>OVERVIEW</p>
                 </div>
                  <div class="menuItem">

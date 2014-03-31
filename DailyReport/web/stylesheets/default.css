@@ -23,7 +23,7 @@ body {
 DIV.topBar {
     
     width: 100%;
-    height: fit-content;
+    height: 100%;
     padding-top: 24px;
     padding-bottom: 24px;
     position: fixed;
@@ -33,8 +33,8 @@ DIV.topBar {
     background: white;
     color: black;
     z-index: 99;
-    opacity: 0.7;
-    border-bottom: 1px solid #C8C8C8;
+    opacity: 0.8;
+    display: none;
     
 }
 
@@ -47,6 +47,12 @@ DIV.wrapper {
     
 }
 
+TABLE#loadingPanelTable {
+    
+    border-collapse: collapse;
+    margin-top: 90px;
+    
+}
 
 DIV.content {
     
