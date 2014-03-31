@@ -17,12 +17,10 @@ public class OverviewData {
     
     private Map<String, Integer> networkOverview;
     private Map<String, Integer> replicationStatusOverview;
-    private Date now;
     
     public OverviewData() {
         this.networkOverview = null;
         this.replicationStatusOverview = null;
-        now = null;
     }
     
     public String getReplicationLabels() {
@@ -51,11 +49,6 @@ public class OverviewData {
          }
          
          return Arrays.toString(temp);
-    }
-    
-    public String getCurrentDate() {
-        now = new Date();
-        return new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm").format(now);
     }
     
     public Map<String, Integer> getNetworkOverview() {

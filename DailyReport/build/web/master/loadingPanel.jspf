@@ -1,0 +1,20 @@
+<%-- any content can be specified here e.g.: --%>
+<%@page import="za.co.argility.furnmart.util.WebPages"%>
+<%@ page pageEncoding="UTF-8" %>
+
+<div id="loadingPanel" class="topBar">
+            
+    <div class="wrapper">
+        <table border="0" cellpadding="2" cellspacing="2" id="loadingPanelTable">
+            <tr>
+                <td>
+                    <img alt="loading-gif" src="<%= WebPages.BASE_APP_URL %>/images/loader.gif" />
+                </td>
+            </tr>
+            <tr>
+                <td>Processing request...</td>
+            </tr>
+        </table>
+    </div>
+
+</div>

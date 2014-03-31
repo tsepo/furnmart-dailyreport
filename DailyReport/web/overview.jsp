@@ -26,15 +26,11 @@
 <html>
     <head>
         <title>Furnmart Daily Report</title>
+        
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         
-        <link rel="stylesheet" type="text/css" href="stylesheets/default.css" />
-        
-        <script type="text/javascript" src="scripts/jquery/jquery-1.11.0.min.js"></script>
-        <script type="text/javascript" src="scripts/high-charts/highcharts.js"></script>
-        <script type="text/javascript" src="scripts/high-charts/modules/exporting.js"></script>
-        <script type="text/javascript" src="scripts/default.js"></script>
+        <%@include file="master/global-header.jspf" %>
         
         <script>
              $(document).ready(function () {
@@ -205,51 +201,11 @@
     </head>
     <body>
         
-        <div id="loadingPanel" class="topBar">
-            
-            <div class="wrapper">
-                <table border="0" cellpadding="2" cellspacing="2" id="loadingPanelTable">
-                    <tr>
-                        <td>
-                            <img alt="loading-gif" src="images/loader.gif" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Processing request...</td>
-                    </tr>
-                </table>
-            </div>
-            
-        </div>
+        <%@include file="master/loadingPanel.jspf" %>
         
         <div class="content" id="content">
             
-            <table border="0" width="100%">
-                <tr>
-                    <td> <h2>Furnmart Daily Summary Report</h2> </td>
-                    <td> <p><b>DATE</b>: <%= data.getCurrentDate() %></p> </td>
-                </tr>
-            </table>
-            
-            <div style="background: gray; height:1px; width:100%"></div>
-            
-            <div class="menuSection">
-                <div class="menuItem" onclick="processMenuItem('overview')">
-                    <p>OVERVIEW</p>
-                </div>
-                 <div class="menuItem">
-                    <p>REPLICATION</p>
-                </div>
-                 <div class="menuItem">
-                    <p>SWITCHING</p>
-                </div>
-                 <div class="menuItem">
-                    <p>NETWORK</p>
-                </div>
-                 <div class="menuItem">
-                    <p>DISK SPACE</p>
-                 </div>
-            </div>
+            <%@include file="master/menu.jspf" %>
             
             <!-- Overview Section -->
             

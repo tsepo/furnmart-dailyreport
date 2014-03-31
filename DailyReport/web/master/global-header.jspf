@@ -1,0 +1,10 @@
+<%-- any content can be specified here e.g.: --%>
+<%@page import="za.co.argility.furnmart.util.WebPages"%>
+<%@ page pageEncoding="UTF-8" %>
+
+<link rel="stylesheet" type="text/css" href="<%= WebPages.BASE_APP_URL %>/stylesheets/default.css" />
+        
+<script type="text/javascript" src="<%= WebPages.BASE_APP_URL %>/scripts/jquery/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="<%= WebPages.BASE_APP_URL %>/scripts/high-charts/highcharts.js"></script>
+<script type="text/javascript" src="<%= WebPages.BASE_APP_URL %>/scripts/high-charts/modules/exporting.js"></script>
+<script type="text/javascript" src="<%= WebPages.BASE_APP_URL %>/scripts/default.js"></script>
