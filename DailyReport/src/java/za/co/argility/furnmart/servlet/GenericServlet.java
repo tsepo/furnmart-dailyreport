@@ -51,7 +51,7 @@ public class GenericServlet extends HttpServlet {
      */
     protected Object getSessionData(HttpServletRequest request, String attribute) {
         HttpSession session = request.getSession(true);
-        return session.getAttribute(SessionAttribute.OVERVIEW_DATA_TAG);
+        return session.getAttribute(attribute);
     }
     
     /**

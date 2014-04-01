@@ -4,6 +4,38 @@
     Author     : tmaleka
 --%>
 
+<%@page import="za.co.argility.furnmart.entity.ReplicationSearchEntity"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="za.co.argility.furnmart.entity.ReplicationEntity"%>
+<%@page import="java.util.List"%>
+<%@page import="za.co.argility.furnmart.servlet.helper.ReplicationData"%>
+<%@page import="za.co.argility.furnmart.servlet.SessionAttribute"%>
+
+<% 
+    // get the data from the session
+    ReplicationData data = (ReplicationData)session.getAttribute(SessionAttribute.REPLICATION_DATA_TAG);
+    if (data == null)
+        response.sendRedirect(WebPages.STARTUP_PAGE); 
+    
+    // replication details
+    List<ReplicationEntity> details = data.getReplicationDetails();
+    if (details == null)
+        details = new ArrayList<ReplicationEntity>();
+    
+    // the branch list
+    List<String> branches = data.getReplicationBranchList();
+    if (branches == null)
+        branches = new ArrayList<String>(); 
+    
+    // process types
+    List<String> processes = data.getProcesses();
+    if (processes == null)
+        processes = new ArrayList<String>();
+    
+    SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy HH:mm:ss");
+    
+%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,6 +44,8 @@
         <title>Replication Details | Furnmart Daily Report</title>
         
         <%@include file="master/global-header.jspf" %>
+        
+        <link type="text/css" rel="stylesheet" href="stylesheets/replication.css" />
         
     </head>
     <body>
@@ -27,6 +61,132 @@
                 <div class="wrapper" ><p>REPLICATION DETAILS</p></div>
             </div>
             <div class="subContentArea">
+                
+                <label>Search Filters:</label><br/>
+                <div>
+                    <form method="post" name="filterReplicationForm" action="<%= WebPages.BASE_APP_URL %>/replication" onsubmit="return validateInput()">
+                        <table border="0" width="60%">
+                            <tr>
+                                <td><label><b>Branch:</b></label></td>
+                                <td><label><b>Process Type:</b></label></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <% 
+                                    ReplicationSearchEntity search = data.getSearch();
+                                    if (search == null) {
+                                        search = new ReplicationSearchEntity();
+                                    }
+                                    
+                                    String selectedBranch = search.getBranchCode();
+                                    if (selectedBranch == null)
+                                        selectedBranch = "ALL";
+                                    
+                                        %>
+                               <td><select name="searchByBranchCode">
+                                       <%  for (String branch : branches) 
+                                            {
+                                        %>
+                                        <option value="<%= branch %>" 
+                                                <% if (selectedBranch.equals(branch))
+                                                    out.print("selected = 'selected'"); %>>
+                                            <%= branch %></option> 
+                                       <%
+                                            }
+                                        %>
+                                    </select>
+                               </td>
+                               <td>
+                                   <%
+                                       String selectedProcess = search.getProcess();
+                                       if (selectedProcess == null)
+                                           selectedProcess = "";
+                                       
+                                       %>
+                                   <select name="processType">
+                                       <% for (String process : processes) {
+                                           %>
+                                           <option value="<%=process %>"
+                                                   <%  
+                                                        if (process.equals(selectedProcess))
+                                                            out.print("selected='selected'");
+                                                   %> 
+                                                   ><%=process %></option>
+                                           <% } %>
+                                   </select>
+                                   
+                               </td>
+                               <td><input type="submit" value="Search" name="search" class="button" /></td>
+                               
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <br/>
+                <table class="replicationDetails" border="0" width="100%">
+                    
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Branch</th>
+                            <th>Audit Up To</th>
+                            <th>Replicate Up To</th>
+                            <th>Difference</th>
+                            <th>Locked</th>
+                            <th>Locked Date</th>
+                            <th>Unlock Date</th>
+                            <th>Process</th>
+                            <th>Comments</th>
+                        </tr>
+                    </thead>
+                 
+                    <tbody>
+                        <% 
+                            for (ReplicationEntity entity : details) {
+                                String className = "branchOk";
+                                if (entity.isIsBranchOk() == false)
+                                    className = "branchWarning";
+                        %>
+                        <tr class="<%= className %>">
+                            <td>   
+                                <% 
+                                    if (entity.isIsBranchOk()) {
+                                        %>
+                                            <img alt="branch ok" src="<%= ReplicationData.BRANCK_OK_IMAGE_URL %>" style="width:36px" />
+                                        <%
+                                    }
+                                    else {
+                                        %>
+                                            <img alt="branch ok" src="<%= ReplicationData.BRANCH_WARNING_IMAGE_URL %>" style="width:36px" />
+                                        <%
+                                    }
+                                %>
+                                
+                            </td>
+                            <td><span class="bigText"><%= entity.getBranchCode() %></span><br/>
+                                <span class="smallText"><%= entity.getBranchName() %></span></td>
+                            <td><%= entity.getAudit() %></td>
+                            <td><%= entity.getReplicate() %></td>
+                            <td><%= entity.getDifference() %></td>
+                            <td><%= entity.isIsLocked() %></td>
+                            <td><% if (entity.getLockedDate() != null) 
+                                        out.println(formatter.format(entity.getLockedDate()));
+                            %></td>
+                            <td><% if (entity.getUnlockedDate() != null) 
+                                        out.println(formatter.format(entity.getUnlockedDate()));
+                            %></td>
+                            <td><%= entity.getProcess() %></td>
+                            <td><p class="comments"><% for (String comment : entity.getComments())  {
+                                        out.println("<span> ● " + comment + "</span><br/>");
+                                }%>
+                                </p>
+                            </td>
+                        </tr>
+                        
+                        <% } %>
+                        
+                    </tbody>
+                </table>
                 
             </div>
             

@@ -6,11 +6,58 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>SQL Update Job Creator</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
+        
+        <link rel="stylesheet" type="text/css" href="stylesheets/default.css" />
+        <script type="text/javascript" src="scripts/default.js"></script>
+        
     </head>
     <body>
-        <div>TODO write content</div>
+        <form method="post" name="sqlJobForm" action="cgi-bin/createSqlUpdateJob.groovy" onsubmit="return createJobFile()" >
+            <div class="main">
+
+                <h2>SQL Update Job Creator</h2>
+                <p>This tool generates a SQL update job script to be used on c9980 web pages.</p>
+
+                <div class="divider"></div>
+
+                <div class="guidelines-section">
+                    <h3>Important guidelines for usage:</h3>
+                    <p>PLEASE CONSIDER THESE GUIDELINES WHEN USING THIS JOB CREATOR:</p>
+                    <ul>
+                        <li>The SQL file must have each query on a single line - each ending with a semi-colon.</li>
+                        <li>The SQL file may not contain any empty lines - even at the end of the file.</li>
+                        <li>The job name must be a friendly name - with no spaces and:</li>
+                        <li><ul>
+                                <li>Not start with 'job.'</li>
+                                <li>Not end with '.sh' or any file extensions.</li>
+                            </ul>
+                        </li>
+                        <li>Copy your job to c9980:/home/ucsretail/jobs.</li>
+                    </ul>
+                </div>
+
+                <div class="divider"></div>
+
+                <label>Enter the friendly name for the job:</label><br/>
+                <input type="text" name="jobName" id="jobName" class="textBox"/><br/>
+
+                <label>Enter the author of the job:</label><br/>
+                <input type="text" name="authorName" id="authorName" class="textBox"/><br/>
+
+                <label>Type a short description:</label><br/>
+                <input type="text" id="jobDescription" name="jobDescription" class="textBox" style="width: 876px"/><br/>
+
+                <label>Type the SQL queries to use:</label><br/>
+                <textarea id="sqlQueries" name="sqlQueries" rows="10"></textarea><br/>
+
+                <br/>
+
+                <input type="submit" class="button" value="Generate" />
+
+            </div>
+        </form>
     </body>
 </html>

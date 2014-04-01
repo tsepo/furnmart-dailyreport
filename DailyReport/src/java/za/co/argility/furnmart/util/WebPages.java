@@ -12,7 +12,8 @@ package za.co.argility.furnmart.util;
  */
 public interface WebPages {
     
-    public static final String BASE_APP_URL = "http://localhost:8080/DailyReport";
+    public static final String BASE_APP_URL = "http://c9980.fm.co.za:8080/DailyReport";
+    //public static final String BASE_APP_URL = "http://localhost:8080/DailyReport";
     
     public static final String STARTUP_PAGE = BASE_APP_URL + "/index.jsp";
     public static final String OVERVIEW_PAGE = BASE_APP_URL + "/overview.jsp";

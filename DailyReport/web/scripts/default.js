@@ -1,6 +1,7 @@
 
 // constants
-var BASE_URL = "http://localhost:8080/DailyReport";
+var BASE_URL = "http://c9980.fm.co.za:8080/DailyReport";
+//var BASE_URL = "http://localhost:8080/DailyReport";
 
 // element IDs
 var LOADING_PANEL_ID = "loadingPanel";
