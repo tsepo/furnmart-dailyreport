@@ -57,76 +57,95 @@
             
             <!-- place logic here -->
             
-             <div class="header">
+            <div class="header">
                 <div class="wrapper" ><p>REPLICATION DETAILS</p></div>
             </div>
+            
+            <div class="subContentArea">
+            
+                <div class="subHeader">SEARCH FILTERS:</div>
+
+                <div style="margin-left: 10px; margin-bottom:30px">
+
+
+                        <form method="post" name="filterReplicationForm" action="<%= WebPages.BASE_APP_URL %>/replication" onsubmit="return validateInput(this)">
+                            <table border="0" width="60%">
+                                <tr>
+                                    <td><label>Branch:</label></td>
+                                       <% 
+                                        ReplicationSearchEntity search = data.getSearch();
+                                        if (search == null) {
+                                            search = new ReplicationSearchEntity();
+                                        }
+
+                                        String selectedBranch = search.getBranchCode();
+                                        if (selectedBranch == null)
+                                            selectedBranch = "ALL";
+
+                                            %>
+                                   <td><select name="searchByBranchCode">
+                                           <%  for (String branch : branches) 
+                                                {
+                                            %>
+                                            <option value="<%= branch %>" 
+                                                    <% if (selectedBranch.equals(branch))
+                                                        out.print("selected = 'selected'"); %>>
+                                                <%= branch %></option> 
+                                           <%
+                                                }
+                                            %>
+                                        </select>
+                                   </td>
+                                    <td><label>Process Type:</label></td>
+                                   <td>
+                                       <%
+                                           String selectedProcess = search.getProcess();
+                                           if (selectedProcess == null)
+                                               selectedProcess = "";
+
+                                           %>
+                                       <select name="processType">
+                                           <% for (String process : processes) {
+                                               %>
+                                               <option value="<%=process %>"
+                                                       <%  
+                                                            if (process.equals(selectedProcess))
+                                                                out.print("selected='selected'");
+                                                       %> 
+                                                       ><%=process %></option>
+                                               <% } %>
+                                       </select>
+
+                                   </td>
+                                   <td><input type="submit" value="Search" name="search" class="button" /></td>
+
+                                </tr>
+                            </table>
+                        </form>
+                </div>
+            </div>
+           
             <div class="subContentArea">
                 
-                <label>Search Filters:</label><br/>
-                <div>
-                    <form method="post" name="filterReplicationForm" action="<%= WebPages.BASE_APP_URL %>/replication" onsubmit="return validateInput()">
-                        <table border="0" width="60%">
-                            <tr>
-                                <td><label><b>Branch:</b></label></td>
-                                <td><label><b>Process Type:</b></label></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <% 
-                                    ReplicationSearchEntity search = data.getSearch();
-                                    if (search == null) {
-                                        search = new ReplicationSearchEntity();
-                                    }
-                                    
-                                    String selectedBranch = search.getBranchCode();
-                                    if (selectedBranch == null)
-                                        selectedBranch = "ALL";
-                                    
-                                        %>
-                               <td><select name="searchByBranchCode">
-                                       <%  for (String branch : branches) 
-                                            {
-                                        %>
-                                        <option value="<%= branch %>" 
-                                                <% if (selectedBranch.equals(branch))
-                                                    out.print("selected = 'selected'"); %>>
-                                            <%= branch %></option> 
-                                       <%
-                                            }
-                                        %>
-                                    </select>
-                               </td>
-                               <td>
-                                   <%
-                                       String selectedProcess = search.getProcess();
-                                       if (selectedProcess == null)
-                                           selectedProcess = "";
-                                       
-                                       %>
-                                   <select name="processType">
-                                       <% for (String process : processes) {
-                                           %>
-                                           <option value="<%=process %>"
-                                                   <%  
-                                                        if (process.equals(selectedProcess))
-                                                            out.print("selected='selected'");
-                                                   %> 
-                                                   ><%=process %></option>
-                                           <% } %>
-                                   </select>
-                                   
-                               </td>
-                               <td><input type="submit" value="Search" name="search" class="button" /></td>
-                               
-                            </tr>
-                        </table>
-                    </form>
-                </div>
-                <br/>
+            <div class="subHeader">REPLICATION DETAILED SUMMARY</div>
+                
+            <div style="margin-left: 10px">
+                
+                <%
+                       String resultsDisplay = null;
+                       if (details.size() == 1)
+                           resultsDisplay = "Returned replication results for " + details.size() + " store.";
+                       else
+                           resultsDisplay = "Returned replication results for " + details.size() + " stores.";
+                %>
+                
+                <p><%= resultsDisplay %></p>
+                <p class="alertText">NB: If the branch is locked or replication crashed on central, please investigate.</p>
+                
                 <table class="replicationDetails" border="0" width="100%">
                     
                     <thead>
-                        <tr>
+                        <tr style="border-top: 1px solid gray">
                             <th></th>
                             <th>Branch</th>
                             <th>Audit Up To</th>
@@ -144,13 +163,13 @@
                         <% 
                             for (ReplicationEntity entity : details) {
                                 String className = "branchOk";
-                                if (entity.isIsBranchOk() == false)
+                                if (entity.isBranchOk() == false)
                                     className = "branchWarning";
                         %>
                         <tr class="<%= className %>">
                             <td>   
                                 <% 
-                                    if (entity.isIsBranchOk()) {
+                                    if (entity.isBranchOk()) {
                                         %>
                                             <img alt="branch ok" src="<%= ReplicationData.BRANCK_OK_IMAGE_URL %>" style="width:36px" />
                                         <%
@@ -168,7 +187,11 @@
                             <td><%= entity.getAudit() %></td>
                             <td><%= entity.getReplicate() %></td>
                             <td><%= entity.getDifference() %></td>
-                            <td><%= entity.isIsLocked() %></td>
+                            <td><% if (entity.isLocked()) 
+                                            out.print("Yes");
+                                    else out.print("No"); 
+                                %>
+                            </td>
                             <td><% if (entity.getLockedDate() != null) 
                                         out.println(formatter.format(entity.getLockedDate()));
                             %></td>
@@ -187,10 +210,12 @@
                         
                     </tbody>
                 </table>
-                
+                        
+             </div>
+                        
             </div>
-            
+       
         </div>
-        
+            
     </body>
 </html>

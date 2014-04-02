@@ -47,7 +47,7 @@ public class ReplicationEntity {
         this.replicate = replicate;
     }
     
-    public boolean isIsBranchOk() {
+    public boolean isBranchOk() {
         return isBranchOk;
     }
 
@@ -79,7 +79,7 @@ public class ReplicationEntity {
         this.difference = difference;
     }
 
-    public boolean isIsLocked() {
+    public boolean isLocked() {
         return isLocked;
     }
 

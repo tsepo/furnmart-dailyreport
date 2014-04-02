@@ -32,6 +32,8 @@ public class ReplicationServlet extends GenericServlet {
             return;
         }
         
+        logClientDetails(request, response); 
+        
         ReplicationData data = (ReplicationData)getSessionData(request, SessionAttribute.REPLICATION_DATA_TAG);
         if (data == null) {
             data = new ReplicationData();
@@ -56,8 +58,7 @@ public class ReplicationServlet extends GenericServlet {
         
         }
         catch (Exception e) {
-            e.printStackTrace();
-            throw new ServletException(e);
+             showErrorPage(request, response);
         }
         
         
@@ -83,7 +84,7 @@ public class ReplicationServlet extends GenericServlet {
         
         catch (Exception e) {
             e.printStackTrace();
-            this.showErrorPage(request, response);
+            showErrorPage(request, response);
         }
         
     }

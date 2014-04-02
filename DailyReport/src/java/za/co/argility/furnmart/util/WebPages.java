@@ -19,4 +19,6 @@ public interface WebPages {
     public static final String OVERVIEW_PAGE = BASE_APP_URL + "/overview.jsp";
     public static final String REPLICATION_PAGE = BASE_APP_URL + "/replication.jsp";
     
+    public static final String ERROR_PAGE = BASE_APP_URL + "/errorpages/404.html";
+    
 }

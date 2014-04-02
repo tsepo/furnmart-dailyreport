@@ -120,7 +120,7 @@ public class DataFactory {
                 
                 List<String> comments = new ArrayList<String>();
                
-                if (item.isIsLocked()) 
+                if (item.isLocked()) 
                     comments.add("Branch is locked on replication.");
                 if (item.getLockedDate() == null)
                     comments.add("Branch never replicated to central.");
@@ -304,7 +304,7 @@ public class DataFactory {
                 
                 List<String> comments = new ArrayList<String>();
                
-                if (item.isIsLocked()) 
+                if (item.isLocked()) 
                     comments.add("Branch is locked on replication.");
                 if (item.getLockedDate() == null)
                     comments.add("Branch never replicated to central.");

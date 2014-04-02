@@ -18,15 +18,17 @@ public interface SQLFactory {
             + "GROUP BY (CASE WHEN network_available IS TRUE THEN 'AVAILABLE' ELSE 'NOT AVAILABLE' END)";
     
     public static final String SELECT_REPLICATION_STATUS_OVERVIEW_DATA = 
-            "SELECT (CASE WHEN process IS NULL OR process = '' THEN 'NOT REPLICATING' \n" +
-            "ELSE process END), count(*) \n" +
-            "FROM branch_is_replicate_locked \n" + 
-            "JOIN (SELECT br_cde FROM branch WHERE br_active "
-            + "AND br_is_ceres IS FALSE "
+            " SELECT (CASE WHEN process IS NULL OR process = '' THEN 'NOT REPLICATING' \n" +
+            " ELSE process END), count(*) \n" +
+            " FROM branch_is_replicate_locked \n" + 
+            " JOIN branch USING (br_cde) " +
+            " JOIN checkpoint USING (br_cde) "
+            + "WHERE br_is_ceres IS FALSE "
+            + "AND br_active IS TRUE "
             + "AND br_is_central IS FALSE "
-            + "AND br_is_cco IS FALSE "
-            + ") AS branch USING (br_cde) \n" +
-            "GROUP BY process ORDER BY process";
+            + "AND br_is_merch IS FALSE "
+            + "AND br_central_brn = (select br_cde from br_prof) "
+            + "GROUP BY process ORDER BY process";
     
     public static final String GET_REPLICATION_DETAILS = "select br_cde, \n" +
                                                         "br_desc, \n" +

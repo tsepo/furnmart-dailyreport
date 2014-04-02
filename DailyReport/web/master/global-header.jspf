@@ -8,3 +8,9 @@
 <script type="text/javascript" src="<%= WebPages.BASE_APP_URL %>/scripts/high-charts/highcharts.js"></script>
 <script type="text/javascript" src="<%= WebPages.BASE_APP_URL %>/scripts/high-charts/modules/exporting.js"></script>
 <script type="text/javascript" src="<%= WebPages.BASE_APP_URL %>/scripts/default.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+       toggleLoadingTopBar(false); 
+    });
+</script>

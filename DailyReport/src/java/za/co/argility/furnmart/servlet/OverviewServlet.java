@@ -28,6 +28,8 @@ public class OverviewServlet extends GenericServlet {
             return;
         }
         
+        logClientDetails(request, response); 
+        
         // check if there is any data in the session
         OverviewData data = (OverviewData)getSessionData(request, SessionAttribute.OVERVIEW_DATA_TAG);
         if (data == null) {
@@ -47,8 +49,8 @@ public class OverviewServlet extends GenericServlet {
             response.sendRedirect(WebPages.OVERVIEW_PAGE); 
         }
         
-        catch (Exception ex) {
-            throw new ServletException(ex);
+        catch (Exception ex) { 
+            showErrorPage(request, response);
         }
         
     }
