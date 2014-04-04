@@ -1,0 +1,79 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 2, 2014, 8:34:02 AM
+    Author     : tmaleka
+*/
+
+a {
+    font-size: 16px;
+}
+
+.networkDetails {
+    border-collapse: collapse;
+    width: 90%;
+}
+
+.networkDetails TH {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-right: 28px;
+    padding-left: 28px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    vertical-align: top;
+    background-color: #cccc00;
+}
+
+.networkDetails TR {
+    background-color: white;
+    border-bottom: 1px solid #cccccc;
+}
+
+.networkDetails TD {
+    
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-right: 28px;
+    padding-left: 28px;
+    text-align: left;
+    font-size: 16px;
+    
+}
+
+.networkDetailsWrapper {
+    
+    width:100%; 
+    padding: 10px; 
+    overflow: hidden;
+    height: fit-content;
+    
+}
+
+.networkItem {
+    width:160px; 
+    margin: 2px; 
+    float: left; 
+    height: 90px; 
+    padding: 8px;
+    color: black; 
+    
+}
+
+.withNetwork {
+    background-color: #ccff99;
+}
+
+.withoutNetwork {
+    background-color:  #ff9966;
+}
+
+.networkItem P {
+    
+    margin: 0px;
+}

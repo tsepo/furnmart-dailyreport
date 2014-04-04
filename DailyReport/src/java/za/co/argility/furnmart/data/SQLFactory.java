@@ -84,4 +84,30 @@ public interface SQLFactory {
     
     public static final String GET_PROCESS_LIST = "SELECT distinct(process) FROM branch_is_replicate_locked";
     
+    public static final String GET_NETWORK_STATISTICS_DATA = "SELECT branch_code, branch_desc, network_available, last_evaluated " +
+                                                             "FROM network_statistics WHERE network_available = ? " +
+                                                             "ORDER BY branch_code";
+    
+    public static final String DAILY_BI_EXTRACTS_HISTORY_DATA = " SELECT daily_bi_extracts_hist_id, \n" +
+                                                                " br_cde, \n" +
+                                                                " fpp_cde, \n" +
+                                                                " process_type, \n" +
+                                                                " daily_bi_extracts_type.extract_type, \n" +
+                                                                " extract_desc, \n" +
+                                                                " is_active, \n" +
+                                                                " start_time, \n" +
+                                                                " end_time, \n" +
+                                                                " COALESCE(daily_bi_extracts_errors_id, 0) AS daily_bi_extracts_errors_id, \n" +
+                                                                " error_ts, \n" +
+                                                                " error_stack_trace\n" +
+                                                                "\n" +
+                                                                " FROM daily_bi_extracts_hist \n" +
+                                                                "\n" +
+                                                                " JOIN daily_bi_extracts_type USING (extract_type) \n" +
+                                                                " LEFT OUTER JOIN daily_bi_extracts_errors ON (daily_bi_extracts_errors_id = error_id) \n" +
+                                                                "\n" +
+                                                                " WHERE process_type = ? \n" +
+                                                                " AND start_time::date = ? \n" +
+                                                                "\n" +
+                                                                " ORDER BY daily_bi_extracts_hist_id, br_cde, fpp_cde, extract_type";
 }

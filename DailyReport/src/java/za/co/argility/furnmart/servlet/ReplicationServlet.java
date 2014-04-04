@@ -28,11 +28,11 @@ public class ReplicationServlet extends GenericServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        
+        super.doGet(request, response); 
+        
         if (response.isCommitted()) {
             return;
         }
-        
-        logClientDetails(request, response); 
         
         ReplicationData data = (ReplicationData)getSessionData(request, SessionAttribute.REPLICATION_DATA_TAG);
         if (data == null) {

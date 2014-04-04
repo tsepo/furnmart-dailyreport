@@ -8,6 +8,18 @@
         <servlet-name>ReplicationServlet</servlet-name>
         <servlet-class>za.co.argility.furnmart.servlet.ReplicationServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NetworkServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.NetworkServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UnlockAndReplicateServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.UnlockAndReplicateServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DailyBIExtractsServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.DailyBIExtractsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OverviewServlet</servlet-name>
         <url-pattern>/overview</url-pattern>
@@ -24,6 +36,18 @@
         <servlet-name>ReplicationServlet</servlet-name>
         <url-pattern>/replication</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NetworkServlet</servlet-name>
+        <url-pattern>/network</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UnlockAndReplicateServlet</servlet-name>
+        <url-pattern>/unlockAndReplicate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DailyBIExtractsServlet</servlet-name>
+        <url-pattern>/dailyBIExtracts</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -32,4 +56,14 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+    
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errorpages/404.html</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/errorpages/404.html</location>
+    </error-page>
+    
 </web-app>

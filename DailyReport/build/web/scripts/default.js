@@ -38,19 +38,62 @@ function toggleLoadingTopBar(isShow) {
  * @returns {undefined}
  */
 function processMenuItem(option) {
-    
-    if (option == null)
-        return;
-    
+   
     // if the OVERVIEW menu item is clicked
     if (option == "overview") {
-        window.location = BASE_URL + "/overview";
         toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/overview");
+        
     }
     
     // if the REPLICATION menu item is clicked
-    if (option == "replication") {
-        window.location = BASE_URL + "/replication";
+    else if (option == "replication") {
         toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/replication");
+        
     }
+    
+    // if the NETWORK menu is clicked
+    else if (option == "network") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/network");
+        
+    }
+    
+    // if the DAILY BO EXTRACTS menu is clicked
+    else if (option == "dailybiextracts") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/dailyBIExtracts");
+    }
+    
+    else {
+        
+        alert("Sorry, that page is still under development.\n" + 
+                "Please try later.");
+        
+    }
+}
+
+/**
+ * Sets the auto refresh settings
+ * 
+ * @param {type} checkBox
+ * @returns {undefined}
+ */
+function setAutoRefresh(checkBox) {
+    
+    toggleLoadingTopBar(true);
+    
+    var form = document.getElementById("refreshForm");
+    if (form == null)
+        return;
+    
+    if (checkBox.checked == true) 
+        form.autoRefresh.value = "true";
+    
+    else 
+        form.autoRefresh.value = "false";
+    
+    form.submit();
+    
 }

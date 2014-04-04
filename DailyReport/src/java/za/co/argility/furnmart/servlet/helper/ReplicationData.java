@@ -14,7 +14,7 @@ import za.co.argility.furnmart.entity.ReplicationSearchEntity;
  *
  * @author tmaleka
  */
-public class ReplicationData {
+public class ReplicationData extends ServletHelper {
     
     public static final String BRANCK_OK_IMAGE_URL = 
             "http://i879.photobucket.com/albums/ab359/tmaleka/ARGILITY/correct_2_zpsf7b3590b.png";

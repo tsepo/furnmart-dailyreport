@@ -13,7 +13,7 @@
     // get the data from the session
     OverviewData data = (OverviewData)session.getAttribute(SessionAttribute.OVERVIEW_DATA_TAG);
     if (data == null) {
-        response.sendRedirect(WebPages.STARTUP_PAGE); 
+        response.sendRedirect(WebPages.BASE_APP_URL + "/overview"); 
         return;
     }
 

@@ -18,6 +18,8 @@ public interface WebPages {
     public static final String STARTUP_PAGE = BASE_APP_URL + "/index.jsp";
     public static final String OVERVIEW_PAGE = BASE_APP_URL + "/overview.jsp";
     public static final String REPLICATION_PAGE = BASE_APP_URL + "/replication.jsp";
+    public static final String NETWORK_PAGE = BASE_APP_URL + "/network.jsp";
+    public static final String DAILY_BI_EXTRACTS_PAGE = BASE_APP_URL + "/daily-bi-extracts.jsp";
     
     public static final String ERROR_PAGE = BASE_APP_URL + "/errorpages/404.html";
     

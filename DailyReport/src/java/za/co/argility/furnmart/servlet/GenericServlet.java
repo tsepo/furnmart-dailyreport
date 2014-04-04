@@ -6,12 +6,9 @@
 
 package za.co.argility.furnmart.servlet;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.ServletException;
@@ -19,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import za.co.argility.furnmart.entity.GlobalSettings;
 import za.co.argility.furnmart.util.WebPages;
 
 /**
@@ -27,6 +25,8 @@ import za.co.argility.furnmart.util.WebPages;
  */
 public class GenericServlet extends HttpServlet {
 
+    protected GlobalSettings settings = null;
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        
@@ -35,6 +35,12 @@ public class GenericServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        
+         // log the client's header details i.e. IP ADDRESs, AGENT etc.
+        logClientDetails(request, response); 
+        
+        // check if the user settings are serialised
+        processGlobalSettings(request, response);
+        
     }
     
     /**
@@ -86,6 +92,9 @@ public class GenericServlet extends HttpServlet {
     protected void logClientDetails(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
+        if (WebPages.BASE_APP_URL.contains("localhost"))
+            return;
+        
         String visitorsLog = "/home/ucsretail/tsepo/daily_report_logging/visitors.log";
         File log = new File(visitorsLog);
         
@@ -103,4 +112,50 @@ public class GenericServlet extends HttpServlet {
         writer.close();
         
     }
+
+    /**
+     * Processes the global settings
+     * 
+     * @param request
+     * @param response 
+     */
+    private void processGlobalSettings(HttpServletRequest request, HttpServletResponse response) {
+        
+        settings = (GlobalSettings)getSessionData(request, SessionAttribute.GLOBAL_SETTINGS_TAG);
+        if (settings == null) {
+            settings = new GlobalSettings();
+        }
+        
+        // the auto refresh option
+        String autoRefresh = request.getParameter("autoRefresh");
+        if (autoRefresh != null) {
+            autoRefresh = autoRefresh.toLowerCase();
+            settings.setAutoRefresh(Boolean.parseBoolean(autoRefresh)); 
+        }
+        
+        // set the refresh interval 
+        String refreshInterval = request.getParameter("refreshInterval");
+        if (refreshInterval != null) {
+            settings.setRefreshInterval(Long.parseLong(refreshInterval.trim())); 
+        }
+        
+        // set the servlet requested
+        String requestingUrl = request.getRequestURL().toString();
+        if (requestingUrl != null && 
+                !requestingUrl.contains(".jsp") && !requestingUrl.contains(".html")) {
+            settings.setServletName(requestingUrl); 
+        }
+        
+        else 
+            settings.setServletName(WebPages.BASE_APP_URL); 
+        
+        // serialise the settings to the current session
+        saveSession(request, settings, SessionAttribute.GLOBAL_SETTINGS_TAG); 
+        
+    }
+    
+    protected void displayWhatsChangedInfo(HttpServletRequest request, HttpServletResponse response) {
+        
+    }
+
 }

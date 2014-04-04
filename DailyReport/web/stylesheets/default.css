@@ -249,3 +249,19 @@ select {
     color: #FF3600;
     
 }
+
+.bigText {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.smallText {
+    font-size: 12px;
+}
+
+.optionsPanel {
+    
+    margin-top: 8px;
+    margin-bottom: 12px;
+    
+}

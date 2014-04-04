@@ -15,7 +15,7 @@
     // get the data from the session
     ReplicationData data = (ReplicationData)session.getAttribute(SessionAttribute.REPLICATION_DATA_TAG);
     if (data == null)
-        response.sendRedirect(WebPages.STARTUP_PAGE); 
+        response.sendRedirect(WebPages.BASE_APP_URL + "/replication"); 
     
     // replication details
     List<ReplicationEntity> details = data.getReplicationDetails();
@@ -46,6 +46,8 @@
         <%@include file="master/global-header.jspf" %>
         
         <link type="text/css" rel="stylesheet" href="stylesheets/replication.css" />
+        <script type="text/javascript" src="scripts/replication.js"></script>
+        
         
     </head>
     <body>
@@ -156,6 +158,7 @@
                             <th>Unlock Date</th>
                             <th>Process</th>
                             <th>Comments</th>
+                            <th></th>
                         </tr>
                     </thead>
                  
@@ -186,7 +189,10 @@
                                 <span class="smallText"><%= entity.getBranchName() %></span></td>
                             <td><%= entity.getAudit() %></td>
                             <td><%= entity.getReplicate() %></td>
-                            <td><%= entity.getDifference() %></td>
+                            <td>
+                                <%= entity.getDifference() %>
+                                <input type="hidden" id="diff-<%= entity.getBranchCode() %>" value="<%= entity.getDifference() %>" />
+                            </td>
                             <td><% if (entity.isLocked()) 
                                             out.print("Yes");
                                     else out.print("No"); 
@@ -203,6 +209,37 @@
                                         out.println("<span> ● " + comment + "</span><br/>");
                                 }%>
                                 </p>
+                            </td>
+                            <td>
+                                <img id="toggleDropDownImage-<%= entity.getBranchCode() %>" alt="show menu" 
+                                     src="images/menu/expand.png" style="width:36px" onclick="toggleDropDownMenu(this)"/>
+                                
+                                <div id="dropDownMenu-<%= entity.getBranchCode() %>" class="dropdownMenu">
+                                    <div class="dropdownItem" onclick="navigate('unlockAndReplicate', '<%= entity.getBranchCode() %>')">
+                                        Unlock and replicate
+                                    </div>
+                                    <div class="dropdownItem" onclick="navigate('connectToStore', '<%= entity.getBranchCode() %>')">
+                                        Connect to store
+                                    </div>
+                                </div>
+                                        
+                                        <script type="text/javascript">
+                                            
+                                            $(document).ready(function(){
+                                              $("#dropDownMenu-<%= entity.getBranchCode() %>").mouseup(function (e)
+                                                {
+                                                    var container = $("dropDownMenu-<%= entity.getBranchCode() %>");
+
+                                                    if (!container.is(e.target) 
+                                                        && container.has(e.target).length == 0) 
+                                                    {
+                                                        $(container).slideUp("fast");
+                                                    }
+                                                });
+                                                
+                                            });
+                                            
+                                        </script>
                             </td>
                         </tr>
                         

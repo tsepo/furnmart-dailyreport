@@ -40,15 +40,6 @@ TABLE.replicationDetails TD {
     
 }
 
-.bigText {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.smallText {
-    font-size: 12px;
-}
-
 .branchOk {
     background-color: #84E184;
 }
@@ -61,4 +52,26 @@ TABLE.replicationDetails TD {
     font-size: 14px;
     margin: 0px;
     padding: 0px;
+}
+
+.dropdownMenu {
+    width:100px; 
+    font-size:12px; 
+    font-family: 'Arial'; 
+    position: absolute; 
+    display: none;
+}
+
+.dropdownItem {
+    padding: 8px; 
+    float:top; 
+    width:100%; 
+    border-bottom: 1px solid gray;
+    background: #F0F0F0; 
+}
+
+.dropdownItem:hover {
+    background: black;
+    color: white;
+    cursor: pointer;
 }

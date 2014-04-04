@@ -1,6 +1,16 @@
 <%-- any content can be specified here e.g.: --%>
+<%@page import="za.co.argility.furnmart.servlet.SessionAttribute"%>
+<%@page import="za.co.argility.furnmart.entity.GlobalSettings"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
+
+<%
+    
+    GlobalSettings settings = (GlobalSettings)session.getAttribute(SessionAttribute.GLOBAL_SETTINGS_TAG);
+    if (settings == null)
+        settings = new GlobalSettings();
+    
+    %>
 
 <%@ page pageEncoding="UTF-8" %>
 
@@ -21,14 +31,64 @@
     </div>
      <div class="menuItem" onclick="processMenuItem('replication')" >
         <p>REPLICATION</p>
-    </div>
-     <div class="menuItem">
-        <p>SWITCHING</p>
-    </div>
-     <div class="menuItem">
+     </div>
+     <div class="menuItem" onclick="processMenuItem('network')">
         <p>NETWORK</p>
     </div>
-     <div class="menuItem">
+     <div class="menuItem" onclick="processMenuItem('diskspace')">
         <p>DISK SPACE</p>
      </div>
+    <div class="menuItem" onclick="processMenuItem('dailybiextracts')">
+        <p>DAILY BI EXTRACTS</p>
+     </div>
+</div>
+
+<div class="optionsPanel">
+    
+    <form id="refreshForm" name="refreshForm" action="<%= settings.getServletName() %>"
+          onsubmit="return true" method="get">
+        <% 
+            if (settings.isAutoRefresh()) {
+        %>
+        
+            <input type="checkbox" id="refreshCheckBox" onchange="setAutoRefresh(this)" />
+                Disable auto refresh<br/>
+         <% 
+            }
+            
+            else {
+         %>
+               <input type="checkbox" id="refreshCheckBox" onchange="setAutoRefresh(this)" />
+                Enable auto refresh<br/>
+         <%
+            }
+         %>
+         
+        <input type="hidden" name="autoRefresh" value="<%= String.valueOf(settings.isAutoRefresh()) %>" />
+        <input type="hidden" name="refreshInterval" value="300000" />
+        
+    </form>
+        
+        <script type="text/javascript">
+            
+            $(document).ready(function(){
+                
+               var form = document.getElementById("refreshForm");
+               if (form == null)
+                   return;
+               
+               if (form.autoRefresh.value == "true") {
+                   
+                   var interval = form.refreshInterval.value;
+                   
+                   setInterval(function(){
+                       
+                        window.location.reload();
+                       
+                   }, interval);
+               }
+                
+            });
+            
+        </script>
 </div>
