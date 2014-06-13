@@ -7,10 +7,10 @@
 package za.co.argility.furnmart.servlet.helper;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.TreeMap;
+import java.util.HashMap;
 import za.co.argility.furnmart.entity.ExtractHistory;
+import za.co.argility.furnmart.util.BucketMap;
 
 /**
  *
@@ -18,7 +18,7 @@ import za.co.argility.furnmart.entity.ExtractHistory;
  */
 public class DailyBIExtractsData {
     
-    public static final String DATE_FORMAT = "ddMMyyy";
+    public static final String DATE_FORMAT = "dd/MM/yyyy";
     
     public static final String TAB_PARAM = "tab";
     public static final String DAY_PARAM = "day";
@@ -30,13 +30,14 @@ public class DailyBIExtractsData {
     
     public static final String DAY_TODAY = "today";
     
-    private TreeMap<Date, ArrayList<ExtractHistory>> extractHistory;
+    private BucketMap<String, ExtractHistory> extractHistory;
+    private HashMap<String, Date> lastExtractFilesSentMap;
     private String currentTab;
     private Date currentDay;
     
     public DailyBIExtractsData() {
         this.extractHistory = null;
-    
+        this.lastExtractFilesSentMap = null;
     }
     
     public static String formatDate(Date date) {
@@ -51,11 +52,11 @@ public class DailyBIExtractsData {
         
     }
 
-    public TreeMap<Date, ArrayList<ExtractHistory>> getExtractHistory() {
+    public BucketMap<String, ExtractHistory> getExtractHistory() {
         return extractHistory;
     }
 
-    public void setExtractHistory(TreeMap<Date, ArrayList<ExtractHistory>> extractHistory) {
+    public void setExtractHistory(BucketMap<String, ExtractHistory> extractHistory) {
         this.extractHistory = extractHistory;
     }
 
@@ -74,7 +75,15 @@ public class DailyBIExtractsData {
     public void setCurrentDay(Date currentDay) {
         this.currentDay = currentDay;
     }
+
+    public HashMap<String, Date> getLastExtractFilesSentMap() {
+        return lastExtractFilesSentMap;
+    }
+
+    public void setLastExtractFilesSentMap(HashMap<String, Date> lastExtractFilesSentMap) {
+        this.lastExtractFilesSentMap = lastExtractFilesSentMap;
+    }
     
-   
+    
     
 }

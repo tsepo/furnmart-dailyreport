@@ -3,26 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/helper/DiskSpaceData.java</file>
+            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/web/disk-space.jsp</file>
             <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/util/WebPages.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/SessionAttribute.java</file>
+            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/helper/DiskSpaceStatistics.java</file>
             <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/web/stylesheets/default.css</file>
             <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/web/scripts/default.js</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/UnlockAndReplicateServlet.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/entity/GlobalSettings.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/OverviewServlet.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/NetworkServlet.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/web/index.jsp</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/web/scripts/replication.js</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/helper/ReplicationData.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/helper/OverviewData.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/GenericServlet.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/util/LinuxCommands.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/helper/ServletHelper.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/data/DataFactory.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/ReplicationServlet.java</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/helper/NetworkData.java</file>
+            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/src/java/za/co/argility/furnmart/servlet/DiskSpaceServlet.java</file>
+            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/nbproject/build-impl.xml</file>
             <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/web/overview.jsp</file>
-            <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/web/WEB-INF/web.xml</file>
             <file>file:/C:/Users/tmaleka/furnmart/repo/DailyReport/web/master/menu.jspf</file>
         </group>
     </open-files>

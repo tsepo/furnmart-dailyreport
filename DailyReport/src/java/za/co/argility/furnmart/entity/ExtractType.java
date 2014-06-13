@@ -12,6 +12,12 @@ package za.co.argility.furnmart.entity;
  */
 public class ExtractType {
     
+    public static final int COMMON_EXTRACT = 100;
+    public static final int SALES_EXTRACT = 101;
+    public static final int STOCK_EXTRACT = 102;
+    public static final int PROMO_EXTRACT = 103;
+    public static final int DEBTORS_EXTRACT = 104;
+    
     private int extractType;
     private String extractDescription;
     private boolean active;
@@ -45,6 +51,5 @@ public class ExtractType {
     public void setActive(boolean active) {
         this.active = active;
     }
-    
     
 }

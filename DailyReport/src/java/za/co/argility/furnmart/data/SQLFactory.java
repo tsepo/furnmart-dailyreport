@@ -107,7 +107,11 @@ public interface SQLFactory {
                                                                 " LEFT OUTER JOIN daily_bi_extracts_errors ON (daily_bi_extracts_errors_id = error_id) \n" +
                                                                 "\n" +
                                                                 " WHERE process_type = ? \n" +
-                                                                " AND start_time::date = ? \n" +
-                                                                "\n" +
-                                                                " ORDER BY daily_bi_extracts_hist_id, br_cde, fpp_cde, extract_type";
+                                                                " AND {0} \n" +
+                                                                " ORDER BY br_cde, fpp_cde, daily_bi_extracts_hist_id, extract_type, start_time";
+    
+    public static final String GET_DATE_EXTRACT_FILES_LAST_SENT = "SELECT br_cde, last_sent_time "
+            + "FROM daily_bi_extracts_sent_files "
+            //+ "WHERE AGE(last_sent_time) < '1 hour' "
+            + "ORDER BY br_cde";
 }

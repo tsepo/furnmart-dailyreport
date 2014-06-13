@@ -13,7 +13,7 @@ import za.co.argility.furnmart.entity.NetworkEntity;
  *
  * @author tmaleka
  */
-public class NetworkData extends ServletHelper {
+public class NetworkData  {
     
     private List<NetworkEntity> networkAvailableList;
     private List<NetworkEntity> networkUnavailableList;

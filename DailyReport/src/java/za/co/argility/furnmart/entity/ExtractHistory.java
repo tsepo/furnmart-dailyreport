@@ -6,7 +6,10 @@
 
 package za.co.argility.furnmart.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.Seconds;
 
 /**
  *
@@ -22,6 +25,7 @@ public class ExtractHistory {
     private Date startTime;
     private Date endTime;
     private ExtractError extractError;
+    private Date filesLastSent;
     
     private ExtractHistory() {
         this.branch = null;
@@ -31,6 +35,7 @@ public class ExtractHistory {
         this.startTime = null;
         this.endTime = null;
         this.extractError = null;
+        this.filesLastSent = null;
         
     }
     
@@ -98,7 +103,92 @@ public class ExtractHistory {
     public void setExtractError(ExtractError extractError) {
         this.extractError = extractError;
     }
+
+    public Date getFilesLastSent() {
+        return filesLastSent;
+    }
+
+    public void setFilesLastSent(Date filesLastSent) {
+        this.filesLastSent = filesLastSent;
+    }
     
-    
+    public String toHtml() {
+         
+        final String DATE_FORMAT = "dd MMMM yyyy HH:mm:ss";
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+        String html = "";
+        ExtractProgress progress = null;
+        
+        
+        // Determine the current progress of the extract
+        if (extractError == null && endTime != null) 
+            progress = ExtractProgress.Finished;
+        else if (extractError != null && endTime == null)
+            progress = ExtractProgress.ErrorOccured;
+        else
+            progress = ExtractProgress.InProgress;
+        
+       
+        if (progress == ExtractProgress.Finished)
+            html += "<img src=\"images/ok.png\" style=\"width:36px\" alt=\"ok\" />";
+        
+        else if (progress == ExtractProgress.ErrorOccured)
+            html += "<img src=\"images/error.png\" style=\"width:36px\" alt=\"error\" />";
+        else
+            html += "<img src=\"images/in_progress.png\" style=\"width:36px\" alt=\"in progress\" />";
+        
+        
+        html += "<p>";
+     
+        if (progress == ExtractProgress.InProgress)
+            html += "<span>" +
+                    "<b>STARTED:</b> " +
+                     format.format(startTime)
+                     + "</span><br/>";
+        
+        else if (progress == ExtractProgress.ErrorOccured)
+            html += "<span>" +
+                    "<b>ABORTED:</b> " +
+                     format.format(startTime)
+                     + "</span><br/>";
+            
+        else
+            html += "<span>" + 
+                    "<b>FINISHED:</b> " +
+                     format.format(endTime)
+                     + "</span><br/>";
+        
+        if (endTime != null) {
+            
+            int total = Seconds.secondsBetween(new DateTime(startTime), new DateTime(endTime)).getSeconds();
+            int seconds = total % 60;
+            int minutes = (int)(total / 60);
+            
+            String duration = "";
+            
+            if (minutes == 0 && seconds > 0) {
+                duration = seconds + " sec";
+            }
+            
+            else if (minutes > 0 && seconds == 0) {
+                duration = minutes + " min";
+            }
+            
+            else if (minutes == 0 && seconds == 0) {
+                duration = "under a second";
+            }
+            
+            else {
+                duration = minutes + " min, " +  seconds + " sec";
+            }
+            
+            html += "<span><b>DURATION: </b>" + 
+                     duration +
+                    "</span>";
+        }
+        
+        return html + "</p>";
+        
+    }
     
 }

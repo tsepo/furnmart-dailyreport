@@ -9,9 +9,6 @@ package za.co.argility.furnmart.data;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -32,11 +29,16 @@ public class ConnectionManager {
         
         if (connectionType == ConnectionType.CENTRAL && dbName == null)
             connectionUrl = CONNECTION_URL.replace("{0}", "c9901.fm.co.za").replace("{1}", "c9901");
+        
         else if (connectionType == ConnectionType.CENTRAL && dbName != null)
                 connectionUrl = CONNECTION_URL.replace("{0}", "c9901.fm.co.za").replace("{1}", dbName);
                 
-        if (connectionType == ConnectionType.INSTORE)
+        else if (connectionType == ConnectionType.INSTORE)
             connectionUrl = CONNECTION_URL.replace("{0}", "c9901.fm.co.za").replace("{1}", dbName);
+        
+        else if (connectionType == ConnectionType.BATCH)
+            connectionUrl = CONNECTION_URL.replace("{0}", "c9910.fm.co.za").replace("{1}", "mecons");
+        
         
         connection = DriverManager.getConnection(connectionUrl, USERNAME, USERNAME);
         

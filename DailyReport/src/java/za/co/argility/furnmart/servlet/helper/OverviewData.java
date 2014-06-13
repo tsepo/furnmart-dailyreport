@@ -13,7 +13,7 @@ import java.util.*;
  *
  * @author tmaleka
  */
-public class OverviewData extends ServletHelper {
+public class OverviewData  {
     
     private Map<String, Integer> networkOverview;
     private Map<String, Integer> replicationStatusOverview;

@@ -40,8 +40,6 @@ DIV.topBar {
     padding-top: 24px;
     padding-bottom: 24px;
     position: fixed;
-    top: 0px;
-    left: 0px;
     margin: 0px;
     background: white;
     color: black;
@@ -134,7 +132,7 @@ DIV.legendArea {
 
 DIV.chartArea {
     width: 90%;
-    height: fit-content;
+    height: auto;
     margin-top: 15px;
     margin-left: 12px;
 }

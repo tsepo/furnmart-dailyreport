@@ -9,12 +9,12 @@ package za.co.argility.furnmart.data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
@@ -24,12 +24,47 @@ import za.co.argility.furnmart.entity.ExtractType;
 import za.co.argility.furnmart.entity.NetworkEntity;
 import za.co.argility.furnmart.entity.ProcessType;
 import za.co.argility.furnmart.entity.ReplicationEntity;
+import za.co.argility.furnmart.util.BucketMap;
 
 /**
  *
  * @author tmaleka
  */
 public class DataFactory {
+    
+    public static HashMap<String, Date> getExtractFilesLastSentDate() throws Exception {
+        HashMap<String, Date> dates = null;
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
+            ps = connection.prepareStatement(SQLFactory.GET_DATE_EXTRACT_FILES_LAST_SENT);
+            
+            rs = ps.executeQuery();
+            dates = new HashMap<String, Date>();
+            
+            while (rs.next()) {
+                
+                String branch = rs.getString(1);
+                Date lastSent = rs.getTimestamp(2);
+                
+                dates.put(branch, lastSent);
+            }
+            
+            return dates;
+        }
+        
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        }
+        
+        finally {
+            ConnectionManager.close(connection);
+        }
+    }
     
     /**
      * Gets the network overview data
@@ -423,11 +458,10 @@ public class DataFactory {
         }
     }
     
-    public static final TreeMap<Date, ArrayList<ExtractHistory>> getDailyBIExtractHistoryRun(Date date, ProcessType type) 
+    public static BucketMap<String, ExtractHistory> getDailyBIExtractHistoryRun(Date date, ProcessType type, boolean checkOnBatch) 
             throws Exception {
         
-        TreeMap<Date, ArrayList<ExtractHistory>> treeMap = null;
-        ArrayList<ExtractHistory> list = null;
+        BucketMap<String, ExtractHistory> bucket = null;
         
         ExtractHistory history = null;
         ExtractType extractType = null;
@@ -439,29 +473,43 @@ public class DataFactory {
         
         try {
             
-            connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
-            ps = connection.prepareStatement(SQLFactory.DAILY_BI_EXTRACTS_HISTORY_DATA);
+            if (type == ProcessType.MonthEnd && checkOnBatch)
+                connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            else
+                connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
+                
+            String query = null;
+            
+            if (type == ProcessType.DayEnd)
+                query = SQLFactory.DAILY_BI_EXTRACTS_HISTORY_DATA.replace("{0}", "start_time::DATE = ?");
+            else
+                query = SQLFactory.DAILY_BI_EXTRACTS_HISTORY_DATA.replace("{0}", "fpp_cde = ?");
+            
+            ps = connection.prepareStatement(query);
+            
+            String dateString = new SimpleDateFormat("yyyy-MM-dd").format(date);
             
             if (type == ProcessType.DayEnd) {
                 ps.setString(1, "DE");
-                ps.setDate(2, new java.sql.Date(date.getTime()));  
+                ps.setDate(2, java.sql.Date.valueOf(dateString));  
             }
             else {
                 ps.setString(1, "ME");
-                ps.setDate(1, new java.sql.Date(date.getTime())); 
+                String fppCode = new SimpleDateFormat("yyyyMM").format(date);
+                ps.setString(2, fppCode); 
             }
             
             rs = ps.executeQuery();
             
-            treeMap = new TreeMap<Date, ArrayList<ExtractHistory>>();
-            list = new ArrayList<ExtractHistory>();
+            bucket = new BucketMap<String, ExtractHistory>();
             
             while (rs.next()) {
                 
                 int histroyId = rs.getInt("daily_bi_extracts_hist_id");
+                String branchCode = rs.getString("br_cde");
         
                 history = new ExtractHistory(histroyId);
-                history.setBranch(rs.getString("br_cde"));
+                history.setBranch(branchCode);
                 history.setPeriod(rs.getString("fpp_cde"));
                 
                 int extractCode = rs.getInt("extract_type");
@@ -492,12 +540,11 @@ public class DataFactory {
                     
                 }
                 
-                list.add(history);
+                bucket.put(branchCode, history);
+                
             }
             
-            treeMap.put(date, list);
-            
-            return treeMap;
+            return bucket;
         }
         
         catch (Exception e) {

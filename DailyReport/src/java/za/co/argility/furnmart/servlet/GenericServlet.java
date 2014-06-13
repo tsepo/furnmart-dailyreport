@@ -38,7 +38,7 @@ public class GenericServlet extends HttpServlet {
          // log the client's header details i.e. IP ADDRESs, AGENT etc.
         logClientDetails(request, response); 
         
-        // check if the user settings are serialised
+        // process global session settings
         processGlobalSettings(request, response);
         
     }
@@ -112,50 +112,31 @@ public class GenericServlet extends HttpServlet {
         writer.close();
         
     }
-
+    
     /**
-     * Processes the global settings
+     * Processes the current session
+     * settings
      * 
      * @param request
-     * @param response 
+     * @param response
+     * @throws ServletException
+     * @throws IOException 
      */
-    private void processGlobalSettings(HttpServletRequest request, HttpServletResponse response) {
+    protected void processGlobalSettings(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
         
         settings = (GlobalSettings)getSessionData(request, SessionAttribute.GLOBAL_SETTINGS_TAG);
-        if (settings == null) {
+        if (settings == null)
             settings = new GlobalSettings();
-        }
         
-        // the auto refresh option
-        String autoRefresh = request.getParameter("autoRefresh");
-        if (autoRefresh != null) {
-            autoRefresh = autoRefresh.toLowerCase();
-            settings.setAutoRefresh(Boolean.parseBoolean(autoRefresh)); 
-        }
+        String requestedUrl = request.getRequestURL().toString();
+        if (requestedUrl == null)
+            requestedUrl = WebPages.BASE_APP_URL + "/overview";
         
-        // set the refresh interval 
-        String refreshInterval = request.getParameter("refreshInterval");
-        if (refreshInterval != null) {
-            settings.setRefreshInterval(Long.parseLong(refreshInterval.trim())); 
-        }
+        settings.setServletName(requestedUrl);
         
-        // set the servlet requested
-        String requestingUrl = request.getRequestURL().toString();
-        if (requestingUrl != null && 
-                !requestingUrl.contains(".jsp") && !requestingUrl.contains(".html")) {
-            settings.setServletName(requestingUrl); 
-        }
-        
-        else 
-            settings.setServletName(WebPages.BASE_APP_URL); 
-        
-        // serialise the settings to the current session
-        saveSession(request, settings, SessionAttribute.GLOBAL_SETTINGS_TAG); 
+        saveSession(request, settings, SessionAttribute.GLOBAL_SETTINGS_TAG);
         
     }
     
-    protected void displayWhatsChangedInfo(HttpServletRequest request, HttpServletResponse response) {
-        
-    }
-
 }

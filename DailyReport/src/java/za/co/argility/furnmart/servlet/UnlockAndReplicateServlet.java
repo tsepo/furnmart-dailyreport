@@ -54,8 +54,6 @@ public class UnlockAndReplicateServlet extends GenericServlet {
         out.println("Started process, please wait...\r\n");
         
         List<String> commands = new ArrayList<String>();
-        commands.add("/usr/bin/ssh");
-        commands.add("root@c9901");
         commands.add("unlockAndReplicate");
         commands.add(branchCode);
         

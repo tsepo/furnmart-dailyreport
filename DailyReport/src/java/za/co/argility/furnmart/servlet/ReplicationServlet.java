@@ -7,13 +7,10 @@
 package za.co.argility.furnmart.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import za.co.argility.furnmart.data.DataFactory;
-import za.co.argility.furnmart.entity.ReplicationEntity;
 import za.co.argility.furnmart.entity.ReplicationSearchEntity;
 import za.co.argility.furnmart.servlet.helper.ReplicationData;
 import za.co.argility.furnmart.util.WebPages;

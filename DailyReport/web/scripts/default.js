@@ -1,11 +1,3 @@
-
-// constants
-var BASE_URL = "http://c9980.fm.co.za:8080/DailyReport";
-//var BASE_URL = "http://localhost:8080/DailyReport";
-
-// element IDs
-var LOADING_PANEL_ID = "loadingPanel";
-
 /**
  * Toggles the visibility of the top bar
  * for indicating progress.
@@ -66,6 +58,17 @@ function processMenuItem(option) {
         window.location.replace(BASE_URL + "/dailyBIExtracts");
     }
     
+    // if the ITC 700 EXTRACTS VERIFIER menu is clicked
+    else if (option == "itc700extractsverifier") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/Itc700ExtractsVerifier");
+    }
+    
+    else if (option == "diskspace") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/DiskSpace");
+    }
+    
     else {
         
         alert("Sorry, that page is still under development.\n" + 
@@ -88,11 +91,13 @@ function setAutoRefresh(checkBox) {
     if (form == null)
         return;
     
-    if (checkBox.checked == true) 
-        form.autoRefresh.value = "true";
+    var currentValue = form.autoRefresh.value;
     
-    else 
+    if (currentValue == "true")
         form.autoRefresh.value = "false";
+    
+    else if (currentValue == "false")
+        form.autoRefresh.value = "true";
     
     form.submit();
     

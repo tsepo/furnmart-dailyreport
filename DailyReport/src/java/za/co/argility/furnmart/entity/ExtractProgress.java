@@ -4,14 +4,16 @@
  * and open the template in the editor.
  */
 
-package za.co.argility.furnmart.data;
+package za.co.argility.furnmart.entity;
 
 /**
  *
  * @author tmaleka
  */
-public interface ConnectionType {
-    public static final int CENTRAL = 1;
-    public static final int INSTORE = 2;
-    public static final int BATCH = 3;
+public enum ExtractProgress {
+    
+    ErrorOccured,
+    InProgress,
+    Finished
+    
 }

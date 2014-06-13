@@ -41,54 +41,28 @@
     <div class="menuItem" onclick="processMenuItem('dailybiextracts')">
         <p>DAILY BI EXTRACTS</p>
      </div>
+   
+
 </div>
 
 <div class="optionsPanel">
+    <p><b>Note:</b> This webpage auto refreshes every minute.</p>
     
-    <form id="refreshForm" name="refreshForm" action="<%= settings.getServletName() %>"
-          onsubmit="return true" method="get">
-        <% 
-            if (settings.isAutoRefresh()) {
-        %>
+    <script type="text/javascript">
         
-            <input type="checkbox" id="refreshCheckBox" onchange="setAutoRefresh(this)" />
-                Disable auto refresh<br/>
-         <% 
-            }
-            
-            else {
-         %>
-               <input type="checkbox" id="refreshCheckBox" onchange="setAutoRefresh(this)" />
-                Enable auto refresh<br/>
-         <%
-            }
-         %>
-         
-        <input type="hidden" name="autoRefresh" value="<%= String.valueOf(settings.isAutoRefresh()) %>" />
-        <input type="hidden" name="refreshInterval" value="300000" />
+         function loadWebpage() {
+            window.location = "<%= settings.getServletName() %>";
+         }
+
+        $(document).ready(function(){
+
+           toggleLoadingTopBar(false); 
+
+           setTimeout("loadWebpage()", 60000);
+
+        });
         
-    </form>
-        
-        <script type="text/javascript">
-            
-            $(document).ready(function(){
-                
-               var form = document.getElementById("refreshForm");
-               if (form == null)
-                   return;
-               
-               if (form.autoRefresh.value == "true") {
-                   
-                   var interval = form.refreshInterval.value;
-                   
-                   setInterval(function(){
-                       
-                        window.location.reload();
-                       
-                   }, interval);
-               }
-                
-            });
-            
-        </script>
+    </script>
+    
+   
 </div>

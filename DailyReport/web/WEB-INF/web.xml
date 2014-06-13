@@ -20,6 +20,18 @@
         <servlet-name>DailyBIExtractsServlet</servlet-name>
         <servlet-class>za.co.argility.furnmart.servlet.DailyBIExtractsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>WhatsChangedServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.WhatsChangedServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Itc700ExtractsVerifierServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.Itc700ExtractsVerifierServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DiskSpaceServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.DiskSpaceServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OverviewServlet</servlet-name>
         <url-pattern>/overview</url-pattern>
@@ -48,6 +60,18 @@
         <servlet-name>DailyBIExtractsServlet</servlet-name>
         <url-pattern>/dailyBIExtracts</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WhatsChangedServlet</servlet-name>
+        <url-pattern>/whatschanged</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Itc700ExtractsVerifierServlet</servlet-name>
+        <url-pattern>/Itc700ExtractsVerifier</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DiskSpaceServlet</servlet-name>
+        <url-pattern>/DiskSpace</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -56,7 +80,6 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-    
     <error-page>
         <error-code>404</error-code>
         <location>/errorpages/404.html</location>
@@ -65,5 +88,4 @@
         <error-code>500</error-code>
         <location>/errorpages/404.html</location>
     </error-page>
-    
 </web-app>
