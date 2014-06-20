@@ -57,6 +57,8 @@
         <div class="content" id="content">
             <%@include file="master/menu.jspf" %>
             
+            <form method="post" name="filterReplicationForm" action="<%= WebPages.BASE_APP_URL %>/replication" onsubmit="return validateInput(this)">
+            
             <!-- place logic here -->
             
             <div class="header">
@@ -69,8 +71,6 @@
 
                 <div style="margin-left: 10px; margin-bottom:30px">
 
-
-                        <form method="post" name="filterReplicationForm" action="<%= WebPages.BASE_APP_URL %>/replication" onsubmit="return validateInput(this)">
                             <table border="0" width="60%">
                                 <tr>
                                     <td><label>Branch:</label></td>
@@ -119,11 +119,11 @@
                                        </select>
 
                                    </td>
-                                   <td><input type="submit" value="Search" name="search" class="button" /></td>
+                                   <td><input type="submit" value="Apply" name="search" class="button" /></td>
 
                                 </tr>
                             </table>
-                        </form>
+                        
                 </div>
             </div>
            
@@ -143,6 +143,10 @@
                 
                 <p><%= resultsDisplay %></p>
                 <p class="alertText">NB: If the branch is locked or replication crashed on central, please investigate.</p>
+                <p>
+                    <a href="<%= WebPages.BASE_APP_URL + "/replication?export=csv" %>" target="_blank" 
+                       title="Export replication summary to CSV">Export to CSV</a>
+                </p>
                 
                 <table class="replicationDetails" border="0" width="100%">
                     
@@ -252,6 +256,7 @@
                         
             </div>
        
+            </form>
         </div>
             
     </body>

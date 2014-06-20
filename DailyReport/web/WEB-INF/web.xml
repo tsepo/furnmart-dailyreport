@@ -90,10 +90,10 @@
     </welcome-file-list>
     <error-page>
         <error-code>404</error-code>
-        <location>/errorpages/404.html</location>
+        <location>/errorpages/error-occured.jsp</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
-        <location>/errorpages/404.html</location>
+        <location>/errorpages/error-occured.jsp</location>
     </error-page>
 </web-app>

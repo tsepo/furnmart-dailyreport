@@ -5,15 +5,24 @@
  */
 package za.co.argility.furnmart.util;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author tmaleka
  */
-public interface WebPages {
 
-    public static final String BASE_APP_URL = "http://c9901.fm.co.za/DailyReport";
-    //public static final String BASE_APP_URL = "http://localhost:8080/DailyReport";
-    //public static final String MONTHEND_URL = "http://localhost:8080/DailyReport";
+public class WebPages {
+    
+    public static final String BASE_APP_URL 
+            = "http://" + getHostName() + "/DailyReport";
 
     public static final String STARTUP_PAGE = BASE_APP_URL + "/index.jsp";
     public static final String OVERVIEW_PAGE = BASE_APP_URL + "/overview.jsp";
@@ -23,6 +32,46 @@ public interface WebPages {
     public static final String ITC_700_EXTRACTS_VERIFIER_PAGE = BASE_APP_URL + "/itc700extractsVerifier.jsp";
     public static final String DISK_SPACE_PAGE = BASE_APP_URL + "/disk-space.jsp";
     public static final String MONTHEND_PROD_PAGE = BASE_APP_URL + "/monthend-production.jsp";
-    public static final String ERROR_PAGE = BASE_APP_URL + "/errorpages/404.html";
-    //public static final String MONTHEND_PAGE = BASE_APP_URL + "/errorpages/404.html";
+    public static final String ERROR_PAGE = BASE_APP_URL + "/errorpages/error-occured.jsp";
+    
+    /**
+     * Gets the local host name
+     * 
+     * @return 
+     */
+    private static String getHostName() {
+        
+        final String PROPERTIES_FILE_NAME = "/home/ucsretail/central/envproperties";
+        File propertiesFile = new File(PROPERTIES_FILE_NAME);
+        
+        String hostname = "localhost:8080";
+        
+        if (!propertiesFile.exists())
+            return hostname;
+        
+        else {
+            try {
+                
+                BufferedReader reader = new BufferedReader(
+                        new FileReader(propertiesFile));
+                
+                while (reader.ready()) {
+                    String line = reader.readLine();
+                    if (line.startsWith("HOSTNAME")) {
+                        hostname = line.substring(line.indexOf("=") + 1);
+                        break;
+                    }
+                }
+                
+                reader.close();
+                return hostname;
+            }
+            
+            catch (IOException e) {
+                return hostname;
+            }
+        }
+        
+    }
+    
 }
