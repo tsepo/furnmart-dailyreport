@@ -50,7 +50,30 @@ public interface SQLFactory {
                                                         "\n" +
                                                         "order by br_cde";
     
-    public static final String GET_REPLICATION_BRANCH_LIST = "select br_cde\n" +
+    public static final String GET_MONTHEND_DETAILS =      "select branch, {1} from ( \n" +
+                                                                "SELECT branch.br_cde branch, COUNT(*) as {0} \n" + 
+                                                                "FROM {1} \n" +
+                                                                "join branch using(br_cde) \n" +
+                                                                "where fpp_cde = '{2}' \n" +
+                                                                "and br_active = true  \n" +
+                                                                "and br_is_ceres = false  \n" + 
+                                                                "and br_is_central = false  \n" + 
+                                                                "and br_is_merch = false  \n" +
+                                                                "group by branch.br_cde  \n" +
+                                                                "UNION  \n" +
+                                                                "select branch.br_cde branch, 0 as {0}  \n" + 
+                                                                "from branch  \n" +
+                                                                "WHERE br_active = true \n" +
+                                                                "and br_is_ceres = false  \n" + 
+                                                                "and br_is_central = false  \n" + 
+                                                                "and br_is_merch = false  \n" +
+                                                                "and not exists(select * from {1} \n" + 
+                                                                "where {1}.br_cde = branch.br_cde \n" +
+                                                                "and fpp_cde = '{2}') \n" +
+                                                                "group by branch.br_cde) as xyz \n" +
+                                                                "order by branch";
+    
+    public static final String GET_REPLICATION_BRANCH_LIST = "select br_cde \n" +
                                                                 "from checkpoint \n" +
                                                                 "join branch_is_replicate_locked using (br_cde) \n" +
                                                                 "join branch using (br_cde)  \n" +
@@ -60,6 +83,21 @@ public interface SQLFactory {
                                                                 "and br_central_brn = (select br_cde from br_prof) \n" +
                                                                 "\n" +
                                                                 "order by br_cde";
+    
+    public static final String GET_MONTHEND_BRANCH_LIST = "SELECT branch.br_cde, COUNT(*) as debtors FROM central_account \n" +
+                                                           "join branch using(br_cde) \n" +
+                                                           " where fpp_cde = '${0}' \n" +
+                                                           "and br_active = true  \n" +
+                                                           "and br_is_ceres = false \n" +
+                                                           "and br_is_central = false \n" +
+                                                           "and br_is_merch = false  \n" +
+                                                           "group by branch.br_cde";
+    
+    
+    public static final String GET_MECONS_FPP_CDE = "select fpp_cde  \n" +
+                                                                "from br_prof";
+                                                              
+    
     
     public static final String SEARCH_REPLICATION_DATA = "select br_cde, \n" +
                                                         "br_desc, \n" +
