@@ -5,6 +5,10 @@
  */
 package za.co.argility.furnmart.util;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
@@ -37,24 +41,36 @@ public class WebPages {
      */
     private static String getHostName() {
         
-        InetAddress address = null;
-        try {
+        final String PROPERTIES_FILE_NAME = "/home/ucsretail/central/envproperties";
+        File propertiesFile = new File(PROPERTIES_FILE_NAME);
+        
+        String hostname = "localhost:8080";
+        
+        if (!propertiesFile.exists())
+            return hostname;
+        
+        else {
+            try {
+                
+                BufferedReader reader = new BufferedReader(
+                        new FileReader(propertiesFile));
+                
+                while (reader.ready()) {
+                    String line = reader.readLine();
+                    if (line.startsWith("HOSTNAME")) {
+                        hostname = line.substring(line.indexOf("=") + 1);
+                        break;
+                    }
+                }
+                
+                reader.close();
+                return hostname;
+            }
             
-            address = InetAddress.getLocalHost();
-        } 
-        
-        catch (UnknownHostException ex) {
-            Logger.getLogger(WebPages.class.getName()).log(Level.SEVERE, null, ex);
-            return "localhost:8080"; 
+            catch (IOException e) {
+                return hostname;
+            }
         }
-        
-        String hostName = address.getCanonicalHostName();
-        
-        if (hostName == null || hostName.isEmpty() || 
-                hostName.contains("Company.net")) 
-            return "localhost:8080";
-        else
-            return hostName + ":8080";
         
     }
     
