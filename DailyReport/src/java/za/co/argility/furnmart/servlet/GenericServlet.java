@@ -11,12 +11,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import za.co.argility.furnmart.entity.GlobalSettings;
+import za.co.argility.furnmart.util.Log;
 import za.co.argility.furnmart.util.WebPages;
 
 /**
@@ -26,6 +29,10 @@ import za.co.argility.furnmart.util.WebPages;
 public class GenericServlet extends HttpServlet {
 
     protected GlobalSettings settings = null;
+    static {
+        Log.setLogger(GenericServlet.class);
+    }
+    
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -91,6 +98,9 @@ public class GenericServlet extends HttpServlet {
      */
     protected void logClientDetails(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
+        
+        Log.info("... inside logClientDetails()..."); 
+        Log.info("HOSTNAME: " + WebPages.BASE_APP_URL);
         
         if (WebPages.BASE_APP_URL.contains("localhost"))
             return;

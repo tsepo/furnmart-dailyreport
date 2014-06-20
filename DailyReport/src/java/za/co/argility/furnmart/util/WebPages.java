@@ -6,14 +6,19 @@
 
 package za.co.argility.furnmart.util;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author tmaleka
  */
-public interface WebPages {
+public class WebPages {
     
-    public static final String BASE_APP_URL = "http://c9901.fm.co.za/DailyReport";
-    //public static final String BASE_APP_URL = "http://localhost:8080/DailyReport";
+    public static final String BASE_APP_URL 
+            = "http://" + getHostName() + "/DailyReport";
     
     public static final String STARTUP_PAGE = BASE_APP_URL + "/index.jsp";
     public static final String OVERVIEW_PAGE = BASE_APP_URL + "/overview.jsp";
@@ -24,5 +29,33 @@ public interface WebPages {
     public static final String DISK_SPACE_PAGE = BASE_APP_URL + "/disk-space.jsp";
     
     public static final String ERROR_PAGE = BASE_APP_URL + "/errorpages/404.html";
+    
+    /**
+     * Gets the local host name
+     * 
+     * @return 
+     */
+    private static String getHostName() {
+        
+        InetAddress address = null;
+        try {
+            
+            address = InetAddress.getLocalHost();
+        } 
+        
+        catch (UnknownHostException ex) {
+            Logger.getLogger(WebPages.class.getName()).log(Level.SEVERE, null, ex);
+            return "localhost:8080"; 
+        }
+        
+        String hostName = address.getCanonicalHostName();
+        
+        if (hostName == null || hostName.isEmpty() || 
+                hostName.contains("Company.net")) 
+            return "localhost:8080";
+        else
+            return hostName + ":8080";
+        
+    }
     
 }
