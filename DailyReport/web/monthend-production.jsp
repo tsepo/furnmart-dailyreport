@@ -47,6 +47,8 @@
         
         <title>Furnmart Monthend Production Stats Page</title>
           <%@include file="master/global-header.jspf" %>
+          <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
+           <link type="text/css" rel="stylesheet" href="stylesheets/biExtracts.css" />
     </head>
     <body>
           <div class="header">
@@ -55,13 +57,16 @@
           
            <div class="subContentArea">
             
-               <div class="subHeader"><center>Monthend Extracts</center></div>    
+               <div class="subHeader"><center>Monthend Extracts</center></div>   
+               
+              
         
           <table border="0" cellspacing="2" cellpadding="2" width="50%">
                     
                     <thead>
                          <tr class="headerRow"> 
                              <th style="text-align: center">Branch</th>
+                              <th style="text-align: center">Branch Type</th>
                             <th>Debtors</th>     
                             <th>Creditors</th>
                             <th>Cash Book</th>
@@ -75,7 +80,10 @@
                         
                         
                         <% 
+                            int count = 0;    
                             for (MonthendEntity entity : details){ 
+                                ++count;
+                                boolean isEven = (count % 2 == 0);
                                 String debtorsFlag = "images/ok.png";
                                 if (entity.isIsDebtorsRun() == false)
                                     debtorsFlag = "images/error.png";
@@ -92,8 +100,9 @@
                                        %>                          
                             
                             
-                            <tr>
-                                <td span class="bigText" style="text-align: center"><%= entity.getBranchCode()  %></td>   
+                            <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
+                                <td span class="bigText" style="text-align: center"><%= entity.getBranchCode()  %></td>
+                                <td span class="smallText" style="text-align: center"><%= entity.getBranchType()  %></td>
                                 <td style="text-align: center"><img src="<%= debtorsFlag %>" style="width:36px;" /></td>
                                 <td style="text-align: center"><img src="<%= creditorsFlag %>" style="width:36px" /></td>
                                 <td style="text-align: center"><img src="<%= cashBookFlag %>" style="width:36px" /></td>
