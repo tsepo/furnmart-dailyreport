@@ -19,7 +19,6 @@ public class WebPages {
     
     public static final String BASE_APP_URL 
             = "http://" + getHostName() + "/DailyReport";
-    
 
     public static final String STARTUP_PAGE = BASE_APP_URL + "/index.jsp";
     public static final String OVERVIEW_PAGE = BASE_APP_URL + "/overview.jsp";
