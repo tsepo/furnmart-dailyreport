@@ -32,6 +32,10 @@
         <servlet-name>DiskSpaceServlet</servlet-name>
         <servlet-class>za.co.argility.furnmart.servlet.DiskSpaceServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MonthEndProductionServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.MonthEndProductionServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OverviewServlet</servlet-name>
         <url-pattern>/overview</url-pattern>
@@ -71,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>DiskSpaceServlet</servlet-name>
         <url-pattern>/DiskSpace</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MonthEndProductionServlet</servlet-name>
+        <url-pattern>/MonthEndProduction</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

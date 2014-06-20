@@ -10,17 +10,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
 import za.co.argility.furnmart.entity.ExtractError;
 import za.co.argility.furnmart.entity.ExtractHistory;
 import za.co.argility.furnmart.entity.ExtractType;
+import za.co.argility.furnmart.entity.MonthEndTableType;
+import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.NetworkEntity;
 import za.co.argility.furnmart.entity.ProcessType;
 import za.co.argility.furnmart.entity.ReplicationEntity;
@@ -233,6 +237,147 @@ public class DataFactory {
         
     }
     
+    
+    public static void getMonthendDetails(MonthEndTableType type, HashMap<String, MonthendEntity> map) throws Exception {
+        
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String fpp = null;
+        int count = 0;
+        boolean flag = false;
+        
+       // ArrayList<MonthendEntity>  list = new ArrayList<MonthendEntity>();
+        
+        if (map == null)
+            map = new HashMap<String, MonthendEntity>();
+        
+       
+        try {
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_MECONS_FPP_CDE);
+            rs = ps.executeQuery();
+                  
+            
+            while (rs.next()) {
+                fpp = (rs.getString("fpp_cde"));
+            }
+        
+            MonthendEntity item = null;
+            
+            String tableName = null;
+            
+            switch (type) {
+                case CentralAccount:
+                    tableName = "central_account";
+                    break;
+                    
+                case Creditors:
+                    tableName = "creditors";
+                    break;
+                    
+                case CashBookExtract:
+                    tableName = "cashbook_extract";
+                    break;
+                    
+                case NewGLTranExt:
+                    tableName = "new_gl_tran_ext";
+                    
+            }
+          
+
+            
+                String query = SQLFactory.GET_MONTHEND_DETAILS;
+
+                if (fpp == null) {
+                    query = query.replace("{0}", "");
+                }
+
+                else {
+                    
+                        query = query.replace("{0}", tableName)
+                                .replace("{1}", tableName)
+                             .replace("{2}", fpp);
+                }
+
+
+                ps = connection.prepareStatement(query);
+
+                rs = ps.executeQuery();
+                
+                while(rs.next()) {                    
+                    
+                    String key = rs.getString("branch");
+                    /*
+                    String branchType ="Instore";
+                    if( rs.getBoolean("br_is_whs") == true){
+                        branchType ="Warehouse";
+                    }
+                    if( rs.getBoolean("br_is_headoffice") == true){
+                        branchType ="H/O";
+                    }*/
+                     
+                    if (map.get(key) != null) {
+                        item = map.get(key);
+                    }
+                    
+                    else
+                        
+                        item = new MonthendEntity();
+                    
+                    item.setBranchCode(rs.getString("branch"));
+                   // item.setFppCde(rs.getString("fpp_cde"));
+                    //item.setBranchType(branchType);
+                    count = rs.getInt(tableName); 
+                    System.out.println("me.getKey() ---> " + tableName);
+                    System.out.println("count ---> " + count);
+                    
+                    if(count > 0){
+                        flag = true;
+                    }else{
+                        flag = false;
+                    }    
+                    
+                    
+                    
+               
+                switch (type) {
+                    case CentralAccount:  item.setIsDebtorsRun(flag);
+                             System.out.println("Hey dude 1 : " + count);  
+                     break;
+                    case Creditors :  item.setIsCreditorsRun(flag);
+                             System.out.println("Hey dude 2 : " + count); 
+                     break;
+                    case CashBookExtract:  item.setIsCashBookExtractRun(flag);                    
+                             System.out.println("Hey dude 3 : "  + count);  
+                     break;
+                    case NewGLTranExt: item.setIsNewGLTranExtRun(flag);
+                            System.out.println("Hey dude 4 : " + count); 
+                     break;
+                }                
+             
+                    
+                 map.put(key, item);
+                      
+
+                }
+                
+                System.out.println("test 2");
+        
+            
+        
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        }
+        
+        finally {
+            ConnectionManager.close(connection);
+        }
+        
+    }
+    
     public static final List<String> getReplicationBranchList() throws Exception {
         
         List<String> list = new ArrayList<String>();
@@ -244,6 +389,39 @@ public class DataFactory {
             
             connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
             ps = connection.prepareStatement(SQLFactory.GET_REPLICATION_BRANCH_LIST);
+            rs = ps.executeQuery();
+            
+            list.add("ALL");
+            
+            while (rs.next()) {
+                list.add(rs.getString("br_cde"));
+            }
+        
+            return list;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        }
+        
+        finally {
+            ConnectionManager.close(connection); 
+        }
+        
+    }
+    
+    
+    public static final List<String> getMonthendBranchList() throws Exception {
+        
+        List<String> list = new ArrayList<String>();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            
+            connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
+            ps = connection.prepareStatement(SQLFactory.GET_MONTHEND_BRANCH_LIST);
             rs = ps.executeQuery();
             
             list.add("ALL");
@@ -300,6 +478,38 @@ public class DataFactory {
         }
         
     }
+    
+    public static String getMeconFpp() throws Exception {
+        String fpp = null;
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_MECONS_FPP_CDE);
+            rs = ps.executeQuery();
+            
+           
+            
+            while (rs.next()) {
+                fpp = (rs.getString("fpp_cde"));
+            }
+        
+            return fpp;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        }
+        
+        finally {
+            ConnectionManager.close(connection); 
+        }
+        
+    }
+    
     
     public static List<ReplicationEntity> searchReplicationDataByFilter(String branch, String process) throws Exception {
         
