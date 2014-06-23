@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -67,10 +68,22 @@ public class ReplicationServlet extends GenericServlet {
             
             // check if the client requested an export
             if (request.getParameter("export") != null && 
-                    request.getParameter("export").equals("csv")) {
+                request.getParameter("export").equals("csv")) {
+                    
+                if (request.getParameter("type") != null && 
+                    request.getParameter("type").equals("filter")) {
                 
-                processExportReplicationSummary(data, request, response);
-                return;
+                    processExportReplicationSummary(data, ReplicationData.EXPORT_TYPE_FILTER, response);
+                    return;
+                }
+                
+                if (request.getParameter("type") != null && 
+                    request.getParameter("type").equals("unhealthy")) {
+                    
+                    processExportReplicationSummary(data, ReplicationData.EXPORT_TYPE_UNHEALTHY_BRANCHES, response);
+                    return;
+                    
+                }
             }
             
             // save the data to the session
@@ -161,7 +174,7 @@ public class ReplicationServlet extends GenericServlet {
     }
 
    
-    private void processExportReplicationSummary(ReplicationData data, HttpServletRequest request, 
+    private void processExportReplicationSummary(ReplicationData data, int exportType, 
             HttpServletResponse response) throws Exception {
         
         if (data == null)
@@ -169,12 +182,32 @@ public class ReplicationServlet extends GenericServlet {
         
         final String DELIMITER = ",";
         final String LINE_FEED = "\r\n";
-        final String NEW_LINE = "\n";
         final String DATE_FORMAT = "yyyy MMMM dd HH:mm:ss";
         
-        // read up all the replication details
+        List<ReplicationEntity> details = null;
         
-        List<ReplicationEntity> details = DataFactory.getReplicationDetails();
+        // read up all the replication details
+        if (exportType == ReplicationData.EXPORT_TYPE_FILTER) {
+            details = data.getReplicationDetails();
+            if (details == null)
+                details = DataFactory.getReplicationDetails();
+        }
+        
+        else if (exportType == ReplicationData.EXPORT_TYPE_UNHEALTHY_BRANCHES) {
+            
+            List<ReplicationEntity> temp = DataFactory.getReplicationDetails();
+            details = new ArrayList<ReplicationEntity>();
+            
+            for (ReplicationEntity item : temp){
+                if (!item.isBranchOk()) {
+                    details.add(item);
+                }
+            }
+            
+            temp = null;
+                
+        }
+            
         StringBuilder builder = new StringBuilder();
         
         // prepare the headings of the CSV file
@@ -207,9 +240,9 @@ public class ReplicationServlet extends GenericServlet {
                 
                 if (item.getComments() != null && !item.getComments().isEmpty()) {
                     StringBuilder comments = new StringBuilder();
-                    
+      
                     for (String comment : item.getComments()) {
-                        comments.append(comment).append(NEW_LINE);
+                        comments.append(comment).append(" ");
                     }
                     
                     builder.append(comments.toString()).append(LINE_FEED);
@@ -221,7 +254,13 @@ public class ReplicationServlet extends GenericServlet {
             // write the CSV content to the file to be downloaded
             
             long tag = System.currentTimeMillis();
-            final String FILE_PATH = "/tmp/" + tag + ".csv";
+            String FILE_PATH = null;
+            
+            if (GeneralUtils.getOperationSystemName().contains("Windows"))
+                FILE_PATH = "C:\\Users\\" + GeneralUtils.getContextUsername() 
+                        + "\\AppData\\Local\\Temp\\" + tag + ".csv";
+            else
+                FILE_PATH = "/tmp/" + tag + ".csv";
             
             File downloadFile = new File(FILE_PATH);
             if (downloadFile.exists())
@@ -263,6 +302,8 @@ public class ReplicationServlet extends GenericServlet {
 
             input.close();
             output.close();
+            
+            downloadFile.delete();
             
         }
         

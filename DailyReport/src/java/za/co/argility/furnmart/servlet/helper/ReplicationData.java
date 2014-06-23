@@ -21,6 +21,9 @@ public class ReplicationData  {
     public static final String BRANCH_WARNING_IMAGE_URL = 
             "http://i879.photobucket.com/albums/ab359/tmaleka/ARGILITY/warning_2_zps4954eb85.png";
     
+    public static final int EXPORT_TYPE_FILTER = 0;
+    public static final int EXPORT_TYPE_UNHEALTHY_BRANCHES = 1;
+    
     private List<ReplicationEntity> replicationDetails;
     private List<String> replicationBranchList;
     private ReplicationSearchEntity search;

@@ -29,12 +29,36 @@ public final class GeneralUtils {
             return "No";
     }
      
+    /**
+     * Formats the date output
+     * to the given format
+     * 
+     * @param date
+     * @param format
+     * @return 
+     */
     public static String formatDate(Date date, String format) {
         
         if (date == null || format == null)
-            return null;
+            return "";
         
         SimpleDateFormat f = new SimpleDateFormat(format);
         return f.format(date);
+    }
+    
+    /**
+     * Gets the name of the operating system
+     * @return 
+     */
+    public static String getOperationSystemName() {
+        return System.getProperty("os.name");
+    }
+    
+    /**
+     * Gets the context user's username
+     * @return 
+     */
+    public static String getContextUsername() {
+        return System.getProperty("user.name");
     }
 }

@@ -206,7 +206,7 @@ public class DataFactory {
                             new DateTime(now)).getHours();
                     
                     if (hours >= 3)  
-                        comments.add("Replication is passive on central for over " + hours + " hours");
+                        comments.add("Replication is passive on central for over " + hours + " hours.");
                     
                     
                     
