@@ -16,8 +16,10 @@
     // get the data from the session
     
     MonthendData data = (MonthendData)session.getAttribute(SessionAttribute.MONTHEND_DATA_TAG);
-    if (data == null)
-        response.sendRedirect(WebPages.BASE_APP_URL + "/monthend"); 
+    if (data == null) {
+        response.sendRedirect(WebPages.BASE_APP_URL + "/MonthEndProduction?tab=production"); 
+        return;
+    }
     
     // replication details
     List<MonthendEntity> details = data.getMonthendDetails();

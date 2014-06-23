@@ -35,6 +35,10 @@
     <servlet>
         <servlet-name>MonthEndProductionServlet</servlet-name>
         <servlet-class>za.co.argility.furnmart.servlet.MonthEndProductionServlet</servlet-class>
+        <init-param>
+            <param-name>tab</param-name>
+            <param-value>overview</param-value>
+        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>OverviewServlet</servlet-name>
@@ -88,12 +92,12 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-    <error-page>
+    <!-- <error-page>
         <error-code>404</error-code>
         <location>/errorpages/error-occured.jsp</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
         <location>/errorpages/error-occured.jsp</location>
-    </error-page>
+    </error-page> -->
 </web-app>

@@ -8,6 +8,7 @@ package za.co.argility.furnmart.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,11 +18,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import za.co.argility.furnmart.data.DataFactory;
 import za.co.argility.furnmart.entity.MonthEndTableType;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.servlet.helper.MonthendData;
+import za.co.argility.furnmart.servlet.helper.MonthendOverviewData;
 import za.co.argility.furnmart.util.BucketMap;
+import za.co.argility.furnmart.util.Log;
 import za.co.argility.furnmart.util.WebPages;
 
 /**
@@ -43,52 +47,108 @@ public class MonthEndProductionServlet  extends GenericServlet {
             throws ServletException, IOException {
        
         super.doGet(request, response); 
+       
+        Log.setLogger(MonthEndProductionServlet.class);
         
         if (response.isCommitted()) {
             return;
         }
         
-        MonthendData data = (MonthendData)getSessionData(request, SessionAttribute.MONTHEND_DATA_TAG);
+        try {
+        
+        boolean hasParameters = (request.getParameterMap() == null || 
+                 !request.getParameterMap().isEmpty());
+            
+        if (!hasParameters || (request.getParameter("tab") != null 
+                && request.getParameter("tab").equals("overview"))) {
+            
+            Log.info("... inside overview ...");
+            
+            processMonthEndOverviewData(request, response);
+            response.sendRedirect(WebPages.MONTHEND_OVERVIEW_PAGE);
+            return;
+        }
+        
+        if (request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("production")) {
+            
+            Log.info("... inside production ...");
+            
+            processMonthEndProductionData(request, response);
+            response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
+            return;
+        }
+        
+        }
+        
+        catch (Exception e) {
+            Log.info("Exception: " + e.getMessage());
+            this.showErrorPage(request, response);
+        }
+        
+    }
+    
+    protected void processMonthEndOverviewData(HttpServletRequest request, 
+            HttpServletResponse response) throws IOException {
+        
+        if (request.getParameterMap() == null || request.getParameterMap().size() == 0) {
+            
+            HttpSession session = request.getSession(true);
+            MonthendOverviewData data = (MonthendOverviewData)getSessionData(request, 
+                    SessionAttribute.MONTHEND_OVERVIEW_DATA_TAG);
+            if (data == null)
+                data = new MonthendOverviewData();
+            
+            
+            saveSession(request, data, SessionAttribute.MONTHEND_OVERVIEW_DATA_TAG);
+
+        }
+        
+    }
+
+    
+    protected void processMonthEndProductionData(HttpServletRequest request, 
+            HttpServletResponse response) throws Exception {
+        if (request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("production")) {
+            
+        MonthendData data = (MonthendData)getSessionData(request, 
+                            SessionAttribute.MONTHEND_DATA_TAG);
+
         if (data == null) {
             data = new MonthendData();
         }
         
-        try {
-            
-           // get the details for replication
-            HashMap<String, MonthendEntity> map = new HashMap<String, MonthendEntity>();
-            
-            DataFactory.getMonthendDetails(MonthEndTableType.NewGLTranExt, map);
-            DataFactory.getMonthendDetails(MonthEndTableType.CashBookExtract, map);
-            DataFactory.getMonthendDetails(MonthEndTableType.CentralAccount, map);
-            DataFactory.getMonthendDetails(MonthEndTableType.Creditors,map);
-            
-            ArrayList<MonthendEntity> details = new ArrayList<MonthendEntity>();
-            TreeSet<String> branches = new TreeSet<String>(map.keySet());
-            for (String branch : branches) {
-                details.add(map.get(branch));
-            }
-            data.setMonthendDetails(details);
-            
-           
-            // get the replication branch list
-            //data.setMonthendBranchList(DataFactory.getMonthendBranchList()); 
-            
-            // get the processes
-            //data.setProcesses(DataFactory.getReplicationProcesses()); 
-            
-            // save the data to the session
-            saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);
-            
-            // this can be changed later - just for now
-            response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
-        
+       
+
+        // get the details for replication
+         HashMap<String, MonthendEntity> map = new HashMap<String, MonthendEntity>();
+
+         DataFactory.getMonthendDetails(MonthEndTableType.NewGLTranExt, map);
+         DataFactory.getMonthendDetails(MonthEndTableType.CashBookExtract, map);
+         DataFactory.getMonthendDetails(MonthEndTableType.CentralAccount, map);
+         DataFactory.getMonthendDetails(MonthEndTableType.Creditors,map);
+
+         ArrayList<MonthendEntity> details = new ArrayList<MonthendEntity>();
+         TreeSet<String> branches = new TreeSet<String>(map.keySet());
+         for (String branch : branches) {
+             details.add(map.get(branch));
+         }
+         data.setMonthendDetails(details);
+
+
+         // get the replication branch list
+         //data.setMonthendBranchList(DataFactory.getMonthendBranchList()); 
+
+         // get the processes
+         //data.setProcesses(DataFactory.getReplicationProcesses()); 
+
+         // save the data to the session
+         saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);
+
+         // this can be changed later - just for now
+        // response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
+
         }
-        catch (Exception e) {
-             showErrorPage(request, response);
-        }
-        
-        
-        
     }
 }

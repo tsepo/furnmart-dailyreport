@@ -77,6 +77,19 @@ function processMenuItem(option) {
     }
 }
 
+
+function processMonthendMenuItem(option) {
+    
+     if (option == "extracts") {
+        //toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/MonthEndProduction?tab=production");
+        
+    }
+    
+    else alert("No page found.");
+    
+}
+
 /**
  * Sets the auto refresh settings
  * 
