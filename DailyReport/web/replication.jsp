@@ -156,6 +156,7 @@
                         <tr style="border-top: 1px solid gray">
                             <th></th>
                             <th>Branch</th>
+                            <th>Period</th>
                             <th>Audit Up To</th>
                             <th>Replicate Up To</th>
                             <th>Difference</th>
@@ -193,6 +194,7 @@
                             </td>
                             <td><span class="bigText"><%= entity.getBranchCode() %></span><br/>
                                 <span class="smallText"><%= entity.getBranchName() %></span></td>
+                            <td><%= entity.getPeriod() %></td>
                             <td><%= entity.getAudit() %></td>
                             <td><%= entity.getReplicate() %></td>
                             <td>

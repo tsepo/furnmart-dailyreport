@@ -152,4 +152,6 @@ public interface SQLFactory {
             + "FROM daily_bi_extracts_sent_files "
             //+ "WHERE AGE(last_sent_time) < '1 hour' "
             + "ORDER BY br_cde";
+    
+    public static final String GET_BRANCH_ROLLED_FPP_CODE = "SELECT fpp_cde FROM br_prof";
 }

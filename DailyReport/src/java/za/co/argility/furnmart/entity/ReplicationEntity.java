@@ -26,6 +26,7 @@ public class ReplicationEntity {
     private Date unlockedDate;
     private String process;
     private List<String> comments;
+    private String period;
     
     public ReplicationEntity() {
         
@@ -118,7 +119,14 @@ public class ReplicationEntity {
     public void setComments(List<String> comments) {
         this.comments = comments;
     }
-    
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
     
     
 }
