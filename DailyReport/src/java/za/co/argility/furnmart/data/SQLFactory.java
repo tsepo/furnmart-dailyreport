@@ -154,4 +154,7 @@ public interface SQLFactory {
             + "ORDER BY br_cde";
     
     public static final String GET_BRANCH_ROLLED_FPP_CODE = "SELECT fpp_cde FROM br_prof";
+    
+    public static final String GET_BRANCH_DESCRIPTION = "SELECT br_desc FROM branch WHERE br_cde = ?";
+    
 }

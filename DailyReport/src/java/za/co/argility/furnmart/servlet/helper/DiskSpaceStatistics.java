@@ -8,12 +8,14 @@ package za.co.argility.furnmart.servlet.helper;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.TreeMap;
+import za.co.argility.furnmart.data.DataFactory;
 import za.co.argility.furnmart.entity.DiskSpace;
+import za.co.argility.furnmart.util.GeneralUtils;
 
 /**
  *
@@ -31,9 +33,17 @@ public class DiskSpaceStatistics {
      * 
      * @return 
      */
-    public TreeMap<String, DiskSpace> getDiskSpaceStatistics() throws IOException {
+    public TreeMap<String, DiskSpace> getDiskSpaceStatistics() throws IOException, SQLException {
         
-        final String directoryName = DIRECTORY + "/results/collectDiskSpaceStats";
+        String directoryName = null;
+        if (GeneralUtils.getOperationSystemName().contains("Windows")) {
+            directoryName = "C:\\Users\\" + GeneralUtils.getContextUsername() + "\\" 
+                            + "Desktop\\results\\collectDiskSpaceStats";
+        }
+        
+        else 
+            directoryName = DIRECTORY + "/results/collectDiskSpaceStats";
+        
         TreeMap<String, DiskSpace> map = null;
         String[] resultFiles = null;
         
@@ -56,7 +66,12 @@ public class DiskSpaceStatistics {
                 if (file.exists() && !file.isDirectory()) {
                     
                     key = filename.substring(filename.indexOf(".") + 1);
-                    map.put(key, createDiskSpaceInstances(file));
+                    
+                    DiskSpace diskSpace = createDiskSpaceInstances(file);
+                    diskSpace.setBranchCode(key);
+                    diskSpace.setDescription(DataFactory.getBranchDescription(key));
+                    
+                    map.put(key, diskSpace);
                 }
             }
         }
