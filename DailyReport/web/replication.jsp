@@ -136,16 +136,18 @@
                 <%
                        String resultsDisplay = null;
                        if (details.size() == 1)
-                           resultsDisplay = "Returned replication results for " + details.size() + " store.";
+                           resultsDisplay = "Returned replication results for <strong>" + details.size() + "</strong> store.";
                        else
-                           resultsDisplay = "Returned replication results for " + details.size() + " stores.";
+                           resultsDisplay = "Returned replication results for <strong>" + details.size() + "</strong> stores.";
                 %>
                 
                 <p><%= resultsDisplay %></p>
                 <p class="alertText">NB: If the branch is locked or replication crashed on central, please investigate.</p>
                 <p>
-                    <a href="<%= WebPages.BASE_APP_URL + "/replication?export=csv" %>" target="_blank" 
-                       title="Export replication summary to CSV">Export to CSV</a>
+                    <strong>Export to CSV options: </strong> <a href="<%= WebPages.BASE_APP_URL + "/replication?export=csv&type=filter" %>" target="_blank" 
+                       title="Export replication summary as per filter to CSV file">current results</a> | 
+                    <a href="<%= WebPages.BASE_APP_URL + "/replication?export=csv&type=unhealthy" %>" target="_blank" 
+                       title="Export yellow stores on replication to a CSV file">unhealthy stores</a>
                 </p>
                 
                 <table class="replicationDetails" border="0" width="100%">
@@ -154,6 +156,7 @@
                         <tr style="border-top: 1px solid gray">
                             <th></th>
                             <th>Branch</th>
+                            <th>Period</th>
                             <th>Audit Up To</th>
                             <th>Replicate Up To</th>
                             <th>Difference</th>
@@ -191,6 +194,7 @@
                             </td>
                             <td><span class="bigText"><%= entity.getBranchCode() %></span><br/>
                                 <span class="smallText"><%= entity.getBranchName() %></span></td>
+                            <td><%= entity.getPeriod() %></td>
                             <td><%= entity.getAudit() %></td>
                             <td><%= entity.getReplicate() %></td>
                             <td>

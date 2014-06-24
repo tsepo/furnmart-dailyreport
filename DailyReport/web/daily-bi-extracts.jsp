@@ -64,11 +64,13 @@
                 <div class="wrapper">DAILY BI EXTRACTS</div>
             </div>
             
-            <div class="subContentArea" style="border-bottom: 1px solid gray; font-size:14px">
-                
-                <form name="pickDayBIExtractsForm" id="pickDayBIExtractsForm" method="get" 
+            <form name="pickDayBIExtractsForm" id="pickDayBIExtractsForm" method="get" 
                       action="<%= WebPages.BASE_APP_URL %>/dailyBIExtracts"
                       onsubmit="return validatePickDayForExtracts(this)">
+            
+            <div class="subContentArea" style="border-bottom: 1px solid gray; font-size:14px">
+                
+                
                     
                     <table border="0" cellspacing="2" cellpadding="2" width="50%">
                         <tr>
@@ -107,11 +109,7 @@
                             </td>
                         </tr>
                     </table>
-                     
-                                
-                                
-                </form>
-                       
+                        
             </div>
             
          
@@ -300,8 +298,11 @@
                         </table>
                     </div>
                 
+                            
             </div>
-            
+                            
+           </form>
+      
         </div>
         
     </body>

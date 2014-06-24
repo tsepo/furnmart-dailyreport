@@ -9,14 +9,13 @@ package za.co.argility.furnmart.data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
@@ -208,7 +207,7 @@ public class DataFactory {
                             new DateTime(now)).getHours();
                     
                     if (hours >= 3)  
-                        comments.add("Replication is passive on central for over " + hours + " hours");
+                        comments.add("Replication is passive on central for over " + hours + " hours.");
                     
                     
                     
@@ -220,6 +219,9 @@ public class DataFactory {
                     item.setIsBranchOk(true);
                 else
                     item.setIsBranchOk(false); 
+                
+                // set the item's current fpp code
+                item.setPeriod(getCurrentFppCode(item.getBranchCode()));
                 
                 list.add(item);
                 
@@ -614,6 +616,9 @@ public class DataFactory {
                 else
                     item.setIsBranchOk(false); 
                 
+                // set the item's current fpp code
+                item.setPeriod(getCurrentFppCode(item.getBranchCode()));
+                
                 list.add(item);
                 
             }
@@ -769,6 +774,45 @@ public class DataFactory {
         
         finally {
             ConnectionManager.close(connection); 
+        }
+        
+    }
+    
+    /**
+     * Gets the current fpp code
+     * 
+     * @param branch
+     * @return
+     * @throws SQLException 
+     */
+    public static String getCurrentFppCode(String branch) throws SQLException {
+        
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        String period = null;
+        
+        try {
+            
+            connection = ConnectionManager.getConnection(ConnectionType.INSTORE, "c" + branch);
+            ps = connection.prepareStatement(SQLFactory.GET_BRANCH_ROLLED_FPP_CODE);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                period = rs.getString(1);
+            }
+            
+            return period;
+        
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException(e);
+        }
+        
+        finally {
+            ConnectionManager.close(connection);
         }
         
     }
