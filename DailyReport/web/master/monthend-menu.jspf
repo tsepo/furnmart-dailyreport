@@ -16,7 +16,7 @@
 
  <table border="0" width="100%">
     <tr>
-        <td> <h2>Furnmart Daily Summary Report</h2> </td>
+        <td> <h2>Furnmart Monthend Summary Report</h2> </td>
         <td> <p><b>DATE</b>: <%= new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm").format(new Date()) %></p> </td>
     </tr>
 </table>
@@ -25,14 +25,14 @@
 <div style="background: gray; height:1px; width:100%"></div>
 
 <!-- Menu Items -->
-<div class="menuSection">
-    <div class="menuItem" onclick="processMonthendMenuItem('extracts')" >
-        <p>EXTRATCS</p>
-    </div>
+<div class="menuSection">    
      <div class="menuItem" onclick="processMonthendMenuItem('process')" >
         <p>PROCESS</p>
      </div>
-     <div class="menuItem" onclick="processMonthendMenuItem('gl-balancing')">
+    <div class="menuItem" onclick="processMonthendMenuItem('extracts')" >
+        <p>EXTRATCS</p>
+    </div>
+    <div class="menuItem" onclick="processMonthendMenuItem('gl-balancing')">
         <p>GL BALANCING</p>
     </div>
     

@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import za.co.argility.furnmart.data.DataFactory;
+import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthEndTableType;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.servlet.helper.MonthendData;
@@ -62,7 +63,9 @@ public class MonthEndProductionServlet  extends GenericServlet {
         if (!hasParameters || (request.getParameter("tab") != null 
                 && request.getParameter("tab").equals("overview"))) {
             
-            Log.info("... inside overview ...");
+            Log.info("... inside overview ...");          
+            
+            
             
             processMonthEndOverviewData(request, response);
             response.sendRedirect(WebPages.MONTHEND_OVERVIEW_PAGE);
@@ -78,6 +81,18 @@ public class MonthEndProductionServlet  extends GenericServlet {
             response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
             return;
         }
+        
+        
+         if (request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("processes")) {
+            
+            Log.info("... inside processes ...");
+            
+            checkGLSubType(request, response);
+            response.sendRedirect(WebPages.MONTHEND_PROCESSES_PAGE);
+            return;
+        }
+        
         
         }
         
@@ -106,6 +121,8 @@ public class MonthEndProductionServlet  extends GenericServlet {
         
     }
 
+    
+    
     
     protected void processMonthEndProductionData(HttpServletRequest request, 
             HttpServletResponse response) throws Exception {
@@ -150,5 +167,35 @@ public class MonthEndProductionServlet  extends GenericServlet {
         // response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
 
         }
+        
+        
+        
+        
+        
     }
+    
+     protected void checkGLSubType(HttpServletRequest request, 
+            HttpServletResponse response) throws Exception {
+            
+          
+            if (request.getParameter("tab") != null &&  
+                request.getParameter("tab").equals("processes")) {
+            MonthendData data = (MonthendData)getSessionData(request, 
+                            SessionAttribute.MONTHEND_DATA_TAG);
+
+            if (data == null) {
+                data = new MonthendData();
+            }   
+             Log.info("... inside gl subType ...");    
+            
+            List<GLSubType>  glSubTypeMissingList = DataFactory.getGlSubTypeMissingList();
+            data.setGlSubType(glSubTypeMissingList);
+             Log.info("... inside gl subType ..." + glSubTypeMissingList.size());    
+            saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);
+        
+            }
+                    
+                    
+         
+     }
 }

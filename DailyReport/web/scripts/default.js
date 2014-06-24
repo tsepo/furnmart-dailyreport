@@ -84,9 +84,15 @@ function processMonthendMenuItem(option) {
         //toggleLoadingTopBar(true);
         window.location.replace(BASE_URL + "/MonthEndProduction?tab=production");
         
+     }
+     if (option == "process") {
+        //toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/MonthEndProduction?tab=processes");
+        
     }
+     
     
-    else alert("No page found.");
+    //else alert("No page found.");
     
 }
 

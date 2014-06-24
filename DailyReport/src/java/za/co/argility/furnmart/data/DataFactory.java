@@ -22,12 +22,14 @@ import org.joda.time.Hours;
 import za.co.argility.furnmart.entity.ExtractError;
 import za.co.argility.furnmart.entity.ExtractHistory;
 import za.co.argility.furnmart.entity.ExtractType;
+import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthEndTableType;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.NetworkEntity;
 import za.co.argility.furnmart.entity.ProcessType;
 import za.co.argility.furnmart.entity.ReplicationEntity;
 import za.co.argility.furnmart.util.BucketMap;
+import za.co.argility.furnmart.util.Log;
 
 /**
  *
@@ -839,6 +841,46 @@ public class DataFactory {
         }
         catch (Exception e) {
             e.printStackTrace();
+            throw new SQLException(e);
+        }
+        
+        finally {
+            ConnectionManager.close(connection);
+        }
+        
+    }
+    
+    public static List<GLSubType> getGlSubTypeMissingList() 
+            throws Exception {
+        
+        List<GLSubType> list = new ArrayList<GLSubType>();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null; 
+        
+        try {
+            
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_MISSING_GL_SUB_TYPES);
+            rs = ps.executeQuery();
+            
+             GLSubType entity = null;            
+             Log.info("... inside gl data subtype ..."); 
+            while (rs.next()) {
+                entity = new GLSubType();
+                Log.info("... inside gl data subtype result  ...");   
+                entity.setGlActType(rs.getInt("act_typ"));
+                entity.setGlSubType(rs.getInt("sub_typ"));
+                list.add(entity);
+            }
+            
+            Log.info("... inside gl data subtype list size ---> " + list.size()); 
+            return list;
+        
+            
+        }
+        catch (Exception e) {
+             e.printStackTrace();
             throw new SQLException(e);
         }
         
