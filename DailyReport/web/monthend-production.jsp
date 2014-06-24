@@ -48,7 +48,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         
-        <title>Furnmart Monthend Production Stats Page</title>
+        <titlend Production Stats Page</title>
           <%@include file="master/global-header.jspf" %>
           <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
            <link type="text/css" rel="stylesheet" href="stylesheets/biExtracts.css" />
@@ -64,7 +64,7 @@
                
               
         
-          <table border="0" cellspacing="2" cellpadding="2" width="50%">
+          <table border="0" cellspacing="2"padding="2" width="50%">
                     
                     <thead>
                          <tr class="headerRow"> 

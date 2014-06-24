@@ -152,4 +152,14 @@ public interface SQLFactory {
             + "FROM daily_bi_extracts_sent_files "
             //+ "WHERE AGE(last_sent_time) < '1 hour' "
             + "ORDER BY br_cde";
+    
+    
+    public static final String GET_MISSING_GL_SUB_TYPES = "select distinct gl_tran_map.act_typ, gl_tran_map.sub_typ \n" + 
+                                                          "from gl_tran_map \n" +
+                                                          "join new_gl_tran_ext on new_gl_tran_ext.act_typ = gl_tran_map.act_typ \n" + 
+                                                          "and new_gl_tran_ext.sub_typ = gl_tran_map.sub_typ \n" +
+                                                          "where not exists (select * from gl_sub_type_map  \n" + 
+                                                          "where gl_sub_type_map.act_typ = gl_tran_map.act_typ \n" +
+                                                          "and gl_sub_type_map.gl_sub_type = gl_tran_map.sub_typ)";
+    
 }
