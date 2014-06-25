@@ -25,7 +25,11 @@
     System.out.println("details-- > " + details.size());
     if (details == null)
         details = new ArrayList<GLSubType>();
-
+  
+    List<MonthendProcesses> processes = data.getMonthendProcesses();
+    System.out.println("processes-- > " + processes.size());
+    if (processes == null)
+        processes = new ArrayList<MonthendProcesses>();
     
 %>
 
@@ -47,6 +51,59 @@
                 <div class="wrapper" ><p>Monthend Process Page</p></div>
           </div>
          
+        
+        
+        <div class="subHeader"><center>Active Monthend Processes</center></div>   
+                    
+              
+        
+          <table border="0" cellspacing="2" cellpadding="2" width="50%">
+                    
+                    <thead>
+                         <tr class="headerRow"> 
+                             <th style="text-align: center">Process Code</th>
+                              <th style="text-align: center">Process Name</th>
+                              <th style="text-align: center">Process Method</th>
+                              <th style="text-align: center">Process Class</th>
+                            
+                        </tr>
+                    </thead>                    
+                 
+                    <tbody>
+                        <% 
+                            int count = 0;    
+                            for (MonthendProcesses entity : processes){
+                                  ++count;
+                                boolean isEven = (count % 2 == 0);                            
+                                
+                               %>
+                            
+                            <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
+                                <td><%= entity.getProdCde() %></td>
+                                <td><%= entity.getProdClassDesc() %></td>
+                                <td><%= entity.getProdMethod() %></td>
+                                <td><%= entity.getProdClass() %></td>
+                            </tr>  
+                            
+                        <% } %>
+                        
+                        
+                   </tbody>
+          </table>
+        
+                        <br><br>
+        
+                        <div class="subHeader"><center>How to run processes from command line</center></div>
+                        <p></p>
+                        <ul class="bigText">Log onto c9910.fm.co.za</ul>
+                        <ul class="bigText">To run GL (process 100) for branch 0017</ul>
+                        <ul class="bigText">x.step.pprocess -p 100 -b 0017</ul>
+                        
+                        <p></p>
+                        
+                        
+        
+        
         <div class="subHeader"><center>Missing GL Sub Types</center></div>   
                
               
@@ -63,10 +120,10 @@
                  
                     <tbody>
                         <% 
-                            int count = 0;    
+                            int count2 = 0;    
                             for (GLSubType entity : details){
-                                  ++count;
-                                boolean isEven = (count % 2 == 0);                            
+                                  ++count2;
+                                boolean isEven = (count2 % 2 == 0);                            
                                 
                                %>
                             
@@ -80,7 +137,10 @@
                         
                    </tbody>
           </table>
-        
+                        <br><br>
+                        
+                        
+    
         
     </body>
 </html>

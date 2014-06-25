@@ -28,6 +28,7 @@ import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.NetworkEntity;
 import za.co.argility.furnmart.entity.ProcessType;
 import za.co.argility.furnmart.entity.ReplicationEntity;
+import za.co.argility.furnmart.servlet.helper.MonthendProcesses;
 import za.co.argility.furnmart.util.BucketMap;
 import za.co.argility.furnmart.util.Log;
 
@@ -842,6 +843,54 @@ public class DataFactory {
             }
             
             Log.info("... inside gl data subtype list size ---> " + list.size()); 
+            return list;
+        
+            
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        }
+        
+        finally {
+            ConnectionManager.close(connection); 
+        }
+        
+        
+        
+     }
+       
+       public static List<MonthendProcesses> getMEProcessesList() 
+            throws Exception {
+        
+        List<MonthendProcesses> list = new ArrayList<MonthendProcesses>();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null; 
+        
+        try {
+            
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_ME_PROCESSES);
+            rs = ps.executeQuery();
+            
+             MonthendProcesses entity = null;            
+             Log.info("... inside gl data subtype ..."); 
+            while (rs.next()) {
+                entity = new MonthendProcesses();
+                Log.info("... inside gl data subtype result  ...");   
+                entity.setProdCde(rs.getInt("prod_cde"));
+                entity.setProdClassDesc(rs.getString("prod_class_desc"));
+                entity.setProdMethod(rs.getString("prod_method"));
+                String className = rs.getString("prod_obj_jndi_name");
+                if (className.equals("central.ExtractUpdateSessionHome"))
+                    className = "ExtractUpdateSessionBean";
+                
+                entity.setProdClass(className);
+                list.add(entity);
+            }
+            
+            Log.info("... meProcess list size ---> " + list.size()); 
             return list;
         
             

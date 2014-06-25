@@ -25,6 +25,7 @@ import za.co.argility.furnmart.entity.MonthEndTableType;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.servlet.helper.MonthendData;
 import za.co.argility.furnmart.servlet.helper.MonthendOverviewData;
+import za.co.argility.furnmart.servlet.helper.MonthendProcesses;
 import za.co.argility.furnmart.util.BucketMap;
 import za.co.argility.furnmart.util.Log;
 import za.co.argility.furnmart.util.WebPages;
@@ -166,11 +167,8 @@ public class MonthEndProductionServlet  extends GenericServlet {
          // this can be changed later - just for now
         // response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
 
-        }
-        
-        
-        
-        
+        }           
+                
         
     }
     
@@ -190,11 +188,13 @@ public class MonthEndProductionServlet  extends GenericServlet {
             
             List<GLSubType>  glSubTypeMissingList = DataFactory.getGlSubTypeMissingList();
             data.setGlSubType(glSubTypeMissingList);
-             Log.info("... inside gl subType ..." + glSubTypeMissingList.size());    
+            List<MonthendProcesses>  meProcessList = DataFactory.getMEProcessesList();         
+            data.setMonthendProcesses(meProcessList);
+            
+            Log.info("... inside gl subType ..." + glSubTypeMissingList.size());    
             saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);
         
-            }
-                    
+            }                    
                     
          
      }

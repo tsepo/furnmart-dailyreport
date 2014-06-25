@@ -162,4 +162,8 @@ public interface SQLFactory {
                                                           "where not exists (select * from gl_sub_type_map  \n" + 
                                                           "where gl_sub_type_map.act_typ = gl_tran_map.act_typ \n" +
                                                           "and gl_sub_type_map.gl_sub_type = gl_tran_map.sub_typ)";
+     
+        public static final String GET_ME_PROCESSES = "select prod_cde , prod_class_desc , prod_method , prod_obj_jndi_name \n" +  
+                                                            "from prod_class join prod_run using (prod_cde) \n" +
+                                                            "where prod_active and prod_type = 'ME'";
 }

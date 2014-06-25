@@ -26,6 +26,7 @@ public class MonthendData {
     private MonthendSearchEntity search;
     private List<String> processes;
     private List<GLSubType> glSubType;
+    private List<MonthendProcesses> monthendProcesses;
     
     public MonthendData() {
     }
@@ -98,6 +99,20 @@ public class MonthendData {
      */
     public void setGlSubType(List<GLSubType> glSubType) {
         this.glSubType = glSubType;
+    }
+
+    /**
+     * @return the monthendProcesses
+     */
+    public List<MonthendProcesses> getMonthendProcesses() {
+        return monthendProcesses;
+    }
+
+    /**
+     * @param monthendProcesses the monthendProcesses to set
+     */
+    public void setMonthendProcesses(List<MonthendProcesses> monthendProcesses) {
+        this.monthendProcesses = monthendProcesses;
     }
     
 }
