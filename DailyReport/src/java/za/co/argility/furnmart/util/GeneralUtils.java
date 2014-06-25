@@ -61,4 +61,18 @@ public final class GeneralUtils {
     public static String getContextUsername() {
         return System.getProperty("user.name");
     }
+    
+    /**
+   * Added by Tsepo
+   * Rounds off a decimal number to the specified digits after a comma
+   * 
+   * @param value - the double value to round off
+   * @param decimalPlaces - decimal places after a comma
+     * @return 
+   */
+    public static String roundOff(double value, int decimalPlaces){
+             String roundedFormat = String.format("%." + decimalPlaces + "f", value);
+             return roundedFormat;
+    }
+
 }

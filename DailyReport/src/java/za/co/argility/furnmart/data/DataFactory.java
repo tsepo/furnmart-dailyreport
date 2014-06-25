@@ -818,7 +818,40 @@ public class DataFactory {
         
     }
     
-       public static List<GLSubType> getGlSubTypeMissingList() 
+    public static String getBranchDescription(String branch) throws SQLException {
+        
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        String description = null;
+        
+        try {
+            
+            connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
+            ps = connection.prepareStatement(SQLFactory.GET_BRANCH_DESCRIPTION);
+            ps.setString(1, branch);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                description = rs.getString(1);
+            }
+            
+            return description;
+        
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException(e);
+        }
+        
+        finally {
+            ConnectionManager.close(connection);
+        }
+        
+    }
+    
+    public static List<GLSubType> getGlSubTypeMissingList() 
             throws Exception {
         
         List<GLSubType> list = new ArrayList<GLSubType>();
@@ -896,16 +929,14 @@ public class DataFactory {
             
         }
         catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception(e);
+             e.printStackTrace();
+            throw new SQLException(e);
         }
         
         finally {
-            ConnectionManager.close(connection); 
+            ConnectionManager.close(connection);
         }
         
-        
-        
-     }
+    }
     
 }

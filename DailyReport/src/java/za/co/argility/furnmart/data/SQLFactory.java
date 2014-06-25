@@ -155,6 +155,8 @@ public interface SQLFactory {
     
     public static final String GET_BRANCH_ROLLED_FPP_CODE = "SELECT fpp_cde FROM br_prof";
     
+    public static final String GET_BRANCH_DESCRIPTION = "SELECT br_desc FROM branch WHERE br_cde = ?";
+    
      public static final String GET_MISSING_GL_SUB_TYPES = "select distinct gl_tran_map.act_typ, gl_tran_map.sub_typ \n" + 
                                                           "from gl_tran_map \n" +
                                                           "join new_gl_tran_ext on new_gl_tran_ext.act_typ = gl_tran_map.act_typ \n" + 

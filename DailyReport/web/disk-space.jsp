@@ -4,6 +4,11 @@
     Author     : tmaleka
 --%>
 
+<%@page import="java.util.Set"%>
+<%@page import="za.co.argility.furnmart.servlet.helper.ReplicationData"%>
+<%@page import="za.co.argility.furnmart.entity.DiskUtilisationLevelType"%>
+<%@page import="za.co.argility.furnmart.util.GeneralUtils"%>
+<%@page import="java.util.TreeSet"%>
 <%@page import="za.co.argility.furnmart.entity.DiskSpace"%>
 <%@page import="java.util.TreeMap"%>
 <%@page import="za.co.argility.furnmart.util.WebPages"%>
@@ -31,62 +36,76 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Disk Space Statistics | Furnmart Daily Report</title>
         
-        <%@include file="master/global-header.jspf" %>
-      
-        <style type="text/css">
-            
-            DIV.diskSpaceChartArea {
-                overflow : scroll;
-            }
-            
-        </style>
+        <link type='text/css' rel='stylesheet' href='<%= WebPages.BASE_APP_URL %>/stylesheets/diskSpace.css' />
         
-        <script type="text/javascript">
-            
-            $(document).ready(
-                function () {
-                        $('#stackedBarChart').highcharts({
-                            chart: {
-                                type: 'column',
-                                width: <%= String.valueOf(data.determineDiskSpaceChartHeight()) %>,
-                                height : 500
+        <%@include file="master/global-header.jspf" %>
+        
+        <%
+        
+        int lowCount = 0, normalCount = 0,
+                        highCount = 0;
+        
+            if (!stats.isEmpty()) {
+                
+                Set<String> keySet = stats.keySet();
+                for (String key : keySet) {
+                 
+                    DiskSpace item = stats.get(key);
+                    
+                    if (item.getDiskSpaceUtilisationLevel() == DiskUtilisationLevelType.Low)
+                        lowCount++;
+                    if (item.getDiskSpaceUtilisationLevel() == DiskUtilisationLevelType.Normal)
+                        normalCount++; 
+                    if (item.getDiskSpaceUtilisationLevel() == DiskUtilisationLevelType.High)
+                        highCount++;
+                    
+                }
+                
+        %>
+        
+        <script type='text/javascript'>
+            $(document).ready(function (){
+                
+                 $('#diskSpaceChart').highcharts({
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false
+                        },
+                        title: {
+                            text: 'Instore Disk Utilisation - Overview'
+                        },
+                        tooltip: {
+                                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: false
+                                },
+                                showInLegend: true
                             }
-                           
-                            title: {
-                                text: 'Available Disk Space vs. Used Disk Space (Live Stores)'
-                            },
-                            xAxis: {
-                                categories: [<%= data.getChartCategories() %>]
-                                
-                            },
-                            yAxis: {
-                                min: 0,
-                                title: {
-                                    text: 'Disk Space Utilisation (GB)'
-                                }
-                            },
-                            tooltip: {
-                                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}GB</b> ({point.percentage:.0f}%)<br/>',
-                                shared: true
-                            },
-                            plotOptions: {
-                                series: {
-                                    stacking: 'percent'
-                                }
-                            },
-                                series: [{
-                                    name: 'Used Space (GB)',
-                                    data: [<%= data.getUsedDiskSpaceChartValues() %>]
-                                        }, 
-                                   {
-                                    name: 'Available Space (GB)',
-                                    data: [<%= data.getAvailableDiskSpaceChartValues() %>]
-                                }]
-                        });
+                        },
+                        series: [{
+                            type: 'pie',
+                            name: 'Percentage',
+                            data: [
+                                ['Low Disk Utilisation',   <%= String.valueOf(lowCount) %>],
+                                ['Normal Disk Utilisation',   <%= String.valueOf(normalCount) %>],
+                                ['High Disk Utilisation',   <%= String.valueOf(highCount) %>]
+                             
+                            ]
+                        }]
                     });
-    
-            
+                
+            });
         </script>
+        
+        <%
+            }
+        %>
         
     </head>
     <body>
@@ -103,9 +122,87 @@
                 </div>
             </div>
             
-            <div class="subContentArea">
+            
+            <div class='subContentArea'>
                 
-                <div id="stackedBarChart" class="chartArea diskSpaceChartArea"></div>
+                 <div class='subHeader'>
+                    OVERVIEW - DISK UTILIZATION
+                </div>
+                
+                <div id='diskSpaceChart' class='chartArea'></div>
+            </div>
+            
+            <div class="subContentArea">
+               
+                <div class='subHeader'>
+                    DETAILED SUMMARY - DISK UTILIZATION
+                </div>
+                
+                <table border='0' class='diskSpaceTable' width='100%' >
+                    <thead>
+                        <tr class='headerRow'>
+                            <th> </th>
+                            <th>Branch</th>
+                            <th>Total Disk Space</th>
+                            <th>Space Used</th>
+                            <th>Free Space</th>
+                            <th>Space Utilization</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            TreeSet<String> branches = new TreeSet(stats.keySet());
+                            
+                            for (String branch : branches) {
+                                
+                                DiskSpace item = stats.get(branch);
+                                String className = null,
+                                        comments = null,
+                                        imageSrc = null;
+                                
+                                DiskUtilisationLevelType type = item.getDiskSpaceUtilisationLevel();
+                                if (type == DiskUtilisationLevelType.Low) {
+                                    className = "utilisationLow";
+                                    comments = "LOW utilisation";
+                                    imageSrc = ReplicationData.BRANCK_OK_IMAGE_URL;
+                                 }
+                                
+                                if (type == DiskUtilisationLevelType.Normal) {
+                                    className = "utilisationNormal";
+                                    comments = "NORMAL utilisation";
+                                    imageSrc = ReplicationData.BRANCK_OK_IMAGE_URL;
+                                }
+                                
+                                if (type == DiskUtilisationLevelType.High) {
+                                    className = "utilisationHigh";
+                                    comments = "HIGH utilisation";
+                                    imageSrc = ReplicationData.BRANCH_WARNING_IMAGE_URL;
+                                }
+                                
+                                
+                                %>
+                        
+                                <tr class="<%= className %>">
+                                    <td title="Utilisation Indicator">
+                                        <img alt='utilisation' src='<%= imageSrc %>' style='width:36px' />
+                                    </td>
+                                    <td title="Store details"><p><span class='bigText'><%= branch %></span><br/>
+                                            <span class='smallText'><%= item.getDescription() %></span>
+                                        </p></td>
+                                    <td title="Total Disk Space (GB)"><p><span><%= item.getTotalDiskSpace() %> GB</span> <br/>
+                                            <span class="smallTextV2"><%= GeneralUtils.roundOff(item.getReservedDiskSpace(), 1) %> GB RESERVED</span></p></td>
+                                    <td title="Used Disk Space (GB)"><p><%= item.getUsedDiskSpace() %> GB</p></td>
+                                    <td title="Available Disk Space (GB)"><p><%= item.getAvailableDiskSpace() %> GB</p></td>
+                                    <td title="Disk Space Utilisation (%)"><p><span class='bigText'><%= GeneralUtils.roundOff(item.getDiskUtilisation(), 2) %>%</span> <br/> 
+                                            <span><%= comments %></span></p></td>
+                                      
+                                </tr>
+                                
+                               <%
+                            }
+                        %>
+                    </tbody>
+                </table>
                 
             </div>
             

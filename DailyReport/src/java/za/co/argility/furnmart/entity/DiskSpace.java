@@ -66,4 +66,29 @@ public class DiskSpace {
         this.availableDiskSpace = availableDiskSpace;
     }
     
+    public DiskUtilisationLevelType getDiskSpaceUtilisationLevel() {
+        
+        if (totalDiskSpace == 0)
+            return DiskUtilisationLevelType.Low;
+        
+        double utilisation = (usedDiskSpace / totalDiskSpace) * 100;
+        if (utilisation <= 30)
+            return DiskUtilisationLevelType.Low;
+        else if (utilisation > 30 && utilisation < 80)
+            return DiskUtilisationLevelType.Normal;
+        else
+            return DiskUtilisationLevelType.High;
+    }
+    
+    public double getDiskUtilisation() {
+        if (totalDiskSpace == 0)
+            return 0;
+        else
+            return (usedDiskSpace / totalDiskSpace) * 100;
+    }
+    
+    public double getReservedDiskSpace() {
+        return (totalDiskSpace - usedDiskSpace - availableDiskSpace);
+    }
+    
 }
