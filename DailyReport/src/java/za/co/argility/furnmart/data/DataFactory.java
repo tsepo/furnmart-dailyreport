@@ -881,17 +881,15 @@ public class DataFactory {
             
         }
         catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception(e);
+             e.printStackTrace();
+            throw new SQLException(e);
         }
         
         finally {
-            ConnectionManager.close(connection); 
+            ConnectionManager.close(connection);
         }
         
-        
-        
-     }
+    }
        
        public static List<MonthendProcesses> getMEProcessesList() 
             throws Exception {
