@@ -315,12 +315,13 @@ public class DataFactory {
                    
                     String key = rs.getString("branch");
                     
+                    /*
                     String branchType ="Instore";
                     if( rs.getBoolean("br_is_whs") == true){
                         branchType ="Warehouse";
                     }
                     
-                    /*
+                    
                     if( rs.getBoolean("br_is_headoffice") == true){
                         branchType ="H/O";
                     }*/
@@ -335,7 +336,7 @@ public class DataFactory {
                     
                     item.setBranchCode(rs.getString("branch"));
                     //item.setFppCde(rs.getString("fpp_cde"));
-                    item.setBranchType(branchType);
+                    item.setBranchDesc(rs.getString("br_desc"));
                     count = rs.getInt(tableName); 
                     System.out.println("me.getKey() ---> " + tableName);
                     System.out.println("count ---> " + count);

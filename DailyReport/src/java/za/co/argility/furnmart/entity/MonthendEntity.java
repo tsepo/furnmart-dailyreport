@@ -14,7 +14,7 @@ public class MonthendEntity {
     private boolean isBranchOk;
     private String branchCode;    
     private List<String> comments;
-    private String branchType;
+    private String branchDesc;
     private String fppCde;
     private boolean isDebtorsRun;
     private boolean isCreditorsRun;
@@ -122,15 +122,15 @@ public class MonthendEntity {
     /**
      * @return the branchType
      */
-    public String getBranchType() {
-        return branchType;
+    public String getBranchDesc() {
+        return branchDesc;
     }
 
     /**
-     * @param branchType the branchType to set
+     * @param branchDesc the branchDesc to set
      */
-    public void setBranchType(String branchType) {
-        this.branchType = branchType;
+    public void setBranchDesc(String branchDesc) {
+        this.branchDesc = branchDesc;
     }
 
     /**

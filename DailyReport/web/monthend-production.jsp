@@ -54,6 +54,12 @@
            <link type="text/css" rel="stylesheet" href="stylesheets/biExtracts.css" />
     </head>
     <body>
+        
+         <div class="content" id="content">
+             <%@include file="master/monthend-menu.jspf" %>
+         </div>
+        
+        
           <div class="header">
                 <div class="wrapper" ><p>Furnmart Monthend Production Stats</p></div>
           </div>
@@ -68,8 +74,8 @@
                     
                     <thead>
                          <tr class="headerRow"> 
-                             <th style="text-align: center">Branch</th>
-                              <th style="text-align: center">Branch Type</th>                              
+                             <th style="text-align: center">Branch Code</th>
+                              <th style="text-align: center">Branch Name</th>                              
                             <th>Debtors</th>     
                             <th>Creditors</th>
                             <th>Cash Book</th>
@@ -105,11 +111,11 @@
                             
                             <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
                                 <td span class="bigText" style="text-align: center"><%= entity.getBranchCode()  %></td>
-                                <td span class="smallText" style="text-align: center"><%= entity.getBranchType()  %></td>
-                                <td style="text-align: center"><img src="<%= debtorsFlag %>" style="width:36px;" /></td>
-                                <td style="text-align: center"><img src="<%= creditorsFlag %>" style="width:36px" /></td>
-                                <td style="text-align: center"><img src="<%= cashBookFlag %>" style="width:36px" /></td>
-                                <td style="text-align: center"><img src="<%= newGLTranFlag %>" style="width:36px" /></td>                                  
+                                <td span class="smallText" style="text-align: center"><%= entity.getBranchDesc()  %></td>
+                                <td style="text-align: center"><img src="<%= debtorsFlag %>" style="width:36px;" title="Debtors"/></td>
+                                <td style="text-align: center"><img src="<%= creditorsFlag %>" style="width:36px" title="Creditors" /></td>
+                                <td style="text-align: center"><img src="<%= cashBookFlag %>" style="width:36px" title="Cash Book"/></td>
+                                <td style="text-align: center"><img src="<%= newGLTranFlag %>" style="width:36px" title="GL" /></td>                                  
                             </tr>
                             
                                     

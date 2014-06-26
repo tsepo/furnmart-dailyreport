@@ -50,8 +50,8 @@ public interface SQLFactory {
                                                         "\n" +
                                                         "order by br_cde";
     
-    public static final String GET_MONTHEND_DETAILS =      "select branch, {1},  br_is_whs from ( \n" +
-                                                                "SELECT branch.br_cde branch, COUNT(*) as {0}, br_is_whs \n" + 
+    public static final String GET_MONTHEND_DETAILS =      "select branch, {1},  br_desc from ( \n" +
+                                                                "SELECT branch.br_cde branch, COUNT(*) as {0}, br_desc \n" + 
                                                                 "FROM {1} \n" +
                                                                 "join branch using(br_cde) \n" +
                                                                 "where fpp_cde = '{2}' \n" +
@@ -61,7 +61,7 @@ public interface SQLFactory {
                                                                 "and br_is_merch = false  \n" +
                                                                 "group by branch.br_cde  \n" +
                                                                 "UNION  \n" +
-                                                                "select branch.br_cde branch, 0 as {0},  br_is_whs \n" + 
+                                                                "select branch.br_cde branch, 0 as {0},  br_desc \n" + 
                                                                 "from branch  \n" +
                                                                 "WHERE br_active = true \n" +
                                                                 "and br_is_ceres = false  \n" + 

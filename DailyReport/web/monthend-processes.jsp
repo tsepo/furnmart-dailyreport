@@ -46,6 +46,12 @@
     </head>
     <body>
         
+         <div class="content" id="content">
+            
+            <%@include file="master/monthend-menu.jspf" %>
+         </div>
+        
+        
         
          <div class="header">
                 <div class="wrapper" ><p>Monthend Process Page</p></div>
