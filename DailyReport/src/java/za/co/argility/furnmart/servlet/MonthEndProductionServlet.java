@@ -161,14 +161,21 @@ public class MonthEndProductionServlet  extends GenericServlet {
          File f = null;
          for (MonthendEntity det : details){
              String filePath = "/home/ucsretail/" + det.getBranchCode() + "/PWC_SENT_SUCCESSFULLY";
-             Log.info("fielPath --->  " + filePath);
+             Log.info("filePath --->  " + filePath);
              f = new File(filePath);
+             boolean isPWCDelivered = false;
              if(f.exists()){
-                det.setIsPWCExtractsDelivered(true);
+                isPWCDelivered = true;
              }else{
-                det.setIsPWCExtractsDelivered(false); 
+                Log.info("file does not exist !!! ");
+                isPWCDelivered = false; 
              }
+             det.setIsPWCExtractsDelivered(isPWCDelivered); 
+             
          }
+         
+         
+         
          
          data.setMonthendDetails(details);
 
