@@ -160,7 +160,7 @@ public class MonthEndProductionServlet  extends GenericServlet {
          Log.info("Server ---> " + server);
          File f = null;
          for (MonthendEntity det : details){
-             String filePath = "/home/ucsretail/pwcExtracts/" + det.getBranchCode() + "_PWC_SENT_SUCCESSFULLY";
+             String filePath = "/home/ucsretail/" + det.getBranchCode() + "/PWC_SENT_SUCCESSFULLY";
              Log.info("fielPath --->  " + filePath);
              f = new File(filePath);
              if(f.exists()){
