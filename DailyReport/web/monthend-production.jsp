@@ -79,10 +79,11 @@
                             <th>Debtors</th>     
                             <th>Creditors</th>
                             <th>Cash Book</th>
-                            <th>New GL Tran</th>     
-                          
+                            <th>New GL Tran</th>
+                            <th>PWC Extracts</th>
+                       
                         </tr>
-                    </thead>
+                    </thead>        
                  
                     <tbody>
                         
@@ -105,7 +106,9 @@
                                 String newGLTranFlag = "images/ok.png";
                                 if (entity.isIsNewGLTranExtRun()== false)
                                     newGLTranFlag = "images/error.png";
-                                     
+                                 String pwcFlag = "images/ok.png";
+                                if (entity.isIsPWCExtractsDelivered()== false)
+                                    newGLTranFlag = "images/error.png";     
                                        %>                          
                             
                             
@@ -115,7 +118,8 @@
                                 <td style="text-align: center"><img src="<%= debtorsFlag %>" style="width:36px;" title="Debtors"/></td>
                                 <td style="text-align: center"><img src="<%= creditorsFlag %>" style="width:36px" title="Creditors" /></td>
                                 <td style="text-align: center"><img src="<%= cashBookFlag %>" style="width:36px" title="Cash Book"/></td>
-                                <td style="text-align: center"><img src="<%= newGLTranFlag %>" style="width:36px" title="GL" /></td>                                  
+                                <td style="text-align: center"><img src="<%= newGLTranFlag %>" style="width:36px" title="GL" /></td> 
+                                <td style="text-align: center"><img src="<%= pwcFlag %>" style="width:36px" title="GL" /></td> 
                             </tr>
                             
                                     

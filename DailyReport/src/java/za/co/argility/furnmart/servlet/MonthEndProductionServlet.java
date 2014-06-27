@@ -6,6 +6,7 @@
 
 package za.co.argility.furnmart.servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -149,9 +150,26 @@ public class MonthEndProductionServlet  extends GenericServlet {
 
          ArrayList<MonthendEntity> details = new ArrayList<MonthendEntity>();
          TreeSet<String> branches = new TreeSet<String>(map.keySet());
-         for (String branch : branches) {
+         
+         for (String branch : branches) {            
              details.add(map.get(branch));
          }
+         
+         String server = request.getServerName();
+         
+         Log.info("Server ---> " + server);
+         File f = null;
+         for (MonthendEntity det : details){
+             String filePath = "/home/ucsretail/pwcExtracts/" + det.getBranchCode() + "_PWC_SENT_SUCCESSFULLY";
+             Log.info("fielPath --->  " + filePath);
+             f = new File(filePath);
+             if(f.exists()){
+                det.setIsPWCExtractsDelivered(true);
+             }else{
+                det.setIsPWCExtractsDelivered(false); 
+             }
+         }
+         
          data.setMonthendDetails(details);
 
 

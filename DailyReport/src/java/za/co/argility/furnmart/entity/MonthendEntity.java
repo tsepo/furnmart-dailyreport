@@ -20,6 +20,7 @@ public class MonthendEntity {
     private boolean isCreditorsRun;
     private boolean isCashBookExtractRun;
     private boolean isNewGLTranExtRun;
+    private boolean isPWCExtractsDelivered;
 
     /**
      * @return the isBranchOk
@@ -145,6 +146,20 @@ public class MonthendEntity {
      */
     public void setFppCde(String fppCde) {
         this.fppCde = fppCde;
+    }
+
+    /**
+     * @return the isPWCExtractsDelivered
+     */
+    public boolean isIsPWCExtractsDelivered() {
+        return isPWCExtractsDelivered;
+    }
+
+    /**
+     * @param isPWCExtractsDelivered the isPWCExtractsDelivered to set
+     */
+    public void setIsPWCExtractsDelivered(boolean isPWCExtractsDelivered) {
+        this.isPWCExtractsDelivered = isPWCExtractsDelivered;
     }
     
     
