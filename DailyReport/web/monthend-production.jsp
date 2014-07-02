@@ -106,7 +106,7 @@
                                 String newGLTranFlag = "images/ok.png";
                                 if (entity.isIsNewGLTranExtRun()== false)
                                     newGLTranFlag = "images/error.png";
-                                 String pwcFlag = "images/ok.png";
+                                String pwcFlag = "images/ok.png";
                                 if (entity.isIsPWCExtractsDelivered()== false)
                                     newGLTranFlag = "images/error.png";     
                                        %>                          

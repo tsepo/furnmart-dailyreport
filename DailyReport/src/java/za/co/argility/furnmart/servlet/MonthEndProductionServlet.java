@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import za.co.argility.furnmart.data.DataFactory;
+import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthEndTableType;
 import za.co.argility.furnmart.entity.MonthendEntity;
@@ -91,6 +92,8 @@ public class MonthEndProductionServlet  extends GenericServlet {
             Log.info("... inside processes ...");
             
             checkGLSubType(request, response);
+            checkGLMapActType(request,response);
+            
             response.sendRedirect(WebPages.MONTHEND_PROCESSES_PAGE);
             return;
         }
@@ -223,4 +226,34 @@ public class MonthEndProductionServlet  extends GenericServlet {
                     
          
      }
+     
+     protected void checkGLMapActType(HttpServletRequest request, 
+            HttpServletResponse response) throws Exception {
+            
+          
+            if (request.getParameter("tab") != null &&  
+                request.getParameter("tab").equals("processes")) {
+            MonthendData data = (MonthendData)getSessionData(request, 
+                            SessionAttribute.MONTHEND_DATA_TAG);
+
+            if (data == null) {
+                data = new MonthendData();
+            }   
+             Log.info("... inside gl subType ...");    
+            
+            List<GLMapActTyp>  glMapAcyTypeMissingList = DataFactory.getMissingGLMapActionTypeList();
+            data.setGlMapActType(glMapAcyTypeMissingList);
+            List<MonthendProcesses>  meProcessList = DataFactory.getMEProcessesList();         
+            data.setMonthendProcesses(meProcessList);
+            
+            Log.info("... inside gl subType ..." + glMapAcyTypeMissingList.size());    
+            saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);
+        
+            }                    
+                    
+         
+     }
+     
+
+
 }

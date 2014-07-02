@@ -7,6 +7,7 @@
 package za.co.argility.furnmart.servlet.helper;
 import java.util.HashMap;
 import java.util.List;
+import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.MonthendSearchEntity;
@@ -26,6 +27,7 @@ public class MonthendData {
     private MonthendSearchEntity search;
     private List<String> processes;
     private List<GLSubType> glSubType;
+    private List<GLMapActTyp> glMapActType;
     private List<MonthendProcesses> monthendProcesses;
     
     public MonthendData() {
@@ -113,6 +115,20 @@ public class MonthendData {
      */
     public void setMonthendProcesses(List<MonthendProcesses> monthendProcesses) {
         this.monthendProcesses = monthendProcesses;
+    }
+
+    /**
+     * @return the glMapActType
+     */
+    public List<GLMapActTyp> getGlMapActType() {
+        return glMapActType;
+    }
+
+    /**
+     * @param glMapActType the glMapActType to set
+     */
+    public void setGlMapActType(List<GLMapActTyp> glMapActType) {
+        this.glMapActType = glMapActType;
     }
     
 }

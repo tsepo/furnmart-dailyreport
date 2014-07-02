@@ -4,6 +4,7 @@
     Author     : rnaidoo
 --%>
 
+<%@page import="za.co.argility.furnmart.entity.GLMapActTyp"%>
 <%@page import="za.co.argility.furnmart.entity.GLSubType"%>
 <%@page import="za.co.argility.furnmart.servlet.helper.MonthendData"%>
 <%@page import="za.co.argility.furnmart.util.WebPages"%>
@@ -25,6 +26,11 @@
     System.out.println("details-- > " + details.size());
     if (details == null)
         details = new ArrayList<GLSubType>();
+    
+    List<GLMapActTyp> glMapActTyp = data.getGlMapActType();
+    System.out.println("glMapActTyp-- > " + glMapActTyp.size());
+    if (glMapActTyp == null)
+        glMapActTyp = new ArrayList<GLMapActTyp>();
   
     List<MonthendProcesses> processes = data.getMonthendProcesses();
     System.out.println("processes-- > " + processes.size());
@@ -110,7 +116,7 @@
                         
         
         
-        <div class="subHeader"><center>Missing GL Sub Types</center></div>   
+        <div class="subHeader"><center>Missing GL Sub Type Map Action Types</center></div>   
                
               
         
@@ -119,7 +125,8 @@
                     <thead>
                          <tr class="headerRow"> 
                              <th style="text-align: center">GL Action Type</th>
-                              <th style="text-align: center">GL Sub Type</th>                              
+                             <th style="text-align: center">GL Sub Type</th>
+                             
                             
                         </tr>
                     </thead>                    
@@ -135,6 +142,7 @@
                             
                             <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
                                 <td><%= entity.getGlActType() %></td>
+                                <td><%= entity.getGlActDesc()%></td>
                                 <td><%= entity.getGlSubType() %></td>
                             </tr>  
                             
@@ -144,6 +152,40 @@
                    </tbody>
           </table>
                         <br><br>
+                        
+                        
+          <div class="subHeader"><center>Missing GL Map Action Types</center></div>                 
+                        
+          <table border="0" cellspacing="2" cellpadding="2" width="50%">
+                    
+                    <thead>
+                         <tr class="headerRow"> 
+                             <th style="text-align: center">GL Action Type</th>
+                              <th style="text-align: center">GL Sub Type</th>                              
+                            
+                        </tr>
+                    </thead>                    
+                 
+                    <tbody>
+                        <% 
+                            int count3 = 0;    
+                            for (GLMapActTyp entity : glMapActTyp ){
+                                  ++count3;
+                                boolean isEven = (count3 % 2 == 0);                            
+                                
+                               %>
+                            
+                            <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
+                                <td><%= entity.getActType() %></td>
+                                <td><%= entity.getActDesc() %></td>
+                            </tr>  
+                            
+                        <% } %>
+                        
+                        
+                   </tbody>
+          </table>
+                        <br><br>              
                         
                         
     

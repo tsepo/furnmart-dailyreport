@@ -159,13 +159,21 @@ public interface SQLFactory {
     
      public static final String GET_MISSING_GL_SUB_TYPES = "select distinct gl_tran_map.act_typ, gl_tran_map.sub_typ \n" + 
                                                           "from gl_tran_map \n" +
+                                                          "join action_typ using (act_typ) \n" + 
                                                           "join new_gl_tran_ext on new_gl_tran_ext.act_typ = gl_tran_map.act_typ \n" + 
                                                           "and new_gl_tran_ext.sub_typ = gl_tran_map.sub_typ \n" +
                                                           "where not exists (select * from gl_sub_type_map  \n" + 
                                                           "where gl_sub_type_map.act_typ = gl_tran_map.act_typ \n" +
                                                           "and gl_sub_type_map.gl_sub_type = gl_tran_map.sub_typ)";
      
-        public static final String GET_ME_PROCESSES = "select prod_cde , prod_class_desc , prod_method , prod_obj_jndi_name \n" +  
+     public static final String GET_ME_PROCESSES = "select prod_cde , prod_class_desc , prod_method , prod_obj_jndi_name \n" +  
                                                             "from prod_class join prod_run using (prod_cde) \n" +
                                                             "where prod_active and prod_type = 'ME'";
+     
+     public static final String GET_MISSING_GL_MAP_ACT_TYPES = "select distinct new_gl_tran_ext.act_typ, act_desc \n" + 
+                                                               "from new_gl_tran_ext \n" +
+                                                               "join action_typ using (act_typ) \n" +
+                                                               "where not exists (select * from gl_tran_map \n" +   
+                                                               "where gl_tran_map.act_typ =  new_gl_tran_ext.act_typ)"; 
+
 }

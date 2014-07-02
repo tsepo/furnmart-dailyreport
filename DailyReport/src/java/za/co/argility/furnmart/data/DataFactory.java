@@ -22,6 +22,7 @@ import org.joda.time.Hours;
 import za.co.argility.furnmart.entity.ExtractError;
 import za.co.argility.furnmart.entity.ExtractHistory;
 import za.co.argility.furnmart.entity.ExtractType;
+import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthEndTableType;
 import za.co.argility.furnmart.entity.MonthendEntity;
@@ -877,6 +878,7 @@ public class DataFactory {
                 Log.info("... inside gl data subtype result  ...");   
                 entity.setGlActType(rs.getInt("act_typ"));
                 entity.setGlSubType(rs.getInt("sub_typ"));
+                entity.setGlActDesc(rs.getString("act_desc"));
                 list.add(entity);
             }
             
@@ -895,6 +897,47 @@ public class DataFactory {
         }
         
     }
+    
+    public static List<GLMapActTyp> getMissingGLMapActionTypeList() 
+            throws Exception {
+        
+        List<GLMapActTyp> list = new ArrayList<GLMapActTyp>();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null; 
+        
+        try {
+            
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_MISSING_GL_MAP_ACT_TYPES);
+            rs = ps.executeQuery();
+            
+             GLMapActTyp entity = null;            
+             Log.info("... inside gl data subtype ..."); 
+            while (rs.next()) {
+                entity = new GLMapActTyp();                 
+                entity.setActType(rs.getInt("act_typ"));
+                entity.setActDesc(rs.getString("act_desc"));                
+                list.add(entity);
+            }
+            
+            Log.info("... inside getMissingGLMapActionTypeList ---> " + list.size()); 
+            return list;
+        
+            
+        }
+        catch (Exception e) {
+             e.printStackTrace();
+            throw new SQLException(e);
+        }
+        
+        finally {
+            ConnectionManager.close(connection);
+        }
+        
+    }
+    
+    
        
        public static List<MonthendProcesses> getMEProcessesList() 
             throws Exception {

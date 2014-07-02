@@ -13,6 +13,7 @@ package za.co.argility.furnmart.entity;
 public class GLSubType {
     private int glActType ;
     private int glSubType ;
+    private String glActDesc; 
 
     /**
      * @return the glActType
@@ -40,6 +41,20 @@ public class GLSubType {
      */
     public void setGlSubType(int glSubType) {
         this.glSubType = glSubType;
+    }
+
+    /**
+     * @return the glActDesc
+     */
+    public String getGlActDesc() {
+        return glActDesc;
+    }
+
+    /**
+     * @param glActDesc the glActDesc to set
+     */
+    public void setGlActDesc(String glActDesc) {
+        this.glActDesc = glActDesc;
     }
     
     
