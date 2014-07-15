@@ -108,7 +108,7 @@
                                     newGLTranFlag = "images/error.png";
                                 String pwcFlag = "images/ok.png";
                                 if (entity.isIsPWCExtractsDelivered()== false)
-                                    newGLTranFlag = "images/error.png";     
+                                    pwcFlag = "images/error.png";     
                                        %>                          
                             
                             
