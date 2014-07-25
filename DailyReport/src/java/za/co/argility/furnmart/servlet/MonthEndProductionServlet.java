@@ -229,24 +229,26 @@ public class MonthEndProductionServlet  extends GenericServlet {
      
      protected void checkGLMapActType(HttpServletRequest request, 
             HttpServletResponse response) throws Exception {
-            
+            Log.info("...checkGLMapActType 1");   
           
             if (request.getParameter("tab") != null &&  
                 request.getParameter("tab").equals("processes")) {
             MonthendData data = (MonthendData)getSessionData(request, 
                             SessionAttribute.MONTHEND_DATA_TAG);
+            Log.info("...  ..."); 
 
             if (data == null) {
                 data = new MonthendData();
             }   
-             Log.info("... inside gl subType ...");    
+             Log.info("...checkGLMapActType 2");    
             
-            List<GLMapActTyp>  glMapAcyTypeMissingList = DataFactory.getMissingGLMapActionTypeList();
+            //List<GLMapActTyp>  glMapAcyTypeMissingList = DataFactory.getMissingGLMapActionTypeList();
+            List<GLMapActTyp>  glMapAcyTypeMissingList = DataFactory.getBranchActionTypes();
             data.setGlMapActType(glMapAcyTypeMissingList);
             List<MonthendProcesses>  meProcessList = DataFactory.getMEProcessesList();         
             data.setMonthendProcesses(meProcessList);
             
-            Log.info("... inside gl subType ..." + glMapAcyTypeMissingList.size());    
+            Log.info("... checkGLMapActType 3" + glMapAcyTypeMissingList.size());    
             saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);
         
             }                    

@@ -53,7 +53,7 @@
 
            toggleLoadingTopBar(false); 
 
-           setTimeout("loadWebpage()", 60000);
+           setTimeout("loadWebpage()", 600000);
 
         });
         

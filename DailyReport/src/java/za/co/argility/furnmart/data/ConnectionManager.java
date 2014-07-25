@@ -36,8 +36,10 @@ public class ConnectionManager {
         else if (connectionType == ConnectionType.INSTORE)
             connectionUrl = CONNECTION_URL.replace("{0}", "c9901.fm.co.za").replace("{1}", dbName);
         
-        else if (connectionType == ConnectionType.BATCH)
+        else if (connectionType == ConnectionType.BATCH &&  dbName == null)
             connectionUrl = CONNECTION_URL.replace("{0}", "c9910.fm.co.za").replace("{1}", "mecons");
+        else if (connectionType == ConnectionType.BATCH &&  dbName != null)
+            connectionUrl = CONNECTION_URL.replace("{0}", "c9910.fm.co.za").replace("{1}", dbName);
         
         
         connection = DriverManager.getConnection(connectionUrl, USERNAME, USERNAME);

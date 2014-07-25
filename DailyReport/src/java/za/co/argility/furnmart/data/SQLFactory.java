@@ -84,14 +84,13 @@ public interface SQLFactory {
                                                                 "\n" +
                                                                 "order by br_cde";
     
-    public static final String GET_MONTHEND_BRANCH_LIST = "SELECT branch.br_cde, COUNT(*) as debtors FROM central_account \n" +
-                                                           "join branch using(br_cde) \n" +
-                                                           " where fpp_cde = '${0}' \n" +
-                                                           "and br_active = true  \n" +
+    public static final String GET_MONTHEND_BRANCH_LIST = "SELECT br_cde \n" +
+                                                           "from branch \n" +                                                           
+                                                           "where br_active = true  \n" +
                                                            "and br_is_ceres = false \n" +
                                                            "and br_is_central = false \n" +
                                                            "and br_is_merch = false  \n" +
-                                                           "group by branch.br_cde";
+                                                           "group by branch.br_cde order by branch.br_cde";
     
     
     public static final String GET_MECONS_FPP_CDE = "select fpp_cde  \n" +
@@ -176,4 +175,13 @@ public interface SQLFactory {
                                                                "where not exists (select * from gl_tran_map \n" +   
                                                                "where gl_tran_map.act_typ =  new_gl_tran_ext.act_typ)"; 
 
+     public static final String GET_BRANCH_ACTION_TYPES =       "select distinct(act_typ)  \n" + 
+                                                                "from audit join action_typ using (act_typ) \n " +
+                                                                "where fpp_cde = '201406' \n " +
+                                                                "and act_is_fin";
+     
+     public static final String GET_GL_TRAN_MAP_ACTION_TYPES = "select distinct(act_typ) from gl_tran_map"; 
+     
+     
+     public static final String GET_ACTION_TYP_DESC = "select act_desc from action_typ where act_typ = ?"; 
 }

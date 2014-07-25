@@ -49,6 +49,9 @@
          <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
            <link type="text/css" rel="stylesheet" href="stylesheets/biExtracts.css" />
          <%@include file="master/global-header.jspf" %>
+         <script type="text/javascript" src="scripts/monthendProcesses.js"></script>
+         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+          <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>         
     </head>
     <body>
         
@@ -72,7 +75,7 @@
           <table border="0" cellspacing="2" cellpadding="2" width="50%">
                     
                     <thead>
-                         <tr class="headerRow"> 
+                        <tr class="RowToClick"> 
                              <th style="text-align: center">Process Code</th>
                               <th style="text-align: center">Process Name</th>
                               <th style="text-align: center">Process Method</th>
@@ -124,8 +127,8 @@
                     
                     <thead>
                          <tr class="headerRow"> 
-                             <th style="text-align: center">GL Action Type</th>
-                             <th style="text-align: center">GL Sub Type</th>
+                             <th style="text-align: center">Action Type</th>
+                             <th style="text-align: center">Sub Type</th>
                              
                             
                         </tr>
@@ -160,8 +163,8 @@
                     
                     <thead>
                          <tr class="headerRow"> 
-                             <th style="text-align: center">GL Action Type</th>
-                              <th style="text-align: center">GL Sub Type</th>                              
+                             <th style="text-align: center">Action Type</th>
+                              <th style="text-align: center">Action Description</th>                              
                             
                         </tr>
                     </thead>                    
@@ -176,8 +179,8 @@
                                %>
                             
                             <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
-                                <td><%= entity.getActType() %></td>
-                                <td><%= entity.getActDesc() %></td>
+                                <td style="text-align: left"><%= entity.getActType() %></td>
+                                <td style="text-align: left"><%= entity.getActDesc() %></td>
                             </tr>  
                             
                         <% } %>
