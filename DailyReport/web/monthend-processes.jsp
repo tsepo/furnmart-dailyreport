@@ -73,18 +73,20 @@
               
         
           <table border="0" cellspacing="2" cellpadding="2" width="50%">
+               
+                     <tr class="RowToClick"> 
                     
-                    <thead>
-                        <tr class="RowToClick"> 
-                             <th style="text-align: center">Process Code</th>
-                              <th style="text-align: center">Process Name</th>
-                              <th style="text-align: center">Process Method</th>
-                              <th style="text-align: center">Process Class</th>
+                        
+                             <td style="text-align: center">Process Code</td>
+                              <td style="text-align: center">Process Name</td>
+                              <td style="text-align: center">Process Method</td>
+                              <td style="text-align: center">Process Class</td>
                             
-                        </tr>
-                    </thead>                    
+                        
+                   
+                     </tr>
                  
-                    <tbody>
+                   <!-- <tbody> -->
                         <% 
                             int count = 0;    
                             for (MonthendProcesses entity : processes){
@@ -93,7 +95,8 @@
                                 
                                %>
                             
-                            <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
+                            <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">       
+                               
                                 <td><%= entity.getProdCde() %></td>
                                 <td><%= entity.getProdClassDesc() %></td>
                                 <td><%= entity.getProdMethod() %></td>
@@ -103,7 +106,7 @@
                         <% } %>
                         
                         
-                   </tbody>
+                 <!--  </tbody> -->
           </table>
         
                         <br><br>
@@ -125,16 +128,7 @@
         
           <table border="0" cellspacing="2" cellpadding="2" width="50%">
                     
-                    <thead>
-                         <tr class="headerRow"> 
-                             <th style="text-align: center">Action Type</th>
-                             <th style="text-align: center">Sub Type</th>
-                             
-                            
-                        </tr>
-                    </thead>                    
-                 
-                    <tbody>
+                    
                         <% 
                             int count2 = 0;    
                             for (GLSubType entity : details){
@@ -143,16 +137,27 @@
                                 
                                %>
                             
+                            <thead>
+                         <tr class="headerRow"> 
+                             <th style="text-align: center">Action Type</th>
+                             <th style="text-align: center">Sub Type</th>
+                             
+                            
+                        </tr>
+                    </thead>                    
+                 
+                    <tbody>   
                             <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
                                 <td><%= entity.getGlActType() %></td>
                                 <td><%= entity.getGlActDesc()%></td>
                                 <td><%= entity.getGlSubType() %></td>
-                            </tr>  
+                            </tr>
+                             </tbody>
                             
                         <% } %>
                         
                         
-                   </tbody>
+                  
           </table>
                         <br><br>
                         
@@ -190,9 +195,7 @@
           </table>
                         <br><br>              
                         
-                        
-    
-        
+
     </body>
 </html>
 

@@ -922,20 +922,22 @@ public class DataFactory {
         boolean validBranch ;
         for (String branch : meBranchList) {
             try {
-                if("0501".equals(branch) || "0550".equals(branch) || "0590".equals(branch) || "0595".equals(branch) ){
-                    validBranch = false;
-                }else{
-                    validBranch = true;
-                }
-                if(validBranch){            
-                    connection = ConnectionManager.getConnection(ConnectionType.BATCH, "c" + branch);
-                    ps = connection.prepareStatement(SQLFactory.GET_BRANCH_ACTION_TYPES);
-                    rs = ps.executeQuery();
-                    while (rs.next()) {
-                        System.out.println("Blikkies --- > " + branch);
-                        actTypes.add(rs.getInt("act_typ"));
+                
+                    try{
+                        connection = ConnectionManager.getConnection(ConnectionType.BATCH, "c" + branch);
+                        validBranch = true;
+                    }catch(SQLException sqle){
+                        validBranch = false;
                     }
-                }
+                    if(validBranch){
+                        ps = connection.prepareStatement(SQLFactory.GET_BRANCH_ACTION_TYPES);
+                        rs = ps.executeQuery();
+                        while (rs.next()) {
+                            System.out.println("Blikkies --- > " + branch);
+                            actTypes.add(rs.getInt("act_typ"));
+                        }
+                    }
+                
 
             } catch (Exception e) {
                 e.printStackTrace();
