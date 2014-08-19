@@ -52,6 +52,9 @@
           <%@include file="master/global-header.jspf" %>
           <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
            <link type="text/css" rel="stylesheet" href="stylesheets/biExtracts.css" />
+           <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+          <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>  
+           <script type="text/javascript" src="scripts/monthendProcesses.js"></script>
     </head>
     <body>
         
@@ -72,20 +75,20 @@
         
           <table border="0" cellspacing="2"padding="2" width="50%">
                     
-                    <thead>
-                         <tr class="headerRow"> 
-                             <th style="text-align: center">Branch Code</th>
-                              <th style="text-align: center">Branch Name</th>                              
-                            <th>Debtors</th>     
-                            <th>Creditors</th>
-                            <th>Cash Book</th>
-                            <th>New GL Tran</th>
-                            <th>PWC Extracts</th>
+                  
+                         <tr class="RowToClick"> 
+                             <td style="text-align: center">Branch Code</td>
+                              <td style="text-align: center">Branch Name</td>                              
+                            <td>Debtors</td>     
+                            <td>Creditors</td>
+                            <td>Cash Book</td>
+                            <td>New GL Tran</td>
+                            <td>PWC Extracts</td>
                        
                         </tr>
-                    </thead>        
+                       
                  
-                    <tbody>
+                    
                         
                         
                         
@@ -126,7 +129,7 @@
                            <% }
                                
                         %>
-                    </tbody>
+                   
           </table>
         </div>
     </body>

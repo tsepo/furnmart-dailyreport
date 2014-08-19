@@ -54,6 +54,7 @@
           <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>         
     </head>
     <body>
+         <%@include file="master/loadingPanel.jspf" %>
         
          <div class="content" id="content">
             
@@ -85,8 +86,7 @@
                         
                    
                      </tr>
-                 
-                   <!-- <tbody> -->
+                                   
                         <% 
                             int count = 0;    
                             for (MonthendProcesses entity : processes){
@@ -106,18 +106,12 @@
                         <% } %>
                         
                         
-                 <!--  </tbody> -->
+                 
           </table>
         
                         <br><br>
         
-                        <div class="subHeader"><center>How to run processes from command line</center></div>
-                        <p></p>
-                        <ul class="bigText">Log onto c9910.fm.co.za</ul>
-                        <ul class="bigText">To run GL (process 100) for branch 0017</ul>
-                        <ul class="bigText">x.step.pprocess -p 100 -b 0017</ul>
                         
-                        <p></p>
                         
                         
         
@@ -133,29 +127,35 @@
                             int count2 = 0;    
                             for (GLSubType entity : details){
                                   ++count2;
-                                boolean isEven = (count2 % 2 == 0);                            
-                                
+                                boolean isEven = (count2 % 2 == 0);                          
+                                                                
                                %>
                             
-                            <thead>
-                         <tr class="headerRow"> 
-                             <th style="text-align: center">Action Type</th>
-                             <th style="text-align: center">Sub Type</th>
+                           
+                        <tr class="RowToClick">
+                             <td style="text-align: center">Action Type</td>
+                             <td style="text-align: center">Sub Type</td>
                              
                             
                         </tr>
-                    </thead>                    
+                                  
                  
-                    <tbody>   
+               
                             <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
                                 <td><%= entity.getGlActType() %></td>
                                 <td><%= entity.getGlActDesc()%></td>
                                 <td><%= entity.getGlSubType() %></td>
                             </tr>
-                             </tbody>
-                            
-                        <% } %>
                         
+                        <% } %>
+                        <% 
+                            if(details.size() == 0){
+                                                                
+                               %>
+                               <tr></tr>
+                               <tr><td colspan="2" style="text-align: center" >*** There are currently no missing GL Sub Types</td></tr>
+                               
+                         <% } %>      
                         
                   
           </table>
@@ -166,15 +166,15 @@
                         
           <table border="0" cellspacing="2" cellpadding="2" width="50%">
                     
-                    <thead>
-                         <tr class="headerRow"> 
-                             <th style="text-align: center">Action Type</th>
-                              <th style="text-align: center">Action Description</th>                              
+                    
+                        <tr class="RowToClick">
+                              <td style="text-align: center">Action Type</td>
+                              <td style="text-align: center">Action Description</td>                              
                             
                         </tr>
-                    </thead>                    
+                                        
                  
-                    <tbody>
+                    
                         <% 
                             int count3 = 0;    
                             for (GLMapActTyp entity : glMapActTyp ){
@@ -191,9 +191,18 @@
                         <% } %>
                         
                         
-                   </tbody>
+                   
           </table>
-                        <br><br>              
+                        <br><br>   
+                        
+                        <div class="subHeader"><center>How to run processes from command line</center></div>
+                        <p></p>
+                        <ul class="bigText">Log onto c9910.fm.co.za</ul>
+                        <ul class="bigText">To run GL (process 100) for branch 0017</ul>
+                        <ul class="bigText">x.step.pprocess -p 100 -b 0017</ul>
+                        
+                        <p></p>
+                        <br><br>
                         
 
     </body>
