@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import za.co.argility.furnmart.data.DataFactory;
+import za.co.argility.furnmart.entity.GLEntity;
 import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthEndTableType;
@@ -85,16 +86,27 @@ public class MonthEndProductionServlet  extends GenericServlet {
             return;
         }
         
+        /*
+          if (request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("production")) {
+            
+            Log.info("... inside production ...");
+            
+            processMonthEndProductionData(request, response);
+            response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
+            return;
+        }*/
+        
         
          if (request.getParameter("tab") != null &&
-                request.getParameter("tab").equals("processes")) {
+                request.getParameter("tab").equals("gl")) {
             
-            Log.info("... inside processes ...");
+            Log.info("... inside GL Balancing ...");
             
-            checkGLSubType(request, response);
-            checkGLMapActType(request,response);
-            
-            response.sendRedirect(WebPages.MONTHEND_PROCESSES_PAGE);
+            //checkGLSubType(request, response);
+            //checkGLMapActType(request,response);
+            processGLData(request, response);
+            response.sendRedirect(WebPages.GL_MAIN_PAGE);
             return;
         }
         
@@ -106,7 +118,7 @@ public class MonthEndProductionServlet  extends GenericServlet {
             this.showErrorPage(request, response);
         }
         
-    }
+        }
     
     protected void processMonthEndOverviewData(HttpServletRequest request, 
             HttpServletResponse response) throws IOException {
@@ -255,6 +267,35 @@ public class MonthEndProductionServlet  extends GenericServlet {
                     
          
      }
+     
+     
+     protected void processGLData(HttpServletRequest request, 
+            HttpServletResponse response) throws Exception {
+        if (request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("gl")) {
+            
+        MonthendData data = (MonthendData)getSessionData(request, 
+                            SessionAttribute.MONTHEND_DATA_TAG);
+
+        if (data == null) {
+            data = new MonthendData();
+        }
+        
+       
+        List<GLEntity>  glData = DataFactory.getGLData();                 
+        data.setGlDetails(glData);
+
+
+         // save the data to the session
+         saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);
+
+         // this can be changed later - just for now
+        // response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
+
+        }           
+                
+        
+    }
      
 
 

@@ -32,7 +32,7 @@
     <div class="menuItem" onclick="processMonthendMenuItem('extracts')" >
         <p>EXTRACTS</p>
     </div>
-    <div class="menuItem" onclick="processMonthendMenuItem('gl-balancing')">
+    <div class="menuItem" onclick="processMonthendMenuItem('gl')">
         <p>GL BALANCING</p>
     </div>
     

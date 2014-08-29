@@ -23,6 +23,7 @@ import org.joda.time.Hours;
 import za.co.argility.furnmart.entity.ExtractError;
 import za.co.argility.furnmart.entity.ExtractHistory;
 import za.co.argility.furnmart.entity.ExtractType;
+import za.co.argility.furnmart.entity.GLEntity;
 import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthEndTableType;
@@ -242,7 +243,7 @@ public class DataFactory {
         int count = 0;
         boolean flag = false;
 
-       // ArrayList<MonthendEntity>  list = new ArrayList<MonthendEntity>();
+        // ArrayList<MonthendEntity>  list = new ArrayList<MonthendEntity>();
         if (map == null) {
             map = new HashMap<String, MonthendEntity>();
         }
@@ -402,7 +403,6 @@ public class DataFactory {
             connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
             ps = connection.prepareStatement(SQLFactory.GET_MONTHEND_BRANCH_LIST);
             rs = ps.executeQuery();
-           
 
             while (rs.next()) {
                 list.add(rs.getString("br_cde"));
@@ -743,7 +743,8 @@ public class DataFactory {
 
         try {
 
-            connection = ConnectionManager.getConnection(ConnectionType.INSTORE, "c" + branch);
+            //connection = ConnectionManager.getConnection(ConnectionType.INSTORE, "c" + branch);
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
             ps = connection.prepareStatement(SQLFactory.GET_BRANCH_ROLLED_FPP_CODE);
             rs = ps.executeQuery();
 
@@ -919,25 +920,24 @@ public class DataFactory {
         ResultSet rs = null;
         Set<Integer> actTypes = new HashSet<Integer>();
         System.out.println("meBranchList ---> " + meBranchList.size());
-        boolean validBranch ;
+        boolean validBranch;
         for (String branch : meBranchList) {
             try {
-                
-                    try{
-                        connection = ConnectionManager.getConnection(ConnectionType.BATCH, "c" + branch);
-                        validBranch = true;
-                    }catch(SQLException sqle){
-                        validBranch = false;
+
+                try {
+                    connection = ConnectionManager.getConnection(ConnectionType.BATCH, "c" + branch);
+                    validBranch = true;
+                } catch (SQLException sqle) {
+                    validBranch = false;
+                }
+                if (validBranch) {
+                    ps = connection.prepareStatement(SQLFactory.GET_BRANCH_ACTION_TYPES);
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
+                        System.out.println("Blikkies --- > " + branch);
+                        actTypes.add(rs.getInt("act_typ"));
                     }
-                    if(validBranch){
-                        ps = connection.prepareStatement(SQLFactory.GET_BRANCH_ACTION_TYPES);
-                        rs = ps.executeQuery();
-                        while (rs.next()) {
-                            System.out.println("Blikkies --- > " + branch);
-                            actTypes.add(rs.getInt("act_typ"));
-                        }
-                    }
-                
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -947,33 +947,33 @@ public class DataFactory {
             }
             actionTypes = new ArrayList<Integer>(actTypes);
         }
-        System.out.println("actionTypes size --->" + actionTypes.size()); 
-        
+        System.out.println("actionTypes size --->" + actionTypes.size());
+
         List<Integer> glTranMapActionTypes = new ArrayList<Integer>();
         //for (String branch : meBranchList) {
-            try {
+        try {
 
-                connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
-                ps = connection.prepareStatement(SQLFactory.GET_GL_TRAN_MAP_ACTION_TYPES);
-                rs = ps.executeQuery();
-                while (rs.next()) {
-                    glTranMapActionTypes.add(rs.getInt("act_typ"));
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new SQLException(e);
-            } finally {
-                ConnectionManager.close(connection);
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_GL_TRAN_MAP_ACTION_TYPES);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                glTranMapActionTypes.add(rs.getInt("act_typ"));
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
         //}                  
         System.out.println("glTranMapActionTypes.size() ---> " + glTranMapActionTypes.size());
-        
+
         GLMapActTyp entity = null;
-        for(int counter = 0; counter < actionTypes.size(); counter++) {            
-            if(glTranMapActionTypes.contains(actionTypes.get(counter))) {
-                System.out.println("I am in gl tran map ---> " + actionTypes.get(counter));                
-            }else{
+        for (int counter = 0; counter < actionTypes.size(); counter++) {
+            if (glTranMapActionTypes.contains(actionTypes.get(counter))) {
+                System.out.println("I am in gl tran map ---> " + actionTypes.get(counter));
+            } else {
                 entity = new GLMapActTyp();
                 System.out.println("I am not in gl tran map ---> " + actionTypes.get(counter));
                 entity.setActType(actionTypes.get(counter));
@@ -981,17 +981,105 @@ public class DataFactory {
                 list.add(entity);
             }
         }
-        
-       
-        System.out.println("list.size() ---> " +list.size());
-       
+
+        System.out.println("list.size() ---> " + list.size());
+
         return list;
     }
-    
+
+    public static List<GLEntity> getGLData()
+            throws Exception {
+
+        List<GLEntity> list = new ArrayList<GLEntity>();
+        String fppCde = getMeconFpp();
+        List<String> meBranchList = getMonthendBranchList();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        System.out.println("meBranchList ---> " + meBranchList.size());
+        boolean validBranch;
+        GLEntity entity = null;
+        for (String branch : meBranchList) {
+            try {
+                 
+                try {
+                    connection = ConnectionManager.getConnection(ConnectionType.BATCH, "c" + branch);
+                    validBranch = true;
+                } catch (SQLException sqle) {
+                    validBranch = false;
+                }
+                
+                if(validBranch) {
+                    entity = new  GLEntity();
+                    entity.setBranchCode(branch);
+                    entity.setBranchDesc(getBranchDescription(branch));
+                    connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+                    ps = connection.prepareStatement(SQLFactory.GET_GL_DEBTORS_DATA);
+                    System.out.println("fpp Code : " + getCurrentFppCode(branch) + " : Branch : "  + branch);
+                    
+                    ps.setString(1,getCurrentFppCode(branch));
+                    ps.setString(2, branch);
+                    rs = ps.executeQuery();
+                     entity.setGlDebtors(0.0);
+                    
+                    while (rs.next()) {                        
+                        entity.setGlDebtors(rs.getDouble("debtors_value"));
+                        System.out.println("GL Debtors Data --- > " + branch);
+                        //ConnectionManager.close(connection);   
+                        
+                    }
+                    //ConnectionManager.close(connection);  
+                    
+                    ps = connection.prepareStatement(SQLFactory.GET_GL_STOCK_DATA);
+                    ps.setString(1,getCurrentFppCode(branch));
+                    ps.setString(2, branch);
+                    rs = ps.executeQuery();
+                    
+                    while (rs.next()) {
+                        entity.setGlStock(rs.getDouble("stock_value"));
+                        System.out.println("GL Stock Data --- > " + branch);
+                        ConnectionManager.close(connection);
+
+                    }
+                    
+                    connection = ConnectionManager.getConnection(ConnectionType.BATCH, "c" + branch);
+                    ps = connection.prepareStatement(SQLFactory.GET_INSTORE_DEBTORS_DATA);
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
+                        entity.setInstoreDebtors(rs.getDouble("debtors_value"));
+                        System.out.println("Instore Debtors Data --- > " + branch);
+                        ConnectionManager.close(connection);
+                    }
+                    
+                    connection = ConnectionManager.getConnection(ConnectionType.BATCH, "c" + branch);
+                    ps = connection.prepareStatement(SQLFactory.GET_INSTORE_STOCK_DATA);
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
+                        entity.setInstoreStock(rs.getDouble("stock_value"));
+                        System.out.println("Instore Stock Data --- > " + branch);
+                        ConnectionManager.close(connection);  
+                    }
+                    list.add(entity);
+                    
+                }                
+                
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new SQLException(e);
+            } finally {
+                ConnectionManager.close(connection);
+            }
+        }
+
+        System.out.println("list.size() ---> " + list.size());
+
+        return list;
+    }
+
     public static String getActDesc(int actType)
             throws Exception {
-        
-       
+
         String actDesc = null;
         //query = query.replace("{0}", "");
         Connection connection = null;
@@ -999,20 +1087,20 @@ public class DataFactory {
         ResultSet rs = null;
 
         try {
-             connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
-                ps = connection.prepareStatement(SQLFactory.GET_ACTION_TYP_DESC);
-                ps.setInt(1, actType);
-                rs = ps.executeQuery();
-                while (rs.next()) {
-                    actDesc = rs.getString("act_desc");
-                }
-        
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_ACTION_TYP_DESC);
+            ps.setInt(1, actType);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                actDesc = rs.getString("act_desc");
+            }
+
         } catch (Exception e) {
-                e.printStackTrace();
-                throw new SQLException(e);
-            } finally {
-                ConnectionManager.close(connection);
-         }
+            e.printStackTrace();
+            throw new SQLException(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
         return actDesc;
     }
 

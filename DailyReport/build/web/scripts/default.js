@@ -80,14 +80,21 @@ function processMenuItem(option) {
 
 function processMonthendMenuItem(option) {
     
+    
      if (option == "extracts") {
         //toggleLoadingTopBar(true);
         window.location.replace(BASE_URL + "/MonthEndProduction?tab=production");
         
      }
      if (option == "process") {
-        //toggleLoadingTopBar(true);
+           //toggleLoadingTopBar(true);
         window.location.replace(BASE_URL + "/MonthEndProduction?tab=processes");
+        
+    }
+    
+     if (option == "gl") {
+          //toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/MonthEndProduction?tab=gl");
         
     }
      

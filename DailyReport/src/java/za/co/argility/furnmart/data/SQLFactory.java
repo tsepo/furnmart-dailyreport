@@ -152,7 +152,7 @@ public interface SQLFactory {
             //+ "WHERE AGE(last_sent_time) < '1 hour' "
             + "ORDER BY br_cde";
     
-    public static final String GET_BRANCH_ROLLED_FPP_CODE = "SELECT fpp_cde FROM br_prof";
+     public static final String GET_BRANCH_ROLLED_FPP_CODE = "SELECT fpp_cde FROM br_prof";
     
     public static final String GET_BRANCH_DESCRIPTION = "SELECT br_desc FROM branch WHERE br_cde = ?";
     
@@ -184,4 +184,49 @@ public interface SQLFactory {
      
      
      public static final String GET_ACTION_TYP_DESC = "select act_desc from action_typ where act_typ = ?"; 
+     
+     public static final String GET_GL_DEBTORS_DATA =  "select sum(value) as debtors_value from new_gl_tran_ext join branch using (br_cde) \n " +
+                                                        "where (debit_code = '500400' or debit_code = '500401' or debit_code = '500402' \n " +
+                                                        "or debit_code = '800011' or debit_code = '800012' or debit_code = '800013' \n " +
+                                                        "or debit_code = '800014' or credit_code = '500400' or credit_code = '500401' \n " +
+                                                        "or credit_code = '500402' or credit_code = '500403' or credit_code = '500404' \n " +
+                                                        "or credit_code = '800010' or credit_code = '800011' or credit_code = '800012' \n " +
+                                                        "or credit_code = '800013' or credit_code = '800014' ) and fpp_cde = ? \n " +
+                                                        "and br_cde = ? \n " +
+                                                        "group by br_cde"; 
+      
+       
+     
+               
+     public static final String GET_GL_STOCK_DATA = "select sum(value) as stock_value from ( \n" +
+                                                    "select grp_cde,br_cde,act_typ,sub_typ,typ_desc,fpp_cde,debit_code,credit_code,sum(value) as value from ( \n" +
+                                                    "SELECT grp_cde,br_cde,act_typ,sub_typ,typ_desc,fpp_cde,debit_code,credit_code,value as value \n" +
+                                                    "from new_gl_tran_ext join branch using (br_cde) \n" +
+                                                    "where (debit_code = '200040' or credit_code = '200040'  or debit_code = '500330' \n" +
+                                                     "or credit_code = '500330') \n" +
+                                                    "and fpp_cde = ? \n" +
+                                                    "and br_cde = ? \n " +
+                                                    "and not (sub_typ IN (11,12) and act_typ in ('77065','75005'))) as try \n" +
+                                                    "where not (act_typ = '70045' and sub_typ not in (0,1)) \n" +
+                                                    "group by grp_cde,br_cde,act_typ,sub_typ,typ_desc,fpp_cde,debit_code,credit_code \n" +
+                                                    "order by grp_cde,br_cde,act_typ,sub_typ,typ_desc,fpp_cde,debit_code,credit_code) as try";
+     
+     public static final String GET_INSTORE_DEBTORS_DATA = "SELECT \n" +
+                                                    "sum(hptran_amt) as debtors_value \n" + 
+                                                    "FROM audmth \n" +
+                                                    "JOIN hp_doc USING(aud_id) \n" + 
+                                                    "JOIN hp_tran USING(hpdoc_id) \n" + 
+                                                    "JOIN audit USING(aud_id) \n" +
+                                                    "JOIN fin_proc_per USING(fpp_cde) \n" +
+                                                    "JOIN action_typ USING(act_typ) \n" +
+                                                    "WHERE hpdoc_is_fin IS TRUE \n" +
+                                                    "GROUP BY fpp_cde \n" ;
+     public static final String GET_INSTORE_STOCK_DATA = "SELECT SUM (stran_qty :: NUMERIC * stran_unit_cos_cost) as stock_value \n" +
+                                                    "FROM audmth  \n" +
+                                                    "JOIN audit USING(aud_id)  \n" +
+                                                    "JOIN fin_proc_per USING(fpp_cde)  \n" +
+                                                    "JOIN action_typ USING(act_typ)  \n" +
+                                                    "JOIN sku_tran USING(aud_id)  \n" +
+                                                    "WHERE stran_is_fin IS TRUE";
+     
 }
