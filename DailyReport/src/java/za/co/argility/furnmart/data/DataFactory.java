@@ -442,7 +442,7 @@ public class DataFactory {
                 list.add(process);
             }
 
-            return list;
+            return list;    
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception(e);
@@ -743,6 +743,37 @@ public class DataFactory {
 
         try {
 
+            connection = ConnectionManager.getConnection(ConnectionType.INSTORE, "c" + branch);
+            //connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_BRANCH_ROLLED_FPP_CODE);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                period = rs.getString(1);
+            }
+
+            return period;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+
+    }
+    
+    
+    public static String getMeconsFppCode(String branch) throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String period = null;
+
+        try {
+
             //connection = ConnectionManager.getConnection(ConnectionType.INSTORE, "c" + branch);
             connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
             ps = connection.prepareStatement(SQLFactory.GET_BRANCH_ROLLED_FPP_CODE);
@@ -762,6 +793,8 @@ public class DataFactory {
         }
 
     }
+    
+    
 
     public static String getBranchDescription(String branch) throws SQLException {
 
@@ -1015,9 +1048,9 @@ public class DataFactory {
                     entity.setBranchDesc(getBranchDescription(branch));
                     connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
                     ps = connection.prepareStatement(SQLFactory.GET_GL_DEBTORS_DATA);
-                    System.out.println("fpp Code : " + getCurrentFppCode(branch) + " : Branch : "  + branch);
+                    //System.out.println("fpp Code : " + getCurrentFppCode(branch) + " : Branch : "  + branch);
                     
-                    ps.setString(1,getCurrentFppCode(branch));
+                    ps.setString(1,fppCde);
                     ps.setString(2, branch);
                     rs = ps.executeQuery();
                      entity.setGlDebtors(0.0);
@@ -1031,7 +1064,7 @@ public class DataFactory {
                     //ConnectionManager.close(connection);  
                     
                     ps = connection.prepareStatement(SQLFactory.GET_GL_STOCK_DATA);
-                    ps.setString(1,getCurrentFppCode(branch));
+                    ps.setString(1,fppCde);
                     ps.setString(2, branch);
                     rs = ps.executeQuery();
                     
