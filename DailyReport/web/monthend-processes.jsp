@@ -44,7 +44,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
         <title>Furnmart Monthend Processes Page</title>
          <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
            <link type="text/css" rel="stylesheet" href="stylesheets/biExtracts.css" />
@@ -81,10 +82,8 @@
                              <td style="text-align: center">Process Code</td>
                               <td style="text-align: center">Process Name</td>
                               <td style="text-align: center">Process Method</td>
-                              <td style="text-align: center">Process Class</td>
-                            
-                        
-                   
+                              <td style="text-align: center">Process Class</td>                            
+                                           
                      </tr>
                                    
                         <% 
@@ -109,8 +108,7 @@
                  
           </table>
         
-                        <br><br>
-        
+                        <br><br>        
                         
                         
                         
@@ -121,7 +119,12 @@
               
         
           <table border="0" cellspacing="2" cellpadding="2" width="50%">
-                    
+                     <tr class="RowToClick">
+                             <td style="text-align: center">Action Type</td>
+                             <td style="text-align: center">Action Description</td>
+                             <td style="text-align: center">Sub Type</td>
+                                                         
+                        </tr>
                     
                         <% 
                             int count2 = 0;    
@@ -132,12 +135,7 @@
                                %>
                             
                            
-                        <tr class="RowToClick">
-                             <td style="text-align: center">Action Type</td>
-                             <td style="text-align: center">Sub Type</td>
-                             
-                            
-                        </tr>
+                       
                                   
                  
                

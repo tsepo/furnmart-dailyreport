@@ -86,16 +86,17 @@ public class MonthEndProductionServlet  extends GenericServlet {
             return;
         }
         
-        /*
+        
           if (request.getParameter("tab") != null &&
-                request.getParameter("tab").equals("production")) {
+                request.getParameter("tab").equals("processes")) {
             
-            Log.info("... inside production ...");
+            Log.info("... inside processes ...");
             
-            processMonthEndProductionData(request, response);
-            response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
+            checkGLSubType(request, response);
+            checkGLMapActType(request,response);
+            response.sendRedirect(WebPages.MONTHEND_PROCESSES_PAGE);
             return;
-        }*/
+        }
         
         
          if (request.getParameter("tab") != null &&
