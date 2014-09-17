@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import za.co.argility.furnmart.data.DataFactory;
+import za.co.argility.furnmart.entity.GLDetailEntity;
+import za.co.argility.furnmart.entity.GLDeteailGLEntity;
 import za.co.argility.furnmart.entity.GLEntity;
 import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
@@ -38,6 +41,8 @@ import za.co.argility.furnmart.util.WebPages;
  * @author rnaidoo
  */
 public class MonthEndProductionServlet  extends GenericServlet {
+    private GLDetailEntity GLDetailInstoreEntity;
+    private GLDetailEntity GLDetailGLEntity;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -104,13 +109,22 @@ public class MonthEndProductionServlet  extends GenericServlet {
             
             Log.info("... inside GL Balancing ...");
             
-            //checkGLSubType(request, response);
-            //checkGLMapActType(request,response);
+           
             processGLData(request, response);
             response.sendRedirect(WebPages.GL_MAIN_PAGE);
             return;
         }
         
+         if (request.getParameter("branchNo") != null) {
+            
+            Log.info("... going to GL Detail Balancing ...");
+            
+            
+            processDetailGLData(request, response);
+            response.sendRedirect(WebPages.GL_DETAIL_PAGE);
+            return;
+        } 
+         
         
         }
         
@@ -297,6 +311,62 @@ public class MonthEndProductionServlet  extends GenericServlet {
                 
         
     }
+     
+     
+     protected void processDetailGLData(HttpServletRequest request, 
+            HttpServletResponse response) throws Exception {
+        
+        if (request.getParameter("branchNo") != null) {
+            String branchNo =  request.getParameter("branchNo");
+        
+        System.out.println("branch no ----> " + branchNo);    
+            
+        MonthendData data = (MonthendData)getSessionData(request, 
+                            SessionAttribute.MONTHEND_DATA_TAG);
+
+        if (data == null) {
+            data = new MonthendData();
+        }
+        
+        HashMap<String, GLDetailEntity> map = new HashMap<String,GLDetailEntity >();
+        List<GLDetailEntity>  glDetailDebtorsList = DataFactory.getGlDetailDebtorsList();
+        List<GLDetailEntity>  instoreDetailDebtorsList = DataFactory.getInstoreDetailDebtorsList(branchNo);     
+        
+        System.out.println("in  processDetailGLData ----> ");
+        System.out.println("instoreDetailDebtorsList size ----> " +instoreDetailDebtorsList.size());
+        System.out.println("glDetailDebtorsList size ----> " + glDetailDebtorsList.size());
+       
+        
+        
+        for (Iterator<GLDetailEntity> it = instoreDetailDebtorsList.iterator(); it.hasNext();) {
+              GLDetailInstoreEntity = it.next();
+              GLDetailInstoreEntity.setGlVal(getGlVal(glDetailDebtorsList,GLDetailInstoreEntity.getActionType()));
+        }
+        
+        
+        
+        System.out.println("instoreDetailDebtorsList ----> " + instoreDetailDebtorsList.size()); 
+        data.setGlDets(instoreDetailDebtorsList);
+        
+         // save the data to the session
+        saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);
+
+           
+        }         
+                      
+        
+    }
+     
+    public double getGlVal(List GLDetailEntity, int actTyp){
+        List<GLDetailEntity>  glDetailDebtorsList = GLDetailEntity;
+        for (Iterator<GLDetailEntity> it = glDetailDebtorsList.iterator(); it.hasNext();) {
+              GLDetailInstoreEntity = it.next();
+              if(actTyp == GLDetailInstoreEntity.getActionType()){
+                  return GLDetailInstoreEntity.getGlVal();
+              }
+        }
+        return 0.0;
+    } 
      
 
 

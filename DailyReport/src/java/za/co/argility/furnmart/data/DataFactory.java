@@ -23,6 +23,7 @@ import org.joda.time.Hours;
 import za.co.argility.furnmart.entity.ExtractError;
 import za.co.argility.furnmart.entity.ExtractHistory;
 import za.co.argility.furnmart.entity.ExtractType;
+import za.co.argility.furnmart.entity.GLDetailEntity;
 import za.co.argility.furnmart.entity.GLEntity;
 import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
@@ -1026,6 +1027,7 @@ public class DataFactory {
         List<GLEntity> list = new ArrayList<GLEntity>();
         String fppCde = getMeconFpp();
         List<String> meBranchList = getMonthendBranchList();
+               
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -1135,6 +1137,75 @@ public class DataFactory {
             ConnectionManager.close(connection);
         }
         return actDesc;
+    }
+    
+    
+    public static final List<GLDetailEntity> getGlDetailDebtorsList() throws Exception {
+
+        List<GLDetailEntity> list = new ArrayList<GLDetailEntity>();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_GL_DETAIL_DEBTORS_LIST);
+            rs = ps.executeQuery();
+
+            GLDetailEntity entity = null;
+
+            while (rs.next()) {
+               entity = new GLDetailEntity();
+               entity.setActionType(rs.getInt("act_typ"));
+               String actDesc = "test";
+               entity.setDescription(actDesc);
+               entity.setGlVal(rs.getDouble("value")); 
+               list.add(entity);
+            }
+
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+
+    }
+    
+    public static final List<GLDetailEntity> getInstoreDetailDebtorsList(String branch) throws Exception {
+
+        List<GLDetailEntity> list = new ArrayList<GLDetailEntity>();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        GLDetailEntity entity = null;
+            
+                
+        try {
+
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, "c" + branch);
+            ps = connection.prepareStatement(SQLFactory.GET_INSTORE_DETAIL_DEBTORS_LIST);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+               entity = new GLDetailEntity();
+               entity.setActionType(rs.getInt("act_typ"));
+               entity.setDescription(getActDesc(entity.getActionType()));
+               entity.setInstoreVal(rs.getDouble("value"));
+               list.add(entity);
+            }
+
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+
     }
 
 }

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : gl_main
-    Created on : Aug 20, 2014, 8:06:10 AM
+    Document   : gl-detail
+    Created on : Sep 15, 2014, 10:57:18 AM
     Author     : rnaidoo
 --%>
 
@@ -15,10 +15,10 @@
         return;
     }
     
-    List<GLEntity> details = data.getGlDetails();
+    List<GLDetailEntity> details = data.getGlDets();
     System.out.println("details-- > " + details.size());
     if (details == null)
-        details = new ArrayList<GLEntity>();
+        details = new ArrayList<GLDetailEntity>();
     
  %>   
 
@@ -42,7 +42,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         
-        <title>Gl Balancing page</title>
+        <title>Gl Detail Page</title>
           <%@include file="master/global-header.jspf" %>
           <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
            <link type="text/css" rel="stylesheet" href="stylesheets/biExtracts.css" />
@@ -54,34 +54,27 @@
         <div class="content" id="content">
              <%@include file="master/monthend-menu.jspf" %>
          </div>
-        
-        
-          <div class="header">
-                <div class="wrapper" ><p>GL Balancing Page</p></div>
-          </div>
-         
-         
-           <table border="0" cellspacing="2"padding="2" width="50%">
-                    
-                  
-                         <tr class="RowToClick"> 
-                              <td style="text-align: center">Branch Code</td>
-                              <td style="text-align: center">Branch Name</td>                              
-                            <td>Instore Debtors</td>     
-                            <td>Gl Debtors</td>
-                            <td>Instore Stock</td>
-                            <td>GL Stock</td>
+         <div class="header">
+                <div class="wrapper" ><p>GL Detail Page</p></div>
+         </div>
+         <br><br>
+         <center><h2>Debtors</h2></center>
+         <br><br>
+                <table border="0" cellspacing="2"padding="2" width="50%">
+                          <tr class="RowToClick"> 
+                            <td style="text-align: center">Action Type</td>
+                            <td style="text-align: center">Description</td>                              
+                            <td>Instore</td>
+                            <td>GL</td>
                             <td>Status</td>
+                            </tr>
                             
-                       
-                        </tr>
-                        <% int count = 0;    
-                            for (GLEntity entity : details){ 
+                              <% int count = 0;    
+                            for (GLDetailEntity entity : details){ 
                                 ++count;
                                 boolean isEven = (count % 2 == 0);  
                                 String status = "images/ok.png"; 
-                                if(entity.getInstoreDebtors() == entity.getGlDebtors() && 
-                                        entity.getInstoreStock() == entity.getGlStock()){
+                                if(entity.getInstoreVal() == entity.getGlVal()){                                       
                                     status = "images/ok.png";
                                 }else{
                                     status = "images/error.png";
@@ -89,22 +82,16 @@
                         %>
                             
                             <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
-                                <td span class="bigText" style="text-align: center"><%= entity.getBranchCode()  %></td>
-                                <td span class="smallText" style="text-align: center"><%= entity.getBranchDesc()  %></td>
-                                <td><a title="Click on link for detailed detobrs balancing." href="MonthEndProduction?branchNo=<%= entity.getBranchCode()  %>" ><%= entity.getInstoreDebtors() %></a></td>
-                                <td><a title="Click on link for detailed detobrs balancing." href="MonthEndProduction?branchNo=<%= entity.getBranchCode()  %>" ><%= entity.getGlDebtors() %></a></td>
-                                <td><%= entity.getInstoreStock() %></td>
-                                <td><%= entity.getGlStock() %></td>
+                                <td><%= entity.getActionType() %></td>
+                                <td><%= entity.getDescription() %></td>
+                                <td><%= entity.getInstoreVal() %></td>
+                                <td><%= entity.getGlVal() %></td>
                                 <td style="text-align: center"><img src="<%= status %>" style="width:36px" /></td> 
                              </tr>
                             
                             <%}                       
                            
                         %>
-              
-          </table>
-         
+         </table>
     </body>
 </html>
-                       
-
