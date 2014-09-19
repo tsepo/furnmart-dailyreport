@@ -33,6 +33,8 @@ public class MonthendData {
     private List<MonthendProcesses> monthendProcesses;
     private List<GLEntity> glDetails;
     private List<GLDetailEntity> glDets;
+    private String glDetailBranchCode;
+    private String glDeatilType; 
     
     public MonthendData() {
     }
@@ -161,6 +163,35 @@ public class MonthendData {
      */
     public void setGlDets(List<GLDetailEntity> glDets) {
         this.glDets = glDets;
+    }
+
+    /**
+     * @return the glDetailBranchCode
+     */
+    public String getGlDetailBranchCode() {
+        return glDetailBranchCode;
+        
+    }
+
+    /**
+     * @param glDetailBranchCode the glDetailBranchCode to set
+     */
+    public void setGlDetailBranchCode(String glDetailBranchCode) {
+        this.glDetailBranchCode = glDetailBranchCode;
+    }
+
+    /**
+     * @return the glDeatilType
+     */
+    public String getGlDeatilType() {
+        return glDeatilType;
+    }
+
+    /**
+     * @param glDeatilType the glDeatilType to set
+     */
+    public void setGlDeatilType(String glDeatilType) {
+        this.glDeatilType = glDeatilType;
     }
     
 }

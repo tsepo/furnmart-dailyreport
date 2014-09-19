@@ -35,7 +35,8 @@ public class WebPages {
     public static final String MONTHEND_PROD_PAGE = BASE_APP_URL + "/monthend-production.jsp";
     public static final String MONTHEND_PROCESSES_PAGE = BASE_APP_URL + "/monthend-processes.jsp";
     public static final String GL_MAIN_PAGE = BASE_APP_URL + "/gl-main.jsp";
-    public static final String GL_DETAIL_PAGE = BASE_APP_URL + "/gl-detail.jsp";
+    public static final String GL_DETAIL_DEBTORS_PAGE = BASE_APP_URL + "/gl-detail-debtors.jsp";
+    public static final String GL_DETAIL_STOCK_PAGE = BASE_APP_URL + "/gl-detail-stock.jsp";
     public static final String ERROR_PAGE = BASE_APP_URL + "/errorpages/error-occured.jsp";
     
     /**

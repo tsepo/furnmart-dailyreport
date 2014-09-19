@@ -1140,18 +1140,30 @@ public class DataFactory {
     }
     
     
-    public static final List<GLDetailEntity> getGlDetailDebtorsList() throws Exception {
+    public static final List<GLDetailEntity> getGlDetailDebtorsList(String branch, String type) throws Exception {
 
         List<GLDetailEntity> list = new ArrayList<GLDetailEntity>();
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-
+        String fppCde = getMeconFpp();
+        System.out.println("fpp cde ----> " + fppCde);
+        System.out.println("branch cde ---> " + branch);
         try {
 
             connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
-            ps = connection.prepareStatement(SQLFactory.GET_GL_DETAIL_DEBTORS_LIST);
+            if(type.equals("debtors")){
+                 System.out.println("Tana 1 ----> " + fppCde);
+                ps = connection.prepareStatement(SQLFactory.GET_GL_DETAIL_DEBTORS_LIST);
+            }else{
+                System.out.println("Tana 2 ----> " + fppCde);
+                ps = connection.prepareStatement(SQLFactory.GET_GL_DETAIL_STOCK_LIST);
+            }
+            
+            ps.setString(1,fppCde);
+            ps.setString(2, branch);
             rs = ps.executeQuery();
+            
 
             GLDetailEntity entity = null;
 
@@ -1174,7 +1186,7 @@ public class DataFactory {
 
     }
     
-    public static final List<GLDetailEntity> getInstoreDetailDebtorsList(String branch) throws Exception {
+    public static final List<GLDetailEntity> getInstoreDetailDebtorsList(String branch, String type) throws Exception {
 
         List<GLDetailEntity> list = new ArrayList<GLDetailEntity>();
         Connection connection = null;
@@ -1187,7 +1199,11 @@ public class DataFactory {
         try {
 
             connection = ConnectionManager.getConnection(ConnectionType.BATCH, "c" + branch);
-            ps = connection.prepareStatement(SQLFactory.GET_INSTORE_DETAIL_DEBTORS_LIST);
+            if(type.equals("debtors")){
+                ps = connection.prepareStatement(SQLFactory.GET_INSTORE_DETAIL_DEBTORS_LIST);
+            }else{
+                ps = connection.prepareStatement(SQLFactory.GET_INSTORE_DETAIL_STOCK_LIST);
+            }
             rs = ps.executeQuery();
 
             while (rs.next()) {

@@ -89,8 +89,7 @@ public interface SQLFactory {
                                                            "where br_active = true  \n" +
                                                            "and br_is_ceres = false \n" +
                                                            "and br_is_central = false \n" +
-                                                           "and br_is_merch = false  \n" +
-                                                           "and br_cde = '0002' \n" + 
+                                                           "and br_is_merch = false  \n" +                                                           
                                                            "group by branch.br_cde order by branch.br_cde";
     
     
@@ -229,16 +228,33 @@ public interface SQLFactory {
                                                     "JOIN action_typ USING(act_typ)  \n" +
                                                     "JOIN sku_tran USING(aud_id)  \n" +
                                                     "WHERE stran_is_fin IS TRUE";
-     public static final String GET_GL_DETAIL_DEBTORS_LIST = "SELECT act_typ, sum( value ) as value from new_gl_tran_ext join branch using (br_cde) \n" +
-                                                            "where (debit_code = '200040' or credit_code = '200040'  or debit_code = '500330' \n" +
-                                                            "or credit_code = '500330') \n" +
-                                                            "and fpp_cde = '201408' \n" +
-                                                            "and br_cde = '0002' \n" +
-                                                            "and not (sub_typ IN (11,12) and act_typ in ('77065','75005')) \n" + 
-                                                            "and not (act_typ = '70045' and sub_typ not in (0,1)) group by act_typ \n" + 
-                                                            "order by act_typ ;";
      
-      public static final String GET_INSTORE_DETAIL_DEBTORS_LIST = "SELECT act_typ, sum(stran_qty :: NUMERIC * stran_unit_cos_cost) as value \n" +
+     public static final String GET_GL_DETAIL_DEBTORS_LIST = "select act_typ, sum(value) as value from new_gl_tran_ext join branch using (br_cde) \n" +
+                                                                "where (debit_code = '500400' or debit_code = '500401' or debit_code = '500402' \n" +
+                                                                "or debit_code = '800011' or debit_code = '800012' or debit_code = '800013' \n" +
+                                                                "or debit_code = '800014' or credit_code = '500400' or credit_code = '500401' \n" +
+                                                                "or credit_code = '500402' or credit_code = '500403' or credit_code = '500404' \n" +
+                                                                "or credit_code = '800010' or credit_code = '800011' or credit_code = '800012' \n" +
+                                                                "or credit_code = '800013' or credit_code = '800014' ) \n" + 
+                                                                "and fpp_cde = ?  \n" +
+                                                                "and br_cde = ? \n" +
+                                                                "group by act_typ \n" +
+                                                                "order by act_typ; ";
+
+     
+      public static final String GET_INSTORE_DETAIL_DEBTORS_LIST = "SELECT \n" + 
+                                                                "act_typ, sum(hptran_amt) as value \n" +  
+                                                                "FROM audmth \n" +
+                                                                "JOIN hp_doc USING(aud_id) \n" + 
+                                                                "JOIN hp_tran USING(hpdoc_id) \n" +
+                                                                "JOIN audit USING(aud_id) \n" +
+                                                                "JOIN fin_proc_per USING(fpp_cde) \n" + 
+                                                                "JOIN action_typ USING(act_typ) \n" +
+                                                                "WHERE hpdoc_is_fin IS TRUE \n" +
+                                                                "GROUP BY act_typ \n" +
+                                                                "order by act_typ;";
+      
+    public static final String GET_INSTORE_DETAIL_STOCK_LIST = "SELECT act_typ, sum(stran_qty :: NUMERIC * stran_unit_cos_cost) as value \n" +
                                                                    "FROM audmth  \n" +
                                                                    "JOIN audit USING(aud_id) \n" +  
                                                                     "JOIN fin_proc_per USING(fpp_cde) \n" +  
@@ -247,5 +263,14 @@ public interface SQLFactory {
                                                                     "WHERE stran_is_fin IS TRUE \n" +
                                                                     "group by act_typ \n" +
                                                                     "order by act_typ;";
+    
+    public static final String GET_GL_DETAIL_STOCK_LIST =  "SELECT act_typ, sum( value ) as value from new_gl_tran_ext join branch using (br_cde) \n" +
+                                                            "where (debit_code = '200040' or credit_code = '200040'  or debit_code = '500330' \n" +
+                                                            "or credit_code = '500330') \n" +
+                                                            "and fpp_cde = ? \n" +
+                                                            "and br_cde = ? \n" +
+                                                            "and not (sub_typ IN (11,12) and act_typ in ('77065','75005')) \n" + 
+                                                            "and not (act_typ = '70045' and sub_typ not in (0,1)) group by act_typ \n" + 
+                                                            "order by act_typ ;";
      
 }

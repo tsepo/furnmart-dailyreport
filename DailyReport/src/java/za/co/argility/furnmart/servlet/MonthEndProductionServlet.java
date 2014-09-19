@@ -121,7 +121,11 @@ public class MonthEndProductionServlet  extends GenericServlet {
             
             
             processDetailGLData(request, response);
-            response.sendRedirect(WebPages.GL_DETAIL_PAGE);
+            if(request.getParameter("type").equals("debtors")){
+                response.sendRedirect(WebPages.GL_DETAIL_DEBTORS_PAGE);
+            }else{
+                response.sendRedirect(WebPages.GL_DETAIL_STOCK_PAGE);
+                }
             return;
         } 
          
@@ -319,7 +323,14 @@ public class MonthEndProductionServlet  extends GenericServlet {
         if (request.getParameter("branchNo") != null) {
             String branchNo =  request.getParameter("branchNo");
         
+         String type = null;   
+         if (request.getParameter("type") != null) {
+            type =  request.getParameter("type"); 
+         }
+            
+            
         System.out.println("branch no ----> " + branchNo);    
+        System.out.println("type ----> " + type); 
             
         MonthendData data = (MonthendData)getSessionData(request, 
                             SessionAttribute.MONTHEND_DATA_TAG);
@@ -328,25 +339,48 @@ public class MonthEndProductionServlet  extends GenericServlet {
             data = new MonthendData();
         }
         
-        HashMap<String, GLDetailEntity> map = new HashMap<String,GLDetailEntity >();
-        List<GLDetailEntity>  glDetailDebtorsList = DataFactory.getGlDetailDebtorsList();
-        List<GLDetailEntity>  instoreDetailDebtorsList = DataFactory.getInstoreDetailDebtorsList(branchNo);     
         
-        System.out.println("in  processDetailGLData ----> ");
-        System.out.println("instoreDetailDebtorsList size ----> " +instoreDetailDebtorsList.size());
-        System.out.println("glDetailDebtorsList size ----> " + glDetailDebtorsList.size());
-       
-        
-        
-        for (Iterator<GLDetailEntity> it = instoreDetailDebtorsList.iterator(); it.hasNext();) {
-              GLDetailInstoreEntity = it.next();
-              GLDetailInstoreEntity.setGlVal(getGlVal(glDetailDebtorsList,GLDetailInstoreEntity.getActionType()));
-        }
-        
-        
-        
-        System.out.println("instoreDetailDebtorsList ----> " + instoreDetailDebtorsList.size()); 
-        data.setGlDets(instoreDetailDebtorsList);
+            List<GLDetailEntity>  glDetailDebtorsList = DataFactory.getGlDetailDebtorsList(branchNo,type);
+            List<GLDetailEntity>  instoreDetailDebtorsList = DataFactory.getInstoreDetailDebtorsList(branchNo,type);     
+
+            System.out.println("in  processDetailGLData ----> ");
+            System.out.println("instoreDetailDebtorsList size ----> " +instoreDetailDebtorsList.size());
+            System.out.println("glDetailDebtorsList size ----> " + glDetailDebtorsList.size());
+            
+            double ibtVarianceVal = 0.0d; 
+            for (Iterator<GLDetailEntity> it = glDetailDebtorsList.iterator(); it.hasNext();) {
+                  GLDetailInstoreEntity = it.next();
+                  if(GLDetailInstoreEntity.getActionType() == 71008){
+                      ibtVarianceVal = GLDetailInstoreEntity.getGlVal();
+                  }
+            }
+            
+            System.out.println("ibtVarianceVal ---> " +ibtVarianceVal);
+            
+            for (Iterator<GLDetailEntity> it = glDetailDebtorsList.iterator(); it.hasNext();) {
+                  GLDetailInstoreEntity = it.next();
+                  if(GLDetailInstoreEntity.getActionType() == 71007){
+                     GLDetailInstoreEntity.setGlVal(GLDetailInstoreEntity.getGlVal() + ibtVarianceVal);
+                     double amt = GLDetailInstoreEntity.getGlVal();
+                     double roundedAmt = Math.round(amt * 100);
+		     GLDetailInstoreEntity.setGlVal(roundedAmt/100);
+                     System.out.println("act type  71007 ---> " + GLDetailInstoreEntity.getGlVal());		
+
+                  }
+            }
+            
+            
+
+
+            for (Iterator<GLDetailEntity> it = instoreDetailDebtorsList.iterator(); it.hasNext();) {
+                  GLDetailInstoreEntity = it.next();
+                  GLDetailInstoreEntity.setGlVal(getGlVal(glDetailDebtorsList,GLDetailInstoreEntity.getActionType()));
+            }
+
+            System.out.println("instoreDetailDebtorsList ----> " + instoreDetailDebtorsList.size()); 
+            data.setGlDets(instoreDetailDebtorsList);
+            data.setGlDetailBranchCode(branchNo);
+            data.setGlDeatilType(type);
         
          // save the data to the session
         saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);

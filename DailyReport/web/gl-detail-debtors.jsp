@@ -42,7 +42,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         
-        <title>Gl Detail Page</title>
+        <title>Gl Debtors Detail Page</title>
           <%@include file="master/global-header.jspf" %>
           <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
            <link type="text/css" rel="stylesheet" href="stylesheets/biExtracts.css" />
@@ -55,11 +55,10 @@
              <%@include file="master/monthend-menu.jspf" %>
          </div>
          <div class="header">
-                <div class="wrapper" ><p>GL Detail Page</p></div>
+                <div class="wrapper" ><p>GL Detail Debtors Page (<%=data.getGlDetailBranchCode() %>)</p></div>
          </div>
          <br><br>
-         <center><h2>Debtors</h2></center>
-         <br><br>
+        
                 <table border="0" cellspacing="2"padding="2" width="50%">
                           <tr class="RowToClick"> 
                             <td style="text-align: center">Action Type</td>
@@ -84,8 +83,8 @@
                             <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
                                 <td><%= entity.getActionType() %></td>
                                 <td><%= entity.getDescription() %></td>
-                                <td><%= entity.getInstoreVal() %></td>
-                                <td><%= entity.getGlVal() %></td>
+                                <td title= "Instore"><%= entity.getInstoreVal() %></td>
+                                <td title = "GL"><%= entity.getGlVal() %></td>
                                 <td style="text-align: center"><img src="<%= status %>" style="width:36px" /></td> 
                              </tr>
                             
