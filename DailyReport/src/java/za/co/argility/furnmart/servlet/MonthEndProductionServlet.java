@@ -129,8 +129,19 @@ public class MonthEndProductionServlet  extends GenericServlet {
             return;
         } 
          
+         
+          if (request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("cons")) {
+              System.out.println("I am in Consolidation page.");
+              response.sendRedirect(WebPages.MONTHEND_CONSOLIDATION_PAGE);
+              
+          }
+         
         
         }
+        
+        
+        
         
         catch (Exception e) {
             Log.info("Exception: " + e.getMessage());
@@ -181,6 +192,7 @@ public class MonthEndProductionServlet  extends GenericServlet {
          DataFactory.getMonthendDetails(MonthEndTableType.CashBookExtract, map);
          DataFactory.getMonthendDetails(MonthEndTableType.CentralAccount, map);
          DataFactory.getMonthendDetails(MonthEndTableType.Creditors,map);
+         DataFactory.getMonthendDetails(MonthEndTableType.Buckets,map);
 
          ArrayList<MonthendEntity> details = new ArrayList<MonthendEntity>();
          TreeSet<String> branches = new TreeSet<String>(map.keySet());

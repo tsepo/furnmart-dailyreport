@@ -83,6 +83,7 @@
                             <td>Creditors</td>
                             <td>Cash Book</td>
                             <td>New GL Tran</td>
+                            <td>Buckets</td>
                             <td>PWC Extracts</td>
                        
                         </tr>
@@ -109,6 +110,9 @@
                                 String newGLTranFlag = "images/ok.png";
                                 if (entity.isIsNewGLTranExtRun()== false)
                                     newGLTranFlag = "images/error.png";
+                                String newBucketsFlag = "images/ok.png";
+                                if (entity.isIsBucketsRun()== false)
+                                    newBucketsFlag = "images/error.png";
                                 String pwcFlag = "images/ok.png";
                                 if (entity.isIsPWCExtractsDelivered()== false)
                                     pwcFlag = "images/error.png";     
@@ -122,6 +126,7 @@
                                 <td style="text-align: center"><img src="<%= creditorsFlag %>" style="width:36px" title="Creditors" /></td>
                                 <td style="text-align: center"><img src="<%= cashBookFlag %>" style="width:36px" title="Cash Book"/></td>
                                 <td style="text-align: center"><img src="<%= newGLTranFlag %>" style="width:36px" title="GL" /></td> 
+                                 <td style="text-align: center"><img src="<%= newBucketsFlag %>" style="width:36px" title="Buckets" /></td> 
                                 <td style="text-align: center"><img src="<%= pwcFlag %>" style="width:36px" title="GL" /></td> 
                             </tr>
                             

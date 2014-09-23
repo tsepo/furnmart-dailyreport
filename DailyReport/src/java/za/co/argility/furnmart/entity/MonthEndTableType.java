@@ -15,7 +15,8 @@ public enum MonthEndTableType {
     CentralAccount,
     Creditors,
     CashBookExtract,
-    NewGLTranExt
+    NewGLTranExt,
+    Buckets
   
     
 }

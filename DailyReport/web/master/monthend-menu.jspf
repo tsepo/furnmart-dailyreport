@@ -35,6 +35,9 @@
     <div class="menuItem" onclick="processMonthendMenuItem('gl')">
         <p>GL BALANCING</p>
     </div>
+      <div class="menuItem" onclick="processMonthendMenuItem('cons')">
+        <p>CONSOLIDATIONS</p>
+    </div>
     
    
 

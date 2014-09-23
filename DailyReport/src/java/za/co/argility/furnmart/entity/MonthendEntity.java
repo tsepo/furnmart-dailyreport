@@ -21,6 +21,7 @@ public class MonthendEntity {
     private boolean isCashBookExtractRun;
     private boolean isNewGLTranExtRun;
     private boolean isPWCExtractsDelivered;
+    private boolean isBucketsRun;
 
     /**
      * @return the isBranchOk
@@ -160,6 +161,20 @@ public class MonthendEntity {
      */
     public void setIsPWCExtractsDelivered(boolean isPWCExtractsDelivered) {
         this.isPWCExtractsDelivered = isPWCExtractsDelivered;
+    }
+
+    /**
+     * @return the isBucketsRun
+     */
+    public boolean isIsBucketsRun() {
+        return isBucketsRun;
+    }
+
+    /**
+     * @param isBucketsRun the isBucketsRun to set
+     */
+    public void setIsBucketsRun(boolean isBucketsRun) {
+        this.isBucketsRun = isBucketsRun;
     }
     
     

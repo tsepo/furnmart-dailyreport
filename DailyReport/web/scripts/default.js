@@ -97,6 +97,12 @@ function processMonthendMenuItem(option) {
         window.location.replace(BASE_URL + "/MonthEndProduction?tab=gl");
         
     }
+    
+     if (option == "cons") {
+          //toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/MonthEndProduction?tab=cons");
+        
+    }
      
     
     //else alert("No page found.");
