@@ -57,6 +57,7 @@ public class MonthEndProductionServlet  extends GenericServlet {
             throws ServletException, IOException {
        
         super.doGet(request, response); 
+        Log.info("... in doGet ME Prod Servlet ...");
        
         Log.setLogger(MonthEndProductionServlet.class);
         
@@ -115,12 +116,36 @@ public class MonthEndProductionServlet  extends GenericServlet {
             return;
         }
         
+        boolean allGlSelected = true; 
+       
+        if(request.getParameter("glSelect") != null){
+            if (request.getParameter("glSelect").equals("all") ||  request.getParameter("glSelect").equals("unbalanced")) {  
+
+                MonthendData data = (MonthendData)getSessionData(request, 
+                            SessionAttribute.MONTHEND_DATA_TAG);
+
+                    if (data == null) {
+                        data = new MonthendData();
+                    }
+                    
+                if(request.getParameter("glSelect").equals("unbalanced")){                   
+                    data.setIsAllGLSelected(false);
+                  
+                 }else{
+                    data.setIsAllGLSelected(true);
+                }
+                  response.sendRedirect(WebPages.GL_MAIN_PAGE);
+            }     
+            
+            
+        }
+       
          if (request.getParameter("branchNo") != null) {
             
             Log.info("... going to GL Detail Balancing ...");
             
             
-            processDetailGLData(request, response);
+            processDetailGLData(request, response,allGlSelected);
             if(request.getParameter("type").equals("debtors")){
                 response.sendRedirect(WebPages.GL_DETAIL_DEBTORS_PAGE);
             }else{
@@ -128,6 +153,7 @@ public class MonthEndProductionServlet  extends GenericServlet {
                 }
             return;
         } 
+       
          
          
           if (request.getParameter("tab") != null &&
@@ -330,8 +356,9 @@ public class MonthEndProductionServlet  extends GenericServlet {
      
      
      protected void processDetailGLData(HttpServletRequest request, 
-            HttpServletResponse response) throws Exception {
+            HttpServletResponse response, Boolean allGlSelected) throws Exception {
         
+        System.out.println("allGlSelected ----> " + allGlSelected);
         if (request.getParameter("branchNo") != null) {
             String branchNo =  request.getParameter("branchNo");
         
@@ -349,9 +376,9 @@ public class MonthEndProductionServlet  extends GenericServlet {
 
         if (data == null) {
             data = new MonthendData();
-        }
+        }     
         
-        
+            data.setIsAllGLSelected(allGlSelected);
             List<GLDetailEntity>  glDetailDebtorsList = DataFactory.getGlDetailDebtorsList(branchNo,type);
             List<GLDetailEntity>  instoreDetailDebtorsList = DataFactory.getInstoreDetailDebtorsList(branchNo,type);     
 

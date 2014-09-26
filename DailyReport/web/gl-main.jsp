@@ -56,10 +56,31 @@
         
         
           <div class="header">
-                <div class="wrapper" ><p>GL Balancing Page</p></div>
+                <div class="wrapper" ><p>GL Balancing Summary Page</p></div>
           </div>
          
+         <br><br>
+           <form name="glSummaryForm" method="get" action="MonthEndProduction">
          
+         <div style="margin-left: 10px">  
+             <br><br>
+             <table border="0" cellspacing="2" cellpadding="2" width="50%">
+             <tr>
+             <td valign="top">
+             <label>Selection: </label><br/>
+             <input type="radio" name="glSelect" value="all" checked="checked"/> All</br>                   
+             <input type="radio" name="glSelect" value="unbalanced" /> Out Of Balance
+             </td>
+              <td valign='bottom'>
+             <input type="submit" value="search" name="submitForm" class="button"/>
+              </td></tr></table>
+             <br><br><hr>
+             
+        </div>
+        
+        
+        <br><br>
+      
            <table border="0" cellspacing="2"padding="2" width="50%">
                     
                   
@@ -74,17 +95,29 @@
                             
                        
                         </tr>
-                        <% int count = 0;    
+                        <% int count = 0; 
+                           int count2 = 0; 
                             for (GLEntity entity : details){ 
                                 ++count;
                                 boolean isEven = (count % 2 == 0);  
                                 String status = "images/ok.png"; 
-                                if(entity.getInstoreDebtors() == entity.getGlDebtors() && 
-                                        entity.getInstoreStock() == entity.getGlStock()){
-                                    status = "images/ok.png";
+                                if(!data.isIsAllGLSelected()){
+                                    if(entity.getInstoreDebtors() == entity.getGlDebtors() && 
+                                            entity.getInstoreStock() == entity.getGlStock()){                                       
+                                            continue; 
+                                    }else{
+                                        status = "images/error.png";
+                                        ++count2;
+                                    }
                                 }else{
-                                    status = "images/error.png";
-                                }   
+                                     if(entity.getInstoreDebtors() == entity.getGlDebtors() && 
+                                            entity.getInstoreStock() == entity.getGlStock()){
+                                            status = "images/ok.png";                                        
+                                    }else{
+                                        status = "images/error.png";
+                                    }
+                                    ++count2; 
+                                }
                         %>
                             
                             <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
@@ -102,7 +135,13 @@
                         %>
               
           </table>
-         
+                        
+                        <div style="margin-left: 10px">  
+                            <br><br><hr>
+            <h3>Returned GL Balancing results for <strong> <%= count2 %></strong> stores.</h3>
+        </div>
+                        
+           </form>
     </body>
 </html>
                        

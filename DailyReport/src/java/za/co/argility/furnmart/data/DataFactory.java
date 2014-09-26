@@ -277,6 +277,11 @@ public class DataFactory {
 
                 case NewGLTranExt:
                     tableName = "new_gl_tran_ext";
+                     break;
+                    
+                case Buckets:
+                    tableName = "gl_stock_bucket_in";
+                    break;
 
             }
 
@@ -319,8 +324,10 @@ public class DataFactory {
                 //item.setFppCde(rs.getString("fpp_cde"));
                 item.setBranchDesc(rs.getString("br_desc"));
                 count = rs.getInt(tableName);
+                /*
                 System.out.println("me.getKey() ---> " + tableName);
-                System.out.println("count ---> " + count);
+                System.out.println("count ---> " + count);*/
+                System.out.println("branch  : " + item.getBranchCode() + "  me.getKey() ---> " + tableName +"count ---> " + count );
 
                 if (count > 0) {
                     flag = true;
@@ -345,6 +352,10 @@ public class DataFactory {
                         item.setIsNewGLTranExtRun(flag);
                         System.out.println("Hey dude 4 : " + count);
                         break;
+                    case Buckets:
+                        item.setIsBucketsRun(flag);
+                        System.out.println("Hey dude 5 : " + count);
+                        break;    
 
                 }
 

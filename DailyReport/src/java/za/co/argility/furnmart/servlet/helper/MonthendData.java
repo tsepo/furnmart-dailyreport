@@ -35,6 +35,7 @@ public class MonthendData {
     private List<GLDetailEntity> glDets;
     private String glDetailBranchCode;
     private String glDeatilType; 
+    private boolean isAllGLSelected = true;
     
     public MonthendData() {
     }
@@ -192,6 +193,20 @@ public class MonthendData {
      */
     public void setGlDeatilType(String glDeatilType) {
         this.glDeatilType = glDeatilType;
+    }
+
+    /**
+     * @return the isAllGLSelected
+     */
+    public boolean isIsAllGLSelected() {
+        return isAllGLSelected;
+    }
+
+    /**
+     * @param isAllGLSelected the isAllGLSelected to set
+     */
+    public void setIsAllGLSelected(boolean isAllGLSelected) {
+        this.isAllGLSelected = isAllGLSelected;
     }
     
 }
