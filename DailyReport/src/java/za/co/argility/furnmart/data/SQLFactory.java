@@ -90,7 +90,7 @@ public interface SQLFactory {
                                                            "and br_is_ceres = false \n" +
                                                            "and br_is_central = false \n" +
                                                            "and br_is_merch = false  \n" +   
-                                                           "and br_cde in('0002','0012') \n" +    
+                                                           "and br_cde in ('0002','0003') \n" + 
                                                            "group by branch.br_cde order by branch.br_cde";
     
     
@@ -273,5 +273,10 @@ public interface SQLFactory {
                                                             "and not (sub_typ IN (11,12) and act_typ in ('77065','75005')) \n" + 
                                                             "and not (act_typ = '70045' and sub_typ not in (0,1)) group by act_typ \n" + 
                                                             "order by act_typ ;";
+    
+    public static final String GET_GL_SUMMARY_DETS = "SELECT br_cde, fpp_cde, gl_debtors, gl_instore_debtors, gl_stock, gl_instore_stock \n" +
+                                                     "FROM new_gl_balancing \n" +
+                                                     "WHERE fpp_cde = ? \n" +
+                                                     "AND br_cde = ? ;" ;
      
 }

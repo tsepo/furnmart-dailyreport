@@ -339,7 +339,7 @@ public class MonthEndProductionServlet  extends GenericServlet {
         }
         
        
-        List<GLEntity>  glData = DataFactory.getGLData();                 
+        List<GLEntity>  glData = DataFactory.getNewGLData();                 
         data.setGlDetails(glData);
 
 

@@ -1122,6 +1122,72 @@ public class DataFactory {
 
         return list;
     }
+    
+    
+    
+    public static List<GLEntity> getNewGLData()
+            throws Exception {
+
+        List<GLEntity> list = new ArrayList<GLEntity>();
+        String fppCde = getMeconFpp();
+        List<String> meBranchList = getMonthendBranchList();
+               
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        System.out.println("meBranchList ---> " + meBranchList.size());
+        boolean validBranch;
+        GLEntity entity = null;
+        for (String branch : meBranchList) {
+            try {
+                 
+                try {
+                    connection = ConnectionManager.getConnection(ConnectionType.BATCH, "c" + branch);
+                    validBranch = true;
+                } catch (SQLException sqle) {
+                    validBranch = false;
+                }
+                
+                if(validBranch) {
+                    entity = new  GLEntity();
+                    entity.setBranchCode(branch);
+                    entity.setBranchDesc(getBranchDescription(branch));
+                    connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+                    ps = connection.prepareStatement(SQLFactory.GET_GL_SUMMARY_DETS);
+                    ps.setString(1,fppCde);
+                    ps.setString(2, branch);                                    
+                    rs = ps.executeQuery();
+                    entity.setGlDebtors(0.0);
+                    entity.setInstoreDebtors(0.0);
+                    entity.setGlStock(0.0);
+                    entity.setInstoreStock(0.0);
+                    
+                    while (rs.next()) {                        
+                        entity.setGlDebtors(rs.getDouble("gl_debtors"));
+                        entity.setInstoreDebtors(rs.getDouble("gl_instore_debtors"));
+                        entity.setGlStock(rs.getDouble("gl_stock"));
+                        entity.setInstoreStock(rs.getDouble("gl_instore_stock"));                      
+                        
+                    }
+                   
+                 
+                    list.add(entity);
+                    
+                }                
+                
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new SQLException(e);
+            } finally {
+                ConnectionManager.close(connection);
+            }
+        }
+
+        System.out.println("list.size() ---> " + list.size());
+
+        return list;
+    }
 
     public static String getActDesc(int actType)
             throws Exception {
