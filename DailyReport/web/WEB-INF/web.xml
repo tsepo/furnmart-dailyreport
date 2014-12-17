@@ -40,6 +40,14 @@
             <param-value>overview</param-value>
         </init-param>
     </servlet>
+    <servlet>
+        <servlet-name>MonthEndConsolidationServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.MonthEndConsolidationServlet</servlet-class>
+        <init-param>
+            <param-name>tab</param-name>
+            <param-value>overview</param-value>
+        </init-param>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OverviewServlet</servlet-name>
         <url-pattern>/overview</url-pattern>
@@ -83,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>MonthEndProductionServlet</servlet-name>
         <url-pattern>/MonthEndProduction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MonthEndConsolidationServlet</servlet-name>
+        <url-pattern>/MonthEndConsolidation</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

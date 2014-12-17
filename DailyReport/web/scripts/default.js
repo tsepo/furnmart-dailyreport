@@ -100,7 +100,7 @@ function processMonthendMenuItem(option) {
     
      if (option == "cons") {
           //toggleLoadingTopBar(true);
-        window.location.replace(BASE_URL + "/MonthEndProduction?tab=cons");
+        window.location.replace(BASE_URL + "/MonthEndConsolidation?tab=cons");
         
     }
      

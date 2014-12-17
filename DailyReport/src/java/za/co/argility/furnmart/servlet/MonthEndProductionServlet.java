@@ -156,13 +156,7 @@ public class MonthEndProductionServlet  extends GenericServlet {
        
          
          
-          if (request.getParameter("tab") != null &&
-                request.getParameter("tab").equals("cons")) {
-              System.out.println("I am in Consolidation page.");
-              response.sendRedirect(WebPages.MONTHEND_CONSOLIDATION_PAGE);
-              
-          }
-         
+          
         
         }
         

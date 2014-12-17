@@ -13,6 +13,17 @@
 <%@page import="za.co.argility.furnmart.servlet.helper.ReplicationData"%>
 <%@page import="za.co.argility.furnmart.servlet.SessionAttribute"%>
 
+<%
+    // get the data from the session
+    MonthendData data = (MonthendData)session.getAttribute(SessionAttribute.MONTHEND_DATA_TAG);
+    if (data == null) {
+        response.sendRedirect(WebPages.BASE_APP_URL + "/MontEndConsolidation?tab=cons"); 
+        return;
+    }
+    
+%>
+
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
