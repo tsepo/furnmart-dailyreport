@@ -64,13 +64,13 @@ public class MonthEndConsolidationServlet extends GenericServlet{
         out.println("Started process, please wait...\r\n");
         
         List<String> commands = new ArrayList<String>();
-        commands.add("/home/ucsretail/bin/clearPWCNotifications.sh");
+        commands.add("/home/rnaidoo/scripts/clearPWCNotifications.sh");
        
         
         ProcessBuilder builder = new ProcessBuilder(commands);
         builder.start();
         
-        out.println("Process started.");
+        out.println("Process Completed Successfully.");
         out.flush();
         
     }

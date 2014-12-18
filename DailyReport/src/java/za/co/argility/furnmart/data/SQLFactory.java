@@ -89,8 +89,7 @@ public interface SQLFactory {
                                                            "where br_active = true  \n" +
                                                            "and br_is_ceres = false \n" +
                                                            "and br_is_central = false \n" +
-                                                           "and br_is_merch = false  \n" +   
-                                                           "and br_cde in ('0002','0003') \n" + 
+                                                           "and br_is_merch = false  \n" +                                                          
                                                            "group by branch.br_cde order by branch.br_cde";
     
     
