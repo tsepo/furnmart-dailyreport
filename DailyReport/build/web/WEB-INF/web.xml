@@ -32,6 +32,22 @@
         <servlet-name>DiskSpaceServlet</servlet-name>
         <servlet-class>za.co.argility.furnmart.servlet.DiskSpaceServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MonthEndProductionServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.MonthEndProductionServlet</servlet-class>
+        <init-param>
+            <param-name>tab</param-name>
+            <param-value>overview</param-value>
+        </init-param>
+    </servlet>
+    <servlet>
+        <servlet-name>MonthEndConsolidationServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.MonthEndConsolidationServlet</servlet-class>
+        <init-param>
+            <param-name>tab</param-name>
+            <param-value>overview</param-value>
+        </init-param>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OverviewServlet</servlet-name>
         <url-pattern>/overview</url-pattern>
@@ -72,6 +88,14 @@
         <servlet-name>DiskSpaceServlet</servlet-name>
         <url-pattern>/DiskSpace</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MonthEndProductionServlet</servlet-name>
+        <url-pattern>/MonthEndProduction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MonthEndConsolidationServlet</servlet-name>
+        <url-pattern>/MonthEndConsolidation</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -80,12 +104,12 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-    <!--error-page>
+    <error-page>
         <error-code>404</error-code>
         <location>/errorpages/error-occured.jsp</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
         <location>/errorpages/error-occured.jsp</location>
-    </error-page-->
+    </error-page>
 </web-app>

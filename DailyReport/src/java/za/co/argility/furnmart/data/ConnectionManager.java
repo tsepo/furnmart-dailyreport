@@ -57,4 +57,13 @@ public class ConnectionManager {
         }
     }
     
+    public static void rollback(Connection connection) {
+        try {
+            if (connection != null && connection.isClosed() == false &&
+                    connection.getAutoCommit() == false)
+                connection.rollback();
+        }
+        catch (Exception e) {}
+    }
+    
 }

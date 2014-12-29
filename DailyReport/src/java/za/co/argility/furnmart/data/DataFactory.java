@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +33,7 @@ import za.co.argility.furnmart.entity.MonthEndTableType;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.NetworkEntity;
 import za.co.argility.furnmart.entity.ProcessType;
+import za.co.argility.furnmart.entity.ProdConsEntity;
 import za.co.argility.furnmart.entity.ReplicationEntity;
 import za.co.argility.furnmart.servlet.helper.MonthendProcesses;
 import za.co.argility.furnmart.util.BucketMap;
@@ -1300,5 +1303,86 @@ public class DataFactory {
         }
 
     }
+    
+     public static List<ProdConsEntity> getProdConsEntities() throws Exception {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        ArrayList<ProdConsEntity> list = new ArrayList<ProdConsEntity>();
+     
+         try {
+
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_PROD_CONS_ENTITIES);
+
+            rs = ps.executeQuery();
+            ProdConsEntity item = null;
+            
+            while (rs.next()) {
+                item = new ProdConsEntity();
+                item.setProdConsId(rs.getInt("prod_cons_id"));
+                item.setProdConsDesc(rs.getString("prod_cons_desc"));
+                 item.setProdConsScript(rs.getString("prod_cons_script"));
+                item.setProdConsError(rs.getString("prod_cons_error"));
+                item.setProdConsStartDte(rs.getTimestamp("prod_cons_start_dte"));
+                item.setProdConsEndDte(rs.getTimestamp("prod_cons_end_dte"));
+                item.setProdConsActive(rs.getBoolean("prod_cons_active"));
+                list.add(item);
+            }
+             return list;
+         }catch(SQLException sqle){
+             sqle.printStackTrace();
+            throw new Exception(sqle);
+             
+         } finally {
+            ConnectionManager.close(connection);
+        }
+       
+     }
+     
+     
+       public static void saveProdConEntity(ProdConsEntity prodConsEntity)throws Exception {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            connection.setAutoCommit(false);
+            
+            ps = connection.prepareStatement(SQLFactory.UPDATE_PROD_CONS_ENTITIES);
+            ps.setString(1, prodConsEntity.getProdConsError());
+            
+            if (prodConsEntity.getProdConsStartDte() == null)
+                ps.setNull(2, Types.TIMESTAMP);
+            else
+                ps.setTimestamp(2, new Timestamp(prodConsEntity.getProdConsStartDte().getTime()));
+            
+            if (prodConsEntity.getProdConsEndDte() == null)
+                ps.setNull(3, Types.TIMESTAMP);
+            else
+                ps.setTimestamp(3, new Timestamp(prodConsEntity.getProdConsEndDte().getTime()));
+           
+            ps.setInt(4, prodConsEntity.getProdConsId());
+            ps.executeUpdate();
+            
+            connection.commit();
+            
+        }catch(SQLException sqle){
+            ConnectionManager.rollback(connection);
+            sqle.printStackTrace();
+            throw new Exception(sqle);
+            
+        }finally{
+              ConnectionManager.close(connection);
+        }
+       }
+        
+        
+ 
 
 }

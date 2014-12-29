@@ -13,6 +13,7 @@ import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.MonthendSearchEntity;
+import za.co.argility.furnmart.entity.ProdConsEntity;
 import za.co.argility.furnmart.util.BucketMap;
 
 
@@ -36,6 +37,8 @@ public class MonthendData {
     private String glDetailBranchCode;
     private String glDeatilType; 
     private boolean isAllGLSelected = true;
+    private List<ProdConsEntity> prodConsEntities;
+    private boolean consRun;
     
     public MonthendData() {
     }
@@ -207,6 +210,34 @@ public class MonthendData {
      */
     public void setIsAllGLSelected(boolean isAllGLSelected) {
         this.isAllGLSelected = isAllGLSelected;
+    }
+
+    /**
+     * @return the prodConsEntities
+     */
+    public List<ProdConsEntity> getProdConsEntities() {
+        return prodConsEntities;
+    }
+
+    /**
+     * @param prodConsEntities the prodConsEntities to set
+     */
+    public void setProdConsEntities(List<ProdConsEntity> prodConsEntities) {
+        this.prodConsEntities = prodConsEntities;
+    }
+
+    /**
+     * @return the consRun
+     */
+    public boolean isConsRun() {
+        return consRun;
+    }
+
+    /**
+     * @param consRun the consRun to set
+     */
+    public void setConsRun(boolean consRun) {
+        this.consRun = consRun;
     }
     
 }

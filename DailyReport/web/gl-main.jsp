@@ -50,6 +50,9 @@
            <script type="text/javascript" src="scripts/monthendProcesses.js"></script>
     </head>
     <body>
+        
+        <%@include file="master/loadingPanel.jspf" %>
+        
         <div class="content" id="content">
              <%@include file="master/monthend-menu.jspf" %>
          </div>

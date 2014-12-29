@@ -63,6 +63,15 @@ public class GenericServlet extends HttpServlet {
     }
     
     /**
+     * Serializes to the session scope
+     * @param request
+     * @param data 
+     */
+    protected void saveSession(HttpServletRequest request, Object data) {
+        saveSession(request, data, data.getClass().getName());
+    }
+    
+    /**
      * Obtains any serialised data from this
      * current session
      * 
@@ -73,6 +82,10 @@ public class GenericServlet extends HttpServlet {
     protected Object getSessionData(HttpServletRequest request, String attribute) {
         HttpSession session = request.getSession(true);
         return session.getAttribute(attribute);
+    }
+    
+    protected Object getSessionData(HttpServletRequest request, Class c) {
+        return getSessionData(request, c.getName());
     }
     
     /**
@@ -147,6 +160,14 @@ public class GenericServlet extends HttpServlet {
         
         saveSession(request, settings, SessionAttribute.GLOBAL_SETTINGS_TAG);
         
+    }
+    
+    protected boolean sendInternalRedirect(HttpServletRequest request, HttpServletResponse response, 
+            String urlPattern) throws IOException {
+        
+        String contextPath = request.getContextPath();
+        response.sendRedirect(contextPath + urlPattern);
+        return true;
     }
     
 }

@@ -82,6 +82,28 @@ public class MonthEndProductionServlet  extends GenericServlet {
             return;
         }
         
+        
+          if (request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("cons")) {
+              System.out.println("I am in Consolidation page.");
+              Log.info("... montendConsolidations ...");       
+       
+        response.sendRedirect(WebPages.MONTHEND_CONSOLIDATION_PAGE); 
+        
+        /*
+         if (response.isCommitted())
+            return;
+        
+       
+        out = new PrintWriter(response.getOutputStream());
+        runProcesses(request, response);
+        */
+          
+              
+          }
+         
+        
+        
         if (request.getParameter("tab") != null &&
                 request.getParameter("tab").equals("production")) {
             

@@ -277,5 +277,14 @@ public interface SQLFactory {
                                                      "FROM new_gl_balancing \n" +
                                                      "WHERE fpp_cde = ? \n" +
                                                      "AND br_cde = ? ;" ;
+    
+    public static final String GET_PROD_CONS_ENTITIES = "SELECT prod_cons_id,prod_cons_desc, prod_cons_script, prod_cons_error, prod_cons_start_dte, \n " +
+                                                         "prod_cons_end_dte, prod_cons_active from prod_cons;"; 
      
+    
+     public static final String UPDATE_PROD_CONS_ENTITIES = "UPDATE prod_cons set prod_cons_error = ? , prod_cons_start_dte = ? , \n " +
+                                                         "prod_cons_end_dte = ? \n " +
+                                                         "where prod_cons_id = ?  ;"; 
+    
+    
 }

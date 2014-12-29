@@ -38,10 +38,11 @@ public class WebPages {
     public static final String GL_DETAIL_DEBTORS_PAGE = BASE_APP_URL + "/gl-detail-debtors.jsp";
     public static final String GL_DETAIL_STOCK_PAGE = BASE_APP_URL + "/gl-detail-stock.jsp";
     public static final String MONTHEND_CONSOLIDATION_PAGE = BASE_APP_URL + "/monthend-consolidations.jsp";
+    //public static final String MONTHEND_CONSOLIDATION_PAGE = BASE_APP_URL + "/test.jsp";
     public static final String ERROR_PAGE = BASE_APP_URL + "/errorpages/error-occured.jsp";
     
     /**
-     * Gets the local host name
+     * Gets the local host name 
      * 
      * @return 
      */

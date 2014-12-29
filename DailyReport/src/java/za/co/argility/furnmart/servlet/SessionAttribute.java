@@ -15,7 +15,7 @@ public interface SessionAttribute {
     public static final String MONTHEND_OVERVIEW_DATA_TAG = "monthend-overview_data";
     public static final String REPLICATION_DATA_TAG = "replication-data";
     public static final String MONTHEND_DATA_TAG = "monthend-data";
-    public static final String MONTHEND_CONS_TAG = "monthend-cons";
+    //public static final String MONTHEND_CONS_TAG = "monthend-cons";
     public static final String NETWORK_DATA_TAG = "network-data";
     public static final String GLOBAL_SETTINGS_TAG = "global-settings";
     public static final String DAILY_BI_EXTRACTS_DATA_TAG =  "daily-bi-extracts";

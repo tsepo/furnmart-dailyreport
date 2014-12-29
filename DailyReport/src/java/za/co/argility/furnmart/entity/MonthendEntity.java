@@ -23,6 +23,7 @@ public class MonthendEntity {
     private boolean isPWCExtractsDelivered;
     private boolean isBucketsRun;
 
+    
     /**
      * @return the isBranchOk
      */

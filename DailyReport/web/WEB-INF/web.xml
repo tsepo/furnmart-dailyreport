@@ -45,7 +45,7 @@
         <servlet-class>za.co.argility.furnmart.servlet.MonthEndConsolidationServlet</servlet-class>
         <init-param>
             <param-name>tab</param-name>
-            <param-value>overview</param-value>
+            <param-value>cons</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

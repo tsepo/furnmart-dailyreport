@@ -82,24 +82,24 @@ function processMonthendMenuItem(option) {
     
     
      if (option == "extracts") {
-        //toggleLoadingTopBar(true);
+        toggleLoadingTopBar(true);
         window.location.replace(BASE_URL + "/MonthEndProduction?tab=production");
         
      }
      if (option == "process") {
-           //toggleLoadingTopBar(true);
+        toggleLoadingTopBar(true);
         window.location.replace(BASE_URL + "/MonthEndProduction?tab=processes");
         
     }
     
      if (option == "gl") {
-          //toggleLoadingTopBar(true);
+        toggleLoadingTopBar(true);
         window.location.replace(BASE_URL + "/MonthEndProduction?tab=gl");
         
     }
     
      if (option == "cons") {
-          //toggleLoadingTopBar(true);
+        toggleLoadingTopBar(true);
         window.location.replace(BASE_URL + "/MonthEndConsolidation?tab=cons");
         
     }
