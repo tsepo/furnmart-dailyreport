@@ -112,9 +112,18 @@ public class MonthEndConsolidationServlet extends GenericServlet {
                     entity.setProdConsStartDte(new Date());
                     
                     List<String> commands = new ArrayList<String>();
-                    commands.add(entity.getProdConsScript());
-                    ProcessBuilder builder = new ProcessBuilder(commands);
-                    builder.start();
+                    String[] array = entity.getProdConsScript().split(" ");
+                    for (String t : array)
+                        commands.add(t);
+                    
+                                    
+                    
+                    for(String c : commands){
+                        ProcessBuilder builder = new ProcessBuilder(c);
+                        Process process = builder.start();
+                        process.waitFor();
+                    }                    
+                    
                     
                     entity.setProdConsError(null);
                     

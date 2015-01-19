@@ -55,11 +55,16 @@
         
          <div class="header">
                 <div class="wrapper" ><p>Monthend Consolidation Page</p></div>
+                 <br>
           </div>
          
         
-        
-        <div class="subHeader"><center>Monthend Extracts</center></div>   
+         
+        <% if(data.isConsRun() ==  false){ %>
+            <div class="subHeader"><center>Select Monthend Consolidations</center></div>   
+        <% }else { %>
+            <div class="subHeader"><center>Monthend Consolidation Results</center></div>
+         <% } %>    
         <form method="post" action="<%= request.getContextPath() %>/MonthEndConsolidation" >
         <table border="0" cellspacing="2" cellpadding="2" width="50%">
                
@@ -68,8 +73,9 @@
                         
                              <td style="text-align: center">Extract Code</td>
                               <td style="text-align: center">Description</td>
-                              <td style="text-align: center">Script</td>
+                              
                               <% if(data.isConsRun() ==  false){ %>
+                              <td style="text-align: center">Script</td>
                                 <td style="text-align: center">Run</td>
                                 <% }else { %>
                                  <td style="text-align: center">Start Date</td>
@@ -92,9 +98,10 @@
                                
                                 <td><%= entity.getProdConsId() %></td>
                                 <td><%= entity.getProdConsDesc() %></td>
-                                <td><%= entity.getProdConsScript() %></td>
+                                
                                 
                                  <% if(data.isConsRun() ==  false){ %>
+                                  <td><%= entity.getProdConsScript() %></td> 
                                   <td><input type="checkbox" name="run" value="<%= entity.getProdConsId() %>"/></td>
                                 <% }else { %>
                                   <td><%= entity.getProdConsStartDte() %></td>
@@ -122,9 +129,13 @@
                  
           </table>
                         <br><br> 
+                         <% if(data.isConsRun() ==  false){ %>
                         <hr>
+                        
                         <center><input type="submit" name="submitCons" value="submit"></center>
+                       
                         <hr>
+                         <% } %>
          
 </form>
         
