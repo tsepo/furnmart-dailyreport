@@ -278,9 +278,12 @@ public interface SQLFactory {
                                                      "WHERE fpp_cde = ? \n" +
                                                      "AND br_cde = ? ;" ;
     
-    public static final String GET_PROD_CONS_ENTITIES = "SELECT prod_cons_id,prod_cons_desc, prod_cons_script, prod_cons_error, prod_cons_start_dte, \n " +
-                                                         "prod_cons_end_dte, prod_cons_active from prod_cons;"; 
+    /*public static final String GET_PROD_CONS_ENTITIES = "SELECT prod_cons_id,prod_cons_desc, prod_cons_script, prod_cons_error, prod_cons_start_dte, \n " +
+                                                         "prod_cons_end_dte, prod_cons_active from prod_cons;"; */
      
+    public static final String GET_PROD_CONS_ENTITIES = "SELECT prod_cons_id,prod_cons_desc, prod_cons_script \n " +
+                                                        "from prod_cons_scripts \n" +
+                                                        "WHERE prod_cons_active;"; 
     
      public static final String UPDATE_PROD_CONS_ENTITIES = "UPDATE prod_cons set prod_cons_error = ? , prod_cons_start_dte = ? , \n " +
                                                          "prod_cons_end_dte = ? \n " +

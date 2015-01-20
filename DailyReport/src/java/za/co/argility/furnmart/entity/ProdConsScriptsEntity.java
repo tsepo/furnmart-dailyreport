@@ -12,7 +12,7 @@ import java.util.Date;
  *
  * @author rnaidoo
  */
-public class ProdConsEntity {
+public class ProdConsScriptsEntity {
     /*prod_cons_id        | integer                     | not null
  prod_cons_desc      | text                        | 
  prod_cons_script    | text                        | 

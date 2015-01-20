@@ -33,7 +33,7 @@ import za.co.argility.furnmart.entity.MonthEndTableType;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.NetworkEntity;
 import za.co.argility.furnmart.entity.ProcessType;
-import za.co.argility.furnmart.entity.ProdConsEntity;
+import za.co.argility.furnmart.entity.ProdConsScriptsEntity;
 import za.co.argility.furnmart.entity.ReplicationEntity;
 import za.co.argility.furnmart.servlet.helper.MonthendProcesses;
 import za.co.argility.furnmart.util.BucketMap;
@@ -1304,13 +1304,13 @@ public class DataFactory {
 
     }
     
-     public static List<ProdConsEntity> getProdConsEntities() throws Exception {
+     public static List<ProdConsScriptsEntity> getProdConsEntities() throws Exception {
 
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        ArrayList<ProdConsEntity> list = new ArrayList<ProdConsEntity>();
+        ArrayList<ProdConsScriptsEntity> list = new ArrayList<ProdConsScriptsEntity>();
      
          try {
 
@@ -1318,17 +1318,18 @@ public class DataFactory {
             ps = connection.prepareStatement(SQLFactory.GET_PROD_CONS_ENTITIES);
 
             rs = ps.executeQuery();
-            ProdConsEntity item = null;
+            ProdConsScriptsEntity item = null;
             
             while (rs.next()) {
-                item = new ProdConsEntity();
+                item = new ProdConsScriptsEntity();
                 item.setProdConsId(rs.getInt("prod_cons_id"));
                 item.setProdConsDesc(rs.getString("prod_cons_desc"));
                  item.setProdConsScript(rs.getString("prod_cons_script"));
+                /*         
                 item.setProdConsError(rs.getString("prod_cons_error"));
                 item.setProdConsStartDte(rs.getTimestamp("prod_cons_start_dte"));
                 item.setProdConsEndDte(rs.getTimestamp("prod_cons_end_dte"));
-                item.setProdConsActive(rs.getBoolean("prod_cons_active"));
+                item.setProdConsActive(rs.getBoolean("prod_cons_active"));*/
                 list.add(item);
             }
              return list;
@@ -1343,7 +1344,7 @@ public class DataFactory {
      }
      
      
-       public static void saveProdConEntity(ProdConsEntity prodConsEntity)throws Exception {
+       public static void saveProdConEntity(ProdConsScriptsEntity prodConsEntity)throws Exception {
 
         Connection connection = null;
         PreparedStatement ps = null;

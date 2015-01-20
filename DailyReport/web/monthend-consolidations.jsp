@@ -6,7 +6,7 @@
 
 
 
-<%@page import="za.co.argility.furnmart.entity.ProdConsEntity"%>
+<%@page import="za.co.argility.furnmart.entity.ProdConsScriptsEntity"%>
 <%@page import="za.co.argility.furnmart.util.WebPages"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="za.co.argility.furnmart.servlet.helper.MonthendProcesses"%>
@@ -24,11 +24,15 @@
     }
     
     
-    List<ProdConsEntity> prodConsEntities = data.getProdConsEntities();
-    if (prodConsEntities == null)
-        prodConsEntities = new ArrayList<ProdConsEntity>();
-    System.out.println("prodConsEntites-- > " + prodConsEntities.size());
+    List<ProdConsScriptsEntity> prodConsScriptsEntities = data.getProdConsEntities();
+    if (prodConsScriptsEntities == null)
+        prodConsScriptsEntities = new ArrayList<ProdConsScriptsEntity>();
+    System.out.println("prodConsEntites-- > " + prodConsScriptsEntities.size());
     
+    List<ProdConsScriptsEntity> prodConsSelectedEntities = data.getProdConsSelectedEntities();
+    if (prodConsSelectedEntities == null)
+        prodConsSelectedEntities = new ArrayList<ProdConsScriptsEntity>();
+    System.out.println("prodConsSelectedEntites-- > " + prodConsSelectedEntities.size());
     
 %>
 <html>
@@ -54,10 +58,9 @@
         
         
          <div class="header">
-                <div class="wrapper" ><p>Monthend Consolidation Page</p></div>
-                 <br>
+                <div class="wrapper" ><p>Monthend Consolidation Page</p></div>                
           </div>
-         
+         <br>
         
          
         <% if(data.isConsRun() ==  false){ %>
@@ -86,35 +89,44 @@
                                            
                      </tr>
                                    
-                        <% 
+                        <% if(data.isConsRun() ==  false){   
                             int count = 0;    
-                            for (ProdConsEntity entity : prodConsEntities){
+                            for (ProdConsScriptsEntity entity : prodConsScriptsEntities){
                                   ++count;
                                 boolean isEven = (count % 2 == 0);                            
                                 
                                %>
                             
-                            <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">       
+                             <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">       
                                
                                 <td><%= entity.getProdConsId() %></td>
-                                <td><%= entity.getProdConsDesc() %></td>
+                                <td><%= entity.getProdConsDesc() %></td>                                                                                   
+                                <td><%= entity.getProdConsScript() %></td> 
+                                <td><input type="checkbox" name="run" value="<%= entity.getProdConsId() %>"/></td>
+                             </tr>
+                                <% } %>  
                                 
+                         <% }else {
+                         
+                                 int count = 0;    
+                                 for (ProdConsScriptsEntity entity : prodConsSelectedEntities){
+                                  ++count;
+                                boolean isEven = (count % 2 == 0);                            
                                 
-                                 <% if(data.isConsRun() ==  false){ %>
-                                  <td><%= entity.getProdConsScript() %></td> 
-                                  <td><input type="checkbox" name="run" value="<%= entity.getProdConsId() %>"/></td>
-                                <% }else { %>
-                                  <td><%= entity.getProdConsStartDte() %></td>
-                                  <td><%= entity.getProdConsEndDte() %></td>
+                               %> 
+                                <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">   
+                                <td><%= entity.getProdConsId() %></td>
+                                <td><%= entity.getProdConsDesc() %></td>    
+                                <td><%= entity.getProdConsStartDte() %></td>
+                                <td><%= entity.getProdConsEndDte() %></td>
                                   
-                                     <% if (entity.getProdConsError() == null) {
-                                      %>
+                                <% if (entity.getProdConsError() == null) { %>
                                       <td>No</td>
-                                  <%
-                                  } else { %>
+                                <%
+                                } else { %>
                                   
                                       <td title="<%= ("ERROR: " + entity.getProdConsError()) %>">Yes</td>
-                                  <% } %>    
+                                <% } %>    
                                          
                                      
                                                                  

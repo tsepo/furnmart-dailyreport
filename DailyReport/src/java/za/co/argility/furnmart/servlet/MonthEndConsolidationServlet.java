@@ -7,6 +7,7 @@ package za.co.argility.furnmart.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import za.co.argility.furnmart.data.DataFactory;
-import za.co.argility.furnmart.entity.ProdConsEntity;
+import za.co.argility.furnmart.entity.ProdConsRunEntity;
+import za.co.argility.furnmart.entity.ProdConsScriptsEntity;
+import za.co.argility.furnmart.jdbc.JdbcInsertConsRunData;
 import za.co.argility.furnmart.servlet.helper.MonthendData;
 import za.co.argility.furnmart.servlet.helper.MonthendOverviewData;
 import za.co.argility.furnmart.util.Log;
@@ -72,7 +75,11 @@ public class MonthEndConsolidationServlet extends GenericServlet {
         
             if (request.getParameter("submitCons") != null) {
                 
-                runProcesses(request, response);
+                try {
+                    runProcesses(request, response);
+                } catch (Exception ex) {
+                    Logger.getLogger(MonthEndConsolidationServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 response.sendRedirect(WebPages.MONTHEND_CONSOLIDATION_PAGE);
                 //sendInternalRedirect(request, response, 
                         //"/MonthEndConsolidation?tab=cons");
@@ -84,14 +91,15 @@ public class MonthEndConsolidationServlet extends GenericServlet {
     }
 
     private void runProcesses(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws IOException, Exception {
 
         MonthendData data = (MonthendData)getSessionData(request, MonthendData.class);
-        Map<Integer, ProdConsEntity> map = new TreeMap<Integer, ProdConsEntity>();
-        for (ProdConsEntity entity : data.getProdConsEntities()) 
+        Map<Integer, ProdConsScriptsEntity> map = new TreeMap<Integer, ProdConsScriptsEntity>();
+        for (ProdConsScriptsEntity entity : data.getProdConsEntities()) 
             map.put(entity.getProdConsId(), entity);
         
         String[] parameters = null;
+        List<ProdConsScriptsEntity> prodConsSelected = new ArrayList<ProdConsScriptsEntity>();
         
         if (request.getParameterValues("run") != null)
             parameters = request.getParameterValues("run");
@@ -104,34 +112,65 @@ public class MonthEndConsolidationServlet extends GenericServlet {
             
         for (String parameter : parameters) {
             Integer id = Integer.parseInt(parameter);
-            ProdConsEntity entity = map.get(id);
-            
+            ProdConsScriptsEntity entity = map.get(id);
+            ProdConsRunEntity prodConsRunEntity = new ProdConsRunEntity(); 
+             String fppCde =  DataFactory.getMeconFpp();
             if (entity != null) {
                 try {
                     
                     entity.setProdConsStartDte(new Date());
-                    
+                    prodConsRunEntity.setProdConsStartDte(new Date());
+                            
                     List<String> commands = new ArrayList<String>();
                     String[] array = entity.getProdConsScript().split(" ");
                     for (String t : array)
                         commands.add(t);
-                    
-                                    
+                                                        
                     
                     for(String c : commands){
                         ProcessBuilder builder = new ProcessBuilder(c);
                         Process process = builder.start();
                         process.waitFor();
+                        prodConsSelected.add(entity);
                     }                    
                     
                     
                     entity.setProdConsError(null);
+                    data.setProdConsSelectedEntities(prodConsSelected);
+                   
+                         
+                    
+                    //insert into prod_cons_run table 
+                 
+                   prodConsRunEntity.setProdConsId(entity.getProdConsId());
+                   //String fppCde =  DataFactory.getMeconFpp();
+                   prodConsRunEntity.setFppCde(fppCde);
+                   prodConsRunEntity.setProdConsError(null);
                     
                 } catch (Exception ex) {
-                     entity.setProdConsError(ex.getMessage().replaceAll("\"", "'")); 
-                    //Write to error field in table
+                     entity.setProdConsError(ex.getMessage().replaceAll("\"", "'"));
+                     prodConsRunEntity.setProdConsId(entity.getProdConsId());
+                     prodConsRunEntity.setFppCde(fppCde);
+                     prodConsRunEntity.setProdConsError(ex.getMessage());
+                    // prodConsRunEntity.setProdConsError("tana");
+                     prodConsRunEntity.setProdConsStartDte(new Date());
+                     prodConsRunEntity.setProdConsEndDte(new Date());
+                     prodConsSelected.add(entity);
+                    /*
+                     try {
+                        new JdbcInsertConsRunData(prodConsRunEntity);
+                    } catch (SQLException ex1) {
+                        Logger.getLogger(MonthEndConsolidationServlet.class.getName()).log(Level.SEVERE, null, ex1);
+                    }*/
+                   
                 }finally{
                     entity.setProdConsEndDte(new Date());
+                    prodConsRunEntity.setProdConsEndDte(new Date());
+                    try {
+                        new JdbcInsertConsRunData(prodConsRunEntity);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MonthEndConsolidationServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    }
 
                 }            
             }
@@ -139,7 +178,7 @@ public class MonthEndConsolidationServlet extends GenericServlet {
         }
         
        
-        for (ProdConsEntity prodConsEntity :map.values()) {
+        for (ProdConsScriptsEntity prodConsEntity :map.values()) {
             try {
                 DataFactory.saveProdConEntity(prodConsEntity);
             } catch (Exception ex) {

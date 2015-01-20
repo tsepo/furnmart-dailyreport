@@ -13,7 +13,7 @@ import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.MonthendSearchEntity;
-import za.co.argility.furnmart.entity.ProdConsEntity;
+import za.co.argility.furnmart.entity.ProdConsScriptsEntity;
 import za.co.argility.furnmart.util.BucketMap;
 
 
@@ -37,7 +37,8 @@ public class MonthendData {
     private String glDetailBranchCode;
     private String glDeatilType; 
     private boolean isAllGLSelected = true;
-    private List<ProdConsEntity> prodConsEntities;
+    private List<ProdConsScriptsEntity> prodConsSelectedEntities;
+    private List<ProdConsScriptsEntity> prodConsEntities;
     private boolean consRun;
     
     public MonthendData() {
@@ -215,14 +216,14 @@ public class MonthendData {
     /**
      * @return the prodConsEntities
      */
-    public List<ProdConsEntity> getProdConsEntities() {
+    public List<ProdConsScriptsEntity> getProdConsEntities() {
         return prodConsEntities;
     }
 
     /**
      * @param prodConsEntities the prodConsEntities to set
      */
-    public void setProdConsEntities(List<ProdConsEntity> prodConsEntities) {
+    public void setProdConsEntities(List<ProdConsScriptsEntity> prodConsEntities) {
         this.prodConsEntities = prodConsEntities;
     }
 
@@ -238,6 +239,20 @@ public class MonthendData {
      */
     public void setConsRun(boolean consRun) {
         this.consRun = consRun;
+    }
+
+    /**
+     * @return the prodConsSelectedEntities
+     */
+    public List<ProdConsScriptsEntity> getProdConsSelectedEntities() {
+        return prodConsSelectedEntities;
+    }
+
+    /**
+     * @param prodConsSelectedEntities the prodConsSelectedEntities to set
+     */
+    public void setProdConsSelectedEntities(List<ProdConsScriptsEntity> prodConsSelectedEntities) {
+        this.prodConsSelectedEntities = prodConsSelectedEntities;
     }
     
 }
