@@ -155,7 +155,7 @@ public class MonthEndConsolidationServlet extends GenericServlet {
                     // prodConsRunEntity.setProdConsError("tana");
                      prodConsRunEntity.setProdConsStartDte(new Date());
                      prodConsRunEntity.setProdConsEndDte(new Date());
-                     prodConsSelected.add(entity);
+                     //prodConsSelected.add(entity);
                     /*
                      try {
                         new JdbcInsertConsRunData(prodConsRunEntity);
