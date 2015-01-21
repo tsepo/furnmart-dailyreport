@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import za.co.argility.furnmart.data.DataFactory;
 import za.co.argility.furnmart.entity.ProdConsRunEntity;
 import za.co.argility.furnmart.entity.ProdConsScriptsEntity;
+import za.co.argility.furnmart.jdbc.JdbcDeleteConsRunData;
 import za.co.argility.furnmart.jdbc.JdbcInsertConsRunData;
 import za.co.argility.furnmart.servlet.helper.MonthendData;
 import za.co.argility.furnmart.servlet.helper.MonthendOverviewData;
@@ -128,6 +129,7 @@ public class MonthEndConsolidationServlet extends GenericServlet {
                                                         
                     
                     for(String c : commands){
+                        new JdbcDeleteConsRunData(entity.getProdConsId(),fppCde);
                         ProcessBuilder builder = new ProcessBuilder(c);
                         Process process = builder.start();
                         process.waitFor();

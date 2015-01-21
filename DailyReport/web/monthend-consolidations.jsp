@@ -74,7 +74,7 @@
                      <tr class="RowToClick"> 
                     
                         
-                             <td style="text-align: center">Extract Code</td>
+                             <td style="text-align: center">Code</td>
                               <td style="text-align: center">Description</td>
                               
                               <% if(data.isConsRun() ==  false){ %>
