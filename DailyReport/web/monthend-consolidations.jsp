@@ -111,7 +111,8 @@
                                  int count = 0;    
                                  for (ProdConsScriptsEntity entity : prodConsSelectedEntities){
                                   ++count;
-                                boolean isEven = (count % 2 == 0);                            
+                                boolean isEven = (count % 2 == 0);
+                                String status = null;
                                 
                                %> 
                                 <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">   
@@ -120,12 +121,14 @@
                                 <td><%= entity.getProdConsStartDte() %></td>
                                 <td><%= entity.getProdConsEndDte() %></td>
                                   
-                                <% if (entity.getProdConsError() == null) { %>
-                                      <td>No</td>
+                                <% if (entity.getProdConsError() == null) {
+                                      status = "images/ok.png"; %>
+                                      <td><img src="<%= status %>" style="width:36px;"/></td>
                                 <%
-                                } else { %>
+                                } else { 
+                                     status = "images/error.png"; %>
                                   
-                                      <td title="<%= ("ERROR: " + entity.getProdConsError()) %>">Yes</td>
+                                      <td title="<%= ("ERROR: " + entity.getProdConsError()) %>"><img src="<%= status %>" style="width:36px;" /></td>
                                 <% } %>    
                                          
                                      

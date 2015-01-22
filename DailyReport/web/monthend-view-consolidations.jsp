@@ -91,7 +91,16 @@
                                 <td><%= entity.getFppCde() %></td>
                                 <td><%= entity.getProdConsStartDte() %></td>
                                 <td><%= entity.getProdConsEndDte() %></td>
-                                <td><%= entity.getProdConsError() %></td>
+                                <% String status = null;
+                                    if (entity.getProdConsError().equals("null")) {
+                                     status = "images/ok.png"; %>
+                                     <td><img src="<%= status %>" style="width:36px;"/></td>
+                                <%
+                                } else { 
+                                     status = "images/error.png"; %>
+                                     <td title="<%= ("ERROR: " + entity.getProdConsError().replaceAll("\"", "'")) %>"><img src="<%= status %>" style="width:36px;" /></td>
+                                <% } %>     
+                              
                             </tr>  
                             
                         <% } %>

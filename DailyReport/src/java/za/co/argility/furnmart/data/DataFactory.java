@@ -1367,6 +1367,13 @@ public class DataFactory {
                 item.setProdConsDescr(rs.getString("prod_cons_desc"));
                 item.setFppCde(rs.getString("fpp_cde"));
                 item.setProdConsError(rs.getString("prod_cons_error"));
+                
+                if(item.getFppCde() == null){
+                    item.setProdConsError("consolidation not run for this period");
+                    //System.out.println("test");
+                }
+                    
+                
                 item.setProdConsStartDte(rs.getTimestamp("prod_cons_start_dte"));
                 item.setProdConsEndDte(rs.getTimestamp("prod_cons_end_dte"));
                 list.add(item);
