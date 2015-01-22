@@ -103,7 +103,13 @@ function processMonthendMenuItem(option) {
         window.location.replace(BASE_URL + "/MonthEndConsolidation?tab=cons");
         
     }
-     
+    
+    
+    if (option == "consView") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/MonthEndConsolidation?tab=consView");
+        
+    }
     
     //else alert("No page found.");
     

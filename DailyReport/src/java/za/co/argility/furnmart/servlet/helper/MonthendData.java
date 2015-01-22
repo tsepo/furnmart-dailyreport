@@ -14,6 +14,7 @@ import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.MonthendSearchEntity;
 import za.co.argility.furnmart.entity.ProdConsScriptsEntity;
+import za.co.argility.furnmart.entity.ProdConsViewEntity;
 import za.co.argility.furnmart.util.BucketMap;
 
 
@@ -39,6 +40,7 @@ public class MonthendData {
     private boolean isAllGLSelected = true;
     private List<ProdConsScriptsEntity> prodConsSelectedEntities;
     private List<ProdConsScriptsEntity> prodConsEntities;
+    private List<ProdConsViewEntity> prodConsViewEntities;
     private boolean consRun;
     
     public MonthendData() {
@@ -253,6 +255,20 @@ public class MonthendData {
      */
     public void setProdConsSelectedEntities(List<ProdConsScriptsEntity> prodConsSelectedEntities) {
         this.prodConsSelectedEntities = prodConsSelectedEntities;
+    }
+
+    /**
+     * @return the prodConsViewEntities
+     */
+    public List<ProdConsViewEntity> getProdConsViewEntities() {
+        return prodConsViewEntities;
+    }
+
+    /**
+     * @param prodConsViewEntities the prodConsViewEntities to set
+     */
+    public void setProdConsViewEntities(List<ProdConsViewEntity> prodConsViewEntities) {
+        this.prodConsViewEntities = prodConsViewEntities;
     }
     
 }

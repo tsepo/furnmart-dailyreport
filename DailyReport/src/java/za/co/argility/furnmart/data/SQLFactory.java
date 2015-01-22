@@ -285,6 +285,10 @@ public interface SQLFactory {
                                                         "from prod_cons_scripts \n" +
                                                         "WHERE prod_cons_active;"; 
     
+    public static final String GET_PROD_CONS_VIEW_ENTITIES = "select prod_cons_id, prod_cons_desc, fpp_cde, prod_cons_error,prod_cons_start_dte, prod_cons_end_dte \n " + 
+                                                             "from prod_cons_run right outer join prod_cons_scripts using (prod_cons_id) \n " +
+                                                             "order by prod_cons_id;"; 
+    
      public static final String UPDATE_PROD_CONS_ENTITIES = "UPDATE prod_cons set prod_cons_error = ? , prod_cons_start_dte = ? , \n " +
                                                          "prod_cons_end_dte = ? \n " +
                                                          "where prod_cons_id = ?  ;"; 

@@ -20,12 +20,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import za.co.argility.furnmart.data.DataFactory;
+import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.ProdConsRunEntity;
 import za.co.argility.furnmart.entity.ProdConsScriptsEntity;
+import za.co.argility.furnmart.entity.ProdConsViewEntity;
 import za.co.argility.furnmart.jdbc.JdbcDeleteConsRunData;
 import za.co.argility.furnmart.jdbc.JdbcInsertConsRunData;
 import za.co.argility.furnmart.servlet.helper.MonthendData;
 import za.co.argility.furnmart.servlet.helper.MonthendOverviewData;
+import za.co.argility.furnmart.servlet.helper.MonthendProcesses;
 import za.co.argility.furnmart.util.Log;
 import za.co.argility.furnmart.util.WebPages;
 
@@ -43,9 +46,8 @@ public class MonthEndConsolidationServlet extends GenericServlet {
         super.doGet(request, response);
 
         //response.sendRedirect(WebPages.MONTHEND_CONSOLIDATION_PAGE); 
-        /* if ((request.getParameter("tab") != null
-                && request.getParameter("tab").equals("cons")) ||
-                request.getParameter("tab") ==null) { */
+        if ((request.getParameter("tab") != null)
+                && request.getParameter("tab").equals("cons")){
             
             System.out.println("I am in Consolidation page 2.");
             Log.info("... montendConsolidations ...");
@@ -56,18 +58,28 @@ public class MonthEndConsolidationServlet extends GenericServlet {
             } catch (Exception ex) {
                 Logger.getLogger(MonthEndConsolidationServlet.class.getName())
                         .log(Level.SEVERE, null, ex);
-            }
-           
+            }          
 
-            /*
-             if (response.isCommitted())
-             return;
+           
+        }
         
-       
-             out = new PrintWriter(response.getOutputStream());
-             runProcesses(request, response);
-             */
-        //}
+        if ((request.getParameter("tab") != null)
+                && request.getParameter("tab").equals("consView")){
+            
+            System.out.println("I am in Consolidation page 2.");
+            Log.info("...view  montendConsolidations ...");
+
+            try {
+                buildConsViewData(request, response);
+                response.sendRedirect(WebPages.MONTHEND_VIEW_CONSOLIDATION_PAGE);
+            } catch (Exception ex) {
+                Logger.getLogger(MonthEndConsolidationServlet.class.getName())
+                        .log(Level.SEVERE, null, ex);
+            }          
+
+           
+        }
+        
 
     }
 
@@ -82,8 +94,7 @@ public class MonthEndConsolidationServlet extends GenericServlet {
                     Logger.getLogger(MonthEndConsolidationServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 response.sendRedirect(WebPages.MONTHEND_CONSOLIDATION_PAGE);
-                //sendInternalRedirect(request, response, 
-                        //"/MonthEndConsolidation?tab=cons");
+                
                 return;
             }
             
@@ -133,19 +144,18 @@ public class MonthEndConsolidationServlet extends GenericServlet {
                         ProcessBuilder builder = new ProcessBuilder(c);
                         Process process = builder.start();
                         process.waitFor();
-                        prodConsSelected.add(entity);
+                        //prodConsSelected.add(entity);
                     }                    
                     
                     
                     entity.setProdConsError(null);
-                    data.setProdConsSelectedEntities(prodConsSelected);
+                    //data.setProdConsSelectedEntities(prodConsSelected);
                    
                          
                     
                     //insert into prod_cons_run table 
                  
-                   prodConsRunEntity.setProdConsId(entity.getProdConsId());
-                   //String fppCde =  DataFactory.getMeconFpp();
+                   prodConsRunEntity.setProdConsId(entity.getProdConsId());                  
                    prodConsRunEntity.setFppCde(fppCde);
                    prodConsRunEntity.setProdConsError(null);
                     
@@ -154,18 +164,13 @@ public class MonthEndConsolidationServlet extends GenericServlet {
                      prodConsRunEntity.setProdConsId(entity.getProdConsId());
                      prodConsRunEntity.setFppCde(fppCde);
                      prodConsRunEntity.setProdConsError(ex.getMessage());
-                    // prodConsRunEntity.setProdConsError("tana");
                      prodConsRunEntity.setProdConsStartDte(new Date());
                      prodConsRunEntity.setProdConsEndDte(new Date());
-                     //prodConsSelected.add(entity);
-                    /*
-                     try {
-                        new JdbcInsertConsRunData(prodConsRunEntity);
-                    } catch (SQLException ex1) {
-                        Logger.getLogger(MonthEndConsolidationServlet.class.getName()).log(Level.SEVERE, null, ex1);
-                    }*/
-                   
+                     
+                      
                 }finally{
+                    prodConsSelected.add(entity);
+                    data.setProdConsSelectedEntities(prodConsSelected);
                     entity.setProdConsEndDte(new Date());
                     prodConsRunEntity.setProdConsEndDte(new Date());
                     try {
@@ -205,6 +210,22 @@ public class MonthEndConsolidationServlet extends GenericServlet {
             data.setConsRun(false);
             saveSession(request, data);      
     
+    }
+
+    private void buildConsViewData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+          MonthendData data = (MonthendData)getSessionData(request, 
+                            SessionAttribute.MONTHEND_DATA_TAG);
+
+            if (data == null) {
+                data = new MonthendData();
+            }   
+             Log.info("...  buildConsViewData...");    
+            
+            List<ProdConsViewEntity>  prodConsViewList = DataFactory.getProdConsViewList();
+            System.out.println("prodConsViewList size ---> " + prodConsViewList.size());
+            data.setProdConsViewEntities(prodConsViewList);                       
+             
+            saveSession(request, data);
     }
 
 }

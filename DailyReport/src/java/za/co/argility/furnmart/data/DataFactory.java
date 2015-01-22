@@ -34,6 +34,7 @@ import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.NetworkEntity;
 import za.co.argility.furnmart.entity.ProcessType;
 import za.co.argility.furnmart.entity.ProdConsScriptsEntity;
+import za.co.argility.furnmart.entity.ProdConsViewEntity;
 import za.co.argility.furnmart.entity.ReplicationEntity;
 import za.co.argility.furnmart.servlet.helper.MonthendProcesses;
 import za.co.argility.furnmart.util.BucketMap;
@@ -1342,6 +1343,46 @@ public class DataFactory {
         }
        
      }
+     
+     
+     public static List<ProdConsViewEntity> getProdConsViewList() throws Exception {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        ArrayList<ProdConsViewEntity> list = new ArrayList<ProdConsViewEntity>();
+     
+         try {
+
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_PROD_CONS_VIEW_ENTITIES);
+
+            rs = ps.executeQuery();
+            ProdConsViewEntity item = null;
+            
+            while (rs.next()) {
+                item = new ProdConsViewEntity();
+                item.setProdConsId(rs.getInt("prod_cons_id"));
+                item.setProdConsDescr(rs.getString("prod_cons_desc"));
+                item.setFppCde(rs.getString("fpp_cde"));
+                item.setProdConsError(rs.getString("prod_cons_error"));
+                item.setProdConsStartDte(rs.getTimestamp("prod_cons_start_dte"));
+                item.setProdConsEndDte(rs.getTimestamp("prod_cons_end_dte"));
+                list.add(item);
+            }
+             return list;
+         }catch(SQLException sqle){
+             sqle.printStackTrace();
+            throw new Exception(sqle);
+             
+         } finally {
+            ConnectionManager.close(connection);
+        }
+       
+     }
+     
+     
      
      
        public static void saveProdConEntity(ProdConsScriptsEntity prodConsEntity)throws Exception {
