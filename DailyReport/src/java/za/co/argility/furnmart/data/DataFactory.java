@@ -13,7 +13,9 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -239,7 +241,7 @@ public class DataFactory {
 
     }
 
-    public static void getMonthendDetails(MonthEndTableType type, HashMap<String, MonthendEntity> map) throws Exception {
+    public static void getMonthendDetails(MonthEndTableType type, HashMap<String, MonthendEntity> map, boolean statements) throws Exception {
 
         Connection connection = null;
         PreparedStatement ps = null;
@@ -254,14 +256,32 @@ public class DataFactory {
         }
 
         try {
-            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
-            ps = connection.prepareStatement(SQLFactory.GET_MECONS_FPP_CDE);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                fpp = (rs.getString("fpp_cde"));
+            if(!statements){
+                connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+                ps = connection.prepareStatement(SQLFactory.GET_MECONS_FPP_CDE);
+                rs = ps.executeQuery();
+                
+                while (rs.next()) {
+                    fpp = (rs.getString("fpp_cde"));
+                }
+            }else{           
+                connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
+                Calendar cal = new GregorianCalendar();
+                String month = null;
+                int intMonth = cal.get(Calendar.MONTH) +1;
+                if(cal.get(Calendar.MONTH) < 10){
+                    month = "0" + intMonth;
+                }else{
+                    month = "" + intMonth;
+                }
+                fpp = "" + cal.get(Calendar.YEAR) + month;
+                //SimpleDateFormat date_format = new SimpleDateFormat("yyyyMMdd");
+                System.out.println("BLikkies Year ---> " + cal.get(Calendar.YEAR));
+                System.out.println("BLikkies Month ---> " + month);
+                
             }
-
+           
+            
             MonthendEntity item = null;
 
             String tableName = null;
@@ -286,6 +306,10 @@ public class DataFactory {
                 case Buckets:
                     tableName = "gl_stock_bucket_in";
                     break;
+                    
+                case Statements:
+                    tableName = "statement_mth_extract";
+                    break;    
 
             }
 
@@ -324,6 +348,10 @@ public class DataFactory {
                     item = new MonthendEntity();
                 }
 
+                if(statements){
+                    item.setFppCde(fpp);
+                }
+                
                 item.setBranchCode(rs.getString("branch"));
                 //item.setFppCde(rs.getString("fpp_cde"));
                 item.setBranchDesc(rs.getString("br_desc"));
@@ -360,6 +388,10 @@ public class DataFactory {
                         item.setIsBucketsRun(flag);
                         System.out.println("Hey dude 5 : " + count);
                         break;    
+                    case Statements:
+                        item.setIsStatementsRun(flag);
+                        System.out.println("Hey dude 5 : " + count);
+                        break;        
 
                 }
 
@@ -1170,7 +1202,38 @@ public class DataFactory {
                         entity.setGlDebtors(rs.getDouble("gl_debtors"));
                         entity.setInstoreDebtors(rs.getDouble("gl_instore_debtors"));
                         entity.setGlStock(rs.getDouble("gl_stock"));
-                        entity.setInstoreStock(rs.getDouble("gl_instore_stock"));                      
+                        entity.setInstoreStock(rs.getDouble("gl_instore_stock"));
+                        
+                        //GET_GL_STOCK_DATA
+                        double latestGLStockAmt = 0.0d;
+                        double latestGLDebtorsAmt = 0.0d;
+                        ps = connection.prepareStatement(SQLFactory.GET_GL_STOCK_DATA);
+                        ps.setString(1,fppCde);
+                        ps.setString(2, branch);                                    
+                        rs = ps.executeQuery();
+                               
+                                               
+                        while(rs.next()){
+                            latestGLStockAmt = rs.getDouble("stock_value");
+                        }
+                        
+                        if(latestGLStockAmt != entity.getGlStock()){
+                            entity.setGlAdjustedStock(latestGLStockAmt);
+                        }
+                        
+                        ps = connection.prepareStatement(SQLFactory.GET_GL_DEBTORS_DATA);
+                        ps.setString(1,fppCde);
+                        ps.setString(2, branch);                                    
+                        rs = ps.executeQuery();
+                        
+                         while(rs.next()){
+                            latestGLDebtorsAmt = rs.getDouble("debtors_value");
+                        }
+                                              
+                        
+                         if(latestGLDebtorsAmt != entity.getGlDebtors()){
+                            entity.setGlAdjustedDebtors(latestGLDebtorsAmt);
+                        }
                         
                     }
                    

@@ -38,6 +38,7 @@ public class MonthendData {
     private String glDetailBranchCode;
     private String glDeatilType; 
     private boolean isAllGLSelected = true;
+    private boolean isAllStatementsSelected = true;
     private List<ProdConsScriptsEntity> prodConsSelectedEntities;
     private List<ProdConsScriptsEntity> prodConsEntities;
     private List<ProdConsViewEntity> prodConsViewEntities;
@@ -269,6 +270,20 @@ public class MonthendData {
      */
     public void setProdConsViewEntities(List<ProdConsViewEntity> prodConsViewEntities) {
         this.prodConsViewEntities = prodConsViewEntities;
+    }
+
+    /**
+     * @return the isAllStatementsSelected
+     */
+    public boolean isIsAllStatementsSelected() {
+        return isAllStatementsSelected;
+    }
+
+    /**
+     * @param isAllStatementsSelected the isAllStatementsSelected to set
+     */
+    public void setIsAllStatementsSelected(boolean isAllStatementsSelected) {
+        this.isAllStatementsSelected = isAllStatementsSelected;
     }
     
 }

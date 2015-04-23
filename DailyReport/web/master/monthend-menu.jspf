@@ -41,6 +41,9 @@
       <div class="menuItem" onclick="processMonthendMenuItem('consView')">
         <p>VIEW CONSOLIDATIONS</p>
     </div>
+      <div class="menuItem" onclick="processMonthendMenuItem('statements')">
+        <p>STATEMENTS</p>
+    </div>
 
 </div>
 

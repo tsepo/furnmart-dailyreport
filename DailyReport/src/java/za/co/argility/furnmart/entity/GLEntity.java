@@ -16,7 +16,9 @@ public class GLEntity {
     private double  instoreDebtors = 0.0d;  
     private double  glDebtors = 0.0d;
     private double  instoreStock = 0.0d;
-    private double  glStock = 0.0d;      
+    private double  glStock = 0.0d;   
+    private double  glAdjustedDebtors = 0.0d;   
+    private double  glAdjustedStock = 0.0d;   
 
     /**
      * @return the branchCode
@@ -100,5 +102,33 @@ public class GLEntity {
      */
     public void setGlStock(double glStock) {
         this.glStock = glStock;
+    }
+
+    /**
+     * @return the glAdjustedDebtors
+     */
+    public double getGlAdjustedDebtors() {
+        return glAdjustedDebtors;
+    }
+
+    /**
+     * @param glAdjustedDebtors the glAdjustedDebtors to set
+     */
+    public void setGlAdjustedDebtors(double glAdjustedDebtors) {
+        this.glAdjustedDebtors = glAdjustedDebtors;
+    }
+
+    /**
+     * @return the glAdjustedStock
+     */
+    public double getGlAdjustedStock() {
+        return glAdjustedStock;
+    }
+
+    /**
+     * @param glAdjustedStock the glAdjustedStock to set
+     */
+    public void setGlAdjustedStock(double glAdjustedStock) {
+        this.glAdjustedStock = glAdjustedStock;
     }
 }

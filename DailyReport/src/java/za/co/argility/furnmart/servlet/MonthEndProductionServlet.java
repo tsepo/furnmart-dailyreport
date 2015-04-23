@@ -125,7 +125,48 @@ public class MonthEndProductionServlet  extends GenericServlet {
             response.sendRedirect(WebPages.MONTHEND_PROCESSES_PAGE);
             return;
         }
+          
+          
+          
+          if (request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("statements")) {
+            
+            Log.info("... inside Statements ...");
+            
+           
+            processStatementData(request, response);
+            response.sendRedirect(WebPages.MONTHEND_STATEMENTS);
+            return;
+          }  
         
+          
+        
+       
+        if(request.getParameter("statementSelect") != null){
+            if (request.getParameter("statementSelect").equals("all") ||  request.getParameter("statementSelect").equals("nostatements")) {  
+
+                MonthendData data = (MonthendData)getSessionData(request, 
+                            SessionAttribute.MONTHEND_DATA_TAG);
+
+                    if (data == null) {
+                        data = new MonthendData();
+                    }
+                    
+                if(request.getParameter("statementSelect").equals("nostatements")){                   
+                    data.setIsAllStatementsSelected(false);
+                    Log.info("... statementSelect ...");
+                    Log.info("... inside Statements ...");
+                 }else{
+                    data.setIsAllStatementsSelected(true);
+                }
+                  response.sendRedirect(WebPages.MONTHEND_STATEMENTS);
+            }     
+            
+            
+        } 
+          
+          
+          
         
          if (request.getParameter("tab") != null &&
                 request.getParameter("tab").equals("gl")) {
@@ -230,11 +271,11 @@ public class MonthEndProductionServlet  extends GenericServlet {
         // get the details for replication
          HashMap<String, MonthendEntity> map = new HashMap<String, MonthendEntity>();
 
-         DataFactory.getMonthendDetails(MonthEndTableType.NewGLTranExt, map);
-         DataFactory.getMonthendDetails(MonthEndTableType.CashBookExtract, map);
-         DataFactory.getMonthendDetails(MonthEndTableType.CentralAccount, map);
-         DataFactory.getMonthendDetails(MonthEndTableType.Creditors,map);
-         DataFactory.getMonthendDetails(MonthEndTableType.Buckets,map);
+         DataFactory.getMonthendDetails(MonthEndTableType.NewGLTranExt, map,false);
+         DataFactory.getMonthendDetails(MonthEndTableType.CashBookExtract, map,false);
+         DataFactory.getMonthendDetails(MonthEndTableType.CentralAccount, map,false);
+         DataFactory.getMonthendDetails(MonthEndTableType.Creditors,map,false);
+         DataFactory.getMonthendDetails(MonthEndTableType.Buckets,map,false);
 
          ArrayList<MonthendEntity> details = new ArrayList<MonthendEntity>();
          TreeSet<String> branches = new TreeSet<String>(map.keySet());
@@ -261,6 +302,60 @@ public class MonthEndProductionServlet  extends GenericServlet {
              det.setIsPWCExtractsDelivered(isPWCDelivered); 
              
          }
+         
+         
+         
+         
+         data.setMonthendDetails(details);
+
+
+         // get the replication branch list
+         //data.setMonthendBranchList(DataFactory.getMonthendBranchList()); 
+
+         // get the processes
+         //data.setProcesses(DataFactory.getReplicationProcesses()); 
+
+         // save the data to the session
+         saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);
+
+         // this can be changed later - just for now
+        // response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
+
+        }           
+                
+        
+    }
+    
+    
+    
+    protected void processStatementData(HttpServletRequest request, 
+            HttpServletResponse response) throws Exception {
+        if (request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("statements")) {
+            
+        MonthendData data = (MonthendData)getSessionData(request, 
+                            SessionAttribute.MONTHEND_DATA_TAG);
+
+        if (data == null) {
+            data = new MonthendData();
+        }
+        
+       
+
+        // get the details for replication
+         HashMap<String, MonthendEntity> map = new HashMap<String, MonthendEntity>();
+
+         DataFactory.getMonthendDetails(MonthEndTableType.Statements, map,true);
+         
+
+         ArrayList<MonthendEntity> details = new ArrayList<MonthendEntity>();
+         TreeSet<String> branches = new TreeSet<String>(map.keySet());
+         
+         for (String branch : branches) {            
+             details.add(map.get(branch));
+         }
+         
+        
          
          
          

@@ -33,6 +33,7 @@ public class WebPages {
     public static final String ITC_700_EXTRACTS_VERIFIER_PAGE = BASE_APP_URL + "/itc700extractsVerifier.jsp";
     public static final String DISK_SPACE_PAGE = BASE_APP_URL + "/disk-space.jsp";
     public static final String MONTHEND_PROD_PAGE = BASE_APP_URL + "/monthend-production.jsp";
+    public static final String MONTHEND_STATEMENTS = BASE_APP_URL + "/monthend-statements.jsp";
     public static final String MONTHEND_PROCESSES_PAGE = BASE_APP_URL + "/monthend-processes.jsp";
     public static final String GL_MAIN_PAGE = BASE_APP_URL + "/gl-main.jsp";
     public static final String GL_DETAIL_DEBTORS_PAGE = BASE_APP_URL + "/gl-detail-debtors.jsp";

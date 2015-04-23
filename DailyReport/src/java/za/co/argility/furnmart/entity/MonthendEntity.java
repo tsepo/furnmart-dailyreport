@@ -22,6 +22,7 @@ public class MonthendEntity {
     private boolean isNewGLTranExtRun;
     private boolean isPWCExtractsDelivered;
     private boolean isBucketsRun;
+    private boolean isStatementsRun;
 
     
     /**
@@ -176,6 +177,20 @@ public class MonthendEntity {
      */
     public void setIsBucketsRun(boolean isBucketsRun) {
         this.isBucketsRun = isBucketsRun;
+    }
+
+    /**
+     * @return the isStatementsRun
+     */
+    public boolean isIsStatementsRun() {
+        return isStatementsRun;
+    }
+
+    /**
+     * @param isStatementsRun the isStatementsRun to set
+     */
+    public void setIsStatementsRun(boolean isStatementsRun) {
+        this.isStatementsRun = isStatementsRun;
     }
     
     

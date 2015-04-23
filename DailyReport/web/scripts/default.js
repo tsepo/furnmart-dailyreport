@@ -111,6 +111,13 @@ function processMonthendMenuItem(option) {
         
     }
     
+    
+    if (option == "statements") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/MonthEndProduction?tab=statements");
+        
+    }
+    
     //else alert("No page found.");
     
 }
