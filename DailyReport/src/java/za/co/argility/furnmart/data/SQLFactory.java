@@ -263,7 +263,7 @@ public interface SQLFactory {
                                                                     "WHERE stran_is_fin IS TRUE \n" +
                                                                     "group by act_typ \n" +
                                                                     "order by act_typ;";
-    
+    /*
     public static final String GET_GL_DETAIL_STOCK_LIST =  "SELECT act_typ, sum( value ) as value from new_gl_tran_ext join branch using (br_cde) \n" +
                                                             "where (debit_code = '200040' or credit_code = '200040'  or debit_code = '500330' \n" +
                                                             "or credit_code = '500330') \n" +
@@ -271,7 +271,18 @@ public interface SQLFactory {
                                                             "and br_cde = ? \n" +
                                                             "and not (sub_typ IN (11,12) and act_typ in ('77065','75005')) \n" + 
                                                             "and not (act_typ = '70045' and sub_typ not in (0,1)) group by act_typ \n" + 
-                                                            "order by act_typ ;";
+                                                            "order by act_typ ;"; */
+    
+    
+    public static final String GET_GL_DETAIL_STOCK_LIST = "SELECT act_typ,sum(value) as value \n" + 
+                                                          "from new_gl_tran_ext \n " +
+                                                          "join branch using (br_cde) \n" +
+                                                          "where (debit_code = '200040' or credit_code = '200040' or debit_code = '500330' or credit_code = '500330') \n" +
+                                                          "and fpp_cde = ? \n " +
+                                                          "and br_cde = ? \n " + 
+                                                          "and not (act_typ in ('70045','75005','75035') and sub_typ not in (0,1)) \n " + 
+                                                          "group by act_typ \n" + 
+                                                          "order by act_typ ";  
     
     public static final String GET_GL_SUMMARY_DETS = "SELECT br_cde, fpp_cde, gl_debtors, gl_instore_debtors, gl_stock, gl_instore_stock \n" +
                                                      "FROM new_gl_balancing \n" +
