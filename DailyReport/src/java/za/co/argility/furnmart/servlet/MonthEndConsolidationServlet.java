@@ -26,6 +26,7 @@ import za.co.argility.furnmart.entity.ProdConsScriptsEntity;
 import za.co.argility.furnmart.entity.ProdConsViewEntity;
 import za.co.argility.furnmart.jdbc.JdbcDeleteConsRunData;
 import za.co.argility.furnmart.jdbc.JdbcInsertConsRunData;
+import za.co.argility.furnmart.servlet.helper.MeProdRunData;
 import za.co.argility.furnmart.servlet.helper.MonthendData;
 import za.co.argility.furnmart.servlet.helper.MonthendOverviewData;
 import za.co.argility.furnmart.servlet.helper.MonthendProcesses;
@@ -80,6 +81,7 @@ public class MonthEndConsolidationServlet extends GenericServlet {
            
         }
         
+        
 
     }
 
@@ -127,6 +129,7 @@ public class MonthEndConsolidationServlet extends GenericServlet {
             ProdConsScriptsEntity entity = map.get(id);
             ProdConsRunEntity prodConsRunEntity = new ProdConsRunEntity(); 
              String fppCde =  DataFactory.getMeconFpp();
+             
             if (entity != null) {
                 try {
                     
@@ -227,5 +230,6 @@ public class MonthEndConsolidationServlet extends GenericServlet {
              
             saveSession(request, data);
     }
+    
 
 }

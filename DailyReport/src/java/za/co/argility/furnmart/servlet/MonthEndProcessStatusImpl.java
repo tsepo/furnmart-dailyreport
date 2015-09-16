@@ -3,15 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package za.co.argility.furnmart.servlet;
 
-package za.co.argility.furnmart.entity;
 
-/**
- *
- * @author tmaleka
- */
-public enum DiskUtilisationLevelType {
-    Low,
-    Normal,
-    High
+public class MonthEndProcessStatusImpl extends MonthEndProcessStatus {
+    
 }

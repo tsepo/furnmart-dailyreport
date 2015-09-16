@@ -23,6 +23,22 @@ public class MonthendEntity {
     private boolean isPWCExtractsDelivered;
     private boolean isBucketsRun;
     private boolean isStatementsRun;
+    
+    private int branchWarehouse;
+    
+     /**
+     * @param isBranchWarehouse the isBranchOk to set
+     */
+    public void setBranchWarehouse(int isBranchWarehouse) {
+        this.branchWarehouse = branchWarehouse;
+    }
+    
+     /**
+     * @return the isBranchWarehouse
+     */
+    public int getBranchWarehouse() {
+        return branchWarehouse;
+    }
 
     
     /**
@@ -192,6 +208,8 @@ public class MonthendEntity {
     public void setIsStatementsRun(boolean isStatementsRun) {
         this.isStatementsRun = isStatementsRun;
     }
+    
+    
     
     
 }

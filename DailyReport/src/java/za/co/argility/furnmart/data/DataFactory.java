@@ -5,6 +5,7 @@
  */
 package za.co.argility.furnmart.data;
 
+import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,6 +39,7 @@ import za.co.argility.furnmart.entity.ProcessType;
 import za.co.argility.furnmart.entity.ProdConsScriptsEntity;
 import za.co.argility.furnmart.entity.ProdConsViewEntity;
 import za.co.argility.furnmart.entity.ReplicationEntity;
+import za.co.argility.furnmart.servlet.helper.MeProdRunData;
 import za.co.argility.furnmart.servlet.helper.MonthendProcesses;
 import za.co.argility.furnmart.util.BucketMap;
 import za.co.argility.furnmart.util.Log;
@@ -214,7 +216,8 @@ public class DataFactory {
                     }
 
                 }
-
+                
+                
                 item.setComments(comments);
 
                 if (comments.isEmpty()) {
@@ -370,7 +373,9 @@ public class DataFactory {
                 switch (type) {
                     case CentralAccount:
                         item.setIsDebtorsRun(flag);
+                        item.setBranchWarehouse(getWarehouseValues());
                         System.out.println("Hey dude 1 : " + count);
+                        System.out.println("item.setIsBranchWarehouse(getWarehouseValues()) : " + item.getBranchWarehouse());
                         break;
                     case Creditors:
                         item.setIsCreditorsRun(flag);
@@ -1283,6 +1288,69 @@ public class DataFactory {
         return actDesc;
     }
     
+    /*
+    //get hp_acc values on warehouse branches
+        public static String getHpAccCount(int actType)
+            throws Exception {
+
+        String actDesc = null;
+        //query = query.replace("{0}", "");
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_ACTION_TYP_DESC);
+            ps.setInt(1, actType);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                actDesc = rs.getString("act_desc");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+        return actDesc;
+    }
+    */
+    
+    
+    //Get warehouse value
+    public static int getWarehouseValues()
+            throws Exception {
+
+        int countWarehouse = 0;
+        //List<MonthendEntity> items = new ArrayList<MonthendEntity>();
+        //MonthendEntity items = null;
+        
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_WAREHOUSE_BRANCHES);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                //items = new MonthendEntity();
+                countWarehouse = rs.getInt("count");
+                
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+        return countWarehouse;
+    }
+    
+    
     
     public static final List<GLDetailEntity> getGlDetailDebtorsList(String branch, String type) throws Exception {
 
@@ -1405,6 +1473,124 @@ public class DataFactory {
             ConnectionManager.close(connection);
         }
        
+     }
+     
+     public List viewMeProdRun(int option, int proc) throws ClassNotFoundException, Exception{
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        List<String> ret = null;
+        
+        List<String> fpp = new ArrayList<String>();
+        
+        List<String> debtors = new ArrayList<String>();
+        List<String> creditors = new ArrayList<String>();
+        List<String>  cashBook = new ArrayList<String>();
+        List<String>  newGl = new ArrayList<String>();
+        List<String>  bucketsReport = new ArrayList<String>();
+        
+        List<String> error = new ArrayList<String>();
+        
+        List<String> branch = new ArrayList<String>();
+        List timeRun = new ArrayList();
+        List start = new ArrayList();
+        List end = new ArrayList();
+        List<String> process = new ArrayList<String>();
+        
+        MeProdRunData values = new MeProdRunData();
+        
+        int test = 0;
+        
+        try{
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+           ps = connection.prepareStatement(SQLFactory.GET_POST_ME_PROCESSES);
+           rs = ps.executeQuery();
+             while (rs.next()) {
+                 
+                 fpp.add(rs.getString("fpp_cde"));
+                 
+                // branch.add(rs.getString("br_cde"));
+                if(!branch.contains(rs.getString("br_cde"))){
+                    if(rs.getString("br_cde").length() ==1 ){
+                          branch.add("000"+rs.getString("br_cde"));
+                    }else if(rs.getString("br_cde").length() ==2){
+                         branch.add("00"+rs.getString("br_cde"));
+                    }else if(rs.getString("br_cde").length() ==3){
+                         branch.add("0"+rs.getString("br_cde"));
+                    }else{
+                          branch.add(rs.getString("br_cde"));
+                    }
+                } 
+                
+                
+                start.add(rs.getDate("mendstat_start") + " - " + rs.getDate("mendstat_end"));
+                //System.out.println("Error number : " + rs.getInt("mendstat_error_id"));
+                
+                if(rs.getInt("mendstat_error_id") > 0){
+                    System.out.println("....Error number is greater than 0.....");
+                    error.add("error");
+                }else{
+                    error.add("ok");
+                }
+                
+                
+//                 //end.add(rs.getDate("mendstat_end"));
+//                 if(rs.getString("mendstat_process").equalsIgnoreCase("Creditors")){
+                     creditors.add(rs.getString("mendstat_process")); 
+//                     //test = rs.getInt("mendstat_error_id");
+//                     start.add(rs.getDate("mendstat_start") + " - " + rs.getDate("mendstat_end"));
+//                 }else if (rs.getString("mendstat_process").equalsIgnoreCase("Debtors")){
+//                     debtors.add(rs.getString("mendstat_process"));
+//                      start.add(rs.getDate("mendstat_start") + " - " + rs.getDate("mendstat_end"));
+//                 }else if(rs.getString("mendstat_process").equalsIgnoreCase("Cashbook")){
+//                     cashBook.add(rs.getString("mendstat_process"));
+//                      start.add(rs.getDate("mendstat_start") + " - " + rs.getDate("mendstat_end"));
+//                 }else if(rs.getString("mendstat_process").equalsIgnoreCase("New GL Extract")){
+//                     newGl.add(rs.getString("mendstat_process"));
+//                      start.add(rs.getDate("mendstat_start") + " - " + rs.getDate("mendstat_end"));
+//                 }else if(rs.getString("mendstat_process").equalsIgnoreCase("Bucket Report Extract")){
+//                     bucketsReport.add(rs.getString("mendstat_process"));
+//                      
+//                 }
+                 
+                 
+             }
+             
+             
+             //values.setDebtors(debtors);
+             values.setBr_cde(branch);
+             values.setFpp_cde(fpp);
+             values.setMendstat_start(start);
+             values.setMendstat_end(end);
+             for(int i = 0; i <branch.size(); i++ ){
+                 
+                 if(branch.get(i).length() ==1 ){
+                     System.out.print("BRANCH : " + "000"+ branch.get(i) +" ");
+                 }else if(branch.get(i).length() ==2){
+                     System.out.print("BRANCH : " + "00"+ branch.get(i) +" ");
+                 }else if(branch.get(i).length() ==3){
+                     System.out.print("BRANCH : " + "0"+ branch.get(i) +" ");
+                 }else{
+                      System.out.print("BRANCH : " + branch.get(i) +" ");
+                 }
+                 
+             }
+        } catch(SQLException ex){
+          ex.getStackTrace();
+          throw new Exception(ex);
+        }
+        if(option == 1 && proc == 0){
+            ret = branch;
+        }else if(option == 0 && proc == 0){
+           ret = start;
+        }else if(option == 0 && proc == 1){
+            ret = end;
+        }else if(option == 10 && proc == 10){
+            ret = error;
+        }
+        
+        return ret;
      }
      
      

@@ -42,6 +42,8 @@ public class WebPages {
     public static final String MONTHEND_VIEW_CONSOLIDATION_PAGE = BASE_APP_URL + "/monthend-view-consolidations.jsp";
     public static final String ERROR_PAGE = BASE_APP_URL + "/errorpages/error-occured.jsp";
     
+    public static final String TEST_PAGE = BASE_APP_URL + "/test.jsp";
+    
     /**
      * Gets the local host name 
      * 

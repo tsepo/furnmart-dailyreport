@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +31,7 @@ import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthEndTableType;
 import za.co.argility.furnmart.entity.MonthendEntity;
+import za.co.argility.furnmart.servlet.helper.MeProdRunData;
 import za.co.argility.furnmart.servlet.helper.MonthendData;
 import za.co.argility.furnmart.servlet.helper.MonthendOverviewData;
 import za.co.argility.furnmart.servlet.helper.MonthendProcesses;
@@ -111,6 +114,29 @@ public class MonthEndProductionServlet  extends GenericServlet {
             
             processMonthEndProductionData(request, response);
             response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
+            return;
+        }
+        
+          if (request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("prod")) {
+            
+            Log.info("... Testing new change ...");
+             //Log.info("...  newest development.......Luthando");
+            
+            
+            
+                try {
+                    buildProcessRunsHistory(request, response);
+                } catch (Exception ex) {
+                    Logger.getLogger(TestServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    
+                     Logger.getLogger("Error occured :" + ex.getMessage());
+                }
+            
+            processMonthEndProductionData(request, response);
+            response.sendRedirect(WebPages.TEST_PAGE);
+            //Luthando
+           //DataFactory.viewMeProdRun();
             return;
         }
         
@@ -232,6 +258,29 @@ public class MonthEndProductionServlet  extends GenericServlet {
         }
         
         }
+     private void buildProcessRunsHistory(HttpServletRequest request, HttpServletResponse response) throws Exception {
+         DataFactory test = new DataFactory();
+         
+         Log.info("...  newest development.......Luthando");
+         //test.viewMeProdRun(1);
+         //test.viewMeProdRun(2);
+         test.viewMeProdRun(2,0);
+         test.viewMeProdRun(2,1);
+         test.viewMeProdRun(2,2);
+         test.viewMeProdRun(2,3);
+         test.viewMeProdRun(2,4);
+         test.viewMeProdRun(2,5);
+          MeProdRunData data = (MeProdRunData)getSessionData(request, SessionAttribute.MONTHEND_DATA_TAG);
+
+            if (data == null) {
+                data = new MeProdRunData();
+            }   
+            
+             
+                           
+             
+            saveSession(request, data);
+    }
     
     protected void processMonthEndOverviewData(HttpServletRequest request, 
             HttpServletResponse response) throws IOException {
@@ -276,9 +325,12 @@ public class MonthEndProductionServlet  extends GenericServlet {
          DataFactory.getMonthendDetails(MonthEndTableType.CentralAccount, map,false);
          DataFactory.getMonthendDetails(MonthEndTableType.Creditors,map,false);
          DataFactory.getMonthendDetails(MonthEndTableType.Buckets,map,false);
+         
+         
 
          ArrayList<MonthendEntity> details = new ArrayList<MonthendEntity>();
          TreeSet<String> branches = new TreeSet<String>(map.keySet());
+         
          
          for (String branch : branches) {            
              details.add(map.get(branch));
@@ -291,6 +343,7 @@ public class MonthEndProductionServlet  extends GenericServlet {
          for (MonthendEntity det : details){
              String filePath = "/home/ucsretail/" + det.getBranchCode() + "/PWC_SENT_SUCCESSFULLY";
              Log.info("filePath --->  " + filePath);
+             
              f = new File(filePath);
              boolean isPWCDelivered = false;
              if(f.exists()){

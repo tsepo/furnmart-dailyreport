@@ -48,6 +48,10 @@
             <param-value>cons</param-value>
         </init-param>
     </servlet>
+    <servlet>
+        <servlet-name>MonthEndProcessStatus</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.MonthEndProcessStatus</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OverviewServlet</servlet-name>
         <url-pattern>/overview</url-pattern>
@@ -95,6 +99,10 @@
     <servlet-mapping>
         <servlet-name>MonthEndConsolidationServlet</servlet-name>
         <url-pattern>/MonthEndConsolidation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MonthEndProcessStatus</servlet-name>
+        <url-pattern>/MonthEndProcessStatus</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

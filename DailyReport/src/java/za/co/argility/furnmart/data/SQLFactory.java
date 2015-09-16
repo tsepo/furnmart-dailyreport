@@ -303,6 +303,16 @@ public interface SQLFactory {
      public static final String UPDATE_PROD_CONS_ENTITIES = "UPDATE prod_cons set prod_cons_error = ? , prod_cons_start_dte = ? , \n " +
                                                          "prod_cons_end_dte = ? \n " +
                                                          "where prod_cons_id = ?  ;"; 
+     
+     public static final String GET_WAREHOUSE_BRANCHES = "select count(*) as count from hp_acc where (select br_is_whs from branch where br_cde in(select br_cde from br_prof)) =false;";
+     
+    public static final String GET_CASH_BOOK = "select * from monthend_status where fpp_cde in(select fpp_cde from br_prof) and mendstat_process = 'Cashbook';";
+    public static final String GET_DEBTORS = "select * from monthend_status where fpp_cde in(select fpp_cde from br_prof) and mendstat_process = 'Debtors';";
+    public static final String GET_PWC_EXTRACT = "select * from monthend_status where fpp_cde in(select fpp_cde from br_prof) and mendstat_process = 'PWC Extracts';";
+    public static final String GET_NEW_GL = "select * from monthend_status where fpp_cde in(select fpp_cde from br_prof) and mendstat_process = 'New GL Extract';";
+    public static final String GET_BUCKETS = "select * from monthend_status where fpp_cde in(select fpp_cde from br_prof) and mendstat_process = 'Bucket Report Extract';";
+    public static final String GET_POST_ME_PROCESSES = "select * from monthend_status where fpp_cde in(select fpp_cde from br_prof) and mendstat_process in ('Creditors', \n"
+            + "'Cashbook','Debtors','New GL Extract','Bucket Report Extract');";
     
     
 }

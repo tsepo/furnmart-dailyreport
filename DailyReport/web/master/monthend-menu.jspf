@@ -44,6 +44,9 @@
       <div class="menuItem" onclick="processMonthendMenuItem('statements')">
         <p>STATEMENTS</p>
     </div>
+      <div class="menuItem" onclick="processMonthendMenuItem('prod')">
+        <p>ME PROCESS RUN</p>
+    </div>
 
 </div>
 

@@ -118,6 +118,12 @@ function processMonthendMenuItem(option) {
         
     }
     
+      if (option == "prod") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/MonthEndProduction?tab=prod");
+        
+    }
+    
     //else alert("No page found.");
     
 }
