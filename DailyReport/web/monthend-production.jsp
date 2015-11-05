@@ -100,12 +100,17 @@
                             for (MonthendEntity entity : details){ 
                                 ++count;
                                 boolean isEven = (count % 2 == 0);
+                                /*
                                 String debtorsFlag = null;
                                 if (entity.getBranchWarehouse() == 0) { 
                                     debtorsFlag = "images/ok.png";
                                 }else if(entity.isIsDebtorsRun() == false && entity.getBranchWarehouse() >0){
                                    debtorsFlag = "images/error.png";
-                                }
+                                }*/
+                                String debtorsFlag = "images/ok.png";
+                                if (entity.isIsDebtorsRun() == false)
+                                    debtorsFlag = "images/error.png";
+                                
                                  String creditorsFlag = "images/ok.png";
                                 if (entity.isIsCreditorsRun() == false)
                                     creditorsFlag = "images/error.png";

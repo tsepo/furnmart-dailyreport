@@ -272,7 +272,7 @@ public class DataFactory {
                 Calendar cal = new GregorianCalendar();
                 String month = null;
                 int intMonth = cal.get(Calendar.MONTH) +1;
-                if(cal.get(Calendar.MONTH) < 10){
+                if(cal.get(Calendar.MONTH) < 9){
                     month = "0" + intMonth;
                 }else{
                     month = "" + intMonth;
@@ -281,6 +281,7 @@ public class DataFactory {
                 //SimpleDateFormat date_format = new SimpleDateFormat("yyyyMMdd");
                 System.out.println("BLikkies Year ---> " + cal.get(Calendar.YEAR));
                 System.out.println("BLikkies Month ---> " + month);
+                System.out.println("Blikkies fpp ----> " + fpp);
                 
             }
            
