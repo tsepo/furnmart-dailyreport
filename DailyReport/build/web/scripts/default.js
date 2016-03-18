@@ -69,6 +69,12 @@ function processMenuItem(option) {
         window.location.replace(BASE_URL + "/DiskSpace");
     }
     
+    // if the DAILY ITC EXTRACTS menu is clicked
+    else if (option == "dailyitcextracts") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/dailyITCExtracts");
+    }
+    
     else {
         
         alert("Sorry, that page is still under development.\n" + 
@@ -82,28 +88,47 @@ function processMonthendMenuItem(option) {
     
     
      if (option == "extracts") {
-        //toggleLoadingTopBar(true);
+        toggleLoadingTopBar(true);
         window.location.replace(BASE_URL + "/MonthEndProduction?tab=production");
         
      }
      if (option == "process") {
-           //toggleLoadingTopBar(true);
+        toggleLoadingTopBar(true);
         window.location.replace(BASE_URL + "/MonthEndProduction?tab=processes");
         
     }
     
      if (option == "gl") {
-          //toggleLoadingTopBar(true);
+        toggleLoadingTopBar(true);
         window.location.replace(BASE_URL + "/MonthEndProduction?tab=gl");
         
     }
     
      if (option == "cons") {
-          //toggleLoadingTopBar(true);
+        toggleLoadingTopBar(true);
         window.location.replace(BASE_URL + "/MonthEndConsolidation?tab=cons");
         
     }
-     
+    
+    
+    if (option == "consView") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/MonthEndConsolidation?tab=consView");
+        
+    }
+    
+    
+    if (option == "statements") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/MonthEndProduction?tab=statements");
+        
+    }
+    
+      if (option == "prod") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/MonthEndProduction?tab=prod");
+        
+    }
     
     //else alert("No page found.");
     

@@ -40,8 +40,11 @@
      </div>
     <div class="menuItem" onclick="processMenuItem('dailybiextracts')">
         <p>DAILY BI EXTRACTS</p>
+    </div>
+    
+    <div class="menuItem" onclick="processMenuItem('dailyitcextracts')">
+        <p>DAILY ITC EXTRACTS</p>
      </div>
-   
 
 </div>
 
