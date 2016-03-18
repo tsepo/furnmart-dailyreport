@@ -19,6 +19,8 @@ public interface SessionAttribute {
     public static final String NETWORK_DATA_TAG = "network-data";
     public static final String GLOBAL_SETTINGS_TAG = "global-settings";
     public static final String DAILY_BI_EXTRACTS_DATA_TAG =  "daily-bi-extracts";
+    public static final String DAILY_ITC_EXTRACTS_DATA_TAG = "daily-itc-extracts";
+    public static final String VIEW_ITC_BRANCHES_DATA_TAG = "view-itc-branches";
     public static final String ITC_700_EXTRACTS_DATA_TAG = "itc-700-extracts";
     public static final String DISK_SPACE_DATA_TAG = "disk-space";
 }

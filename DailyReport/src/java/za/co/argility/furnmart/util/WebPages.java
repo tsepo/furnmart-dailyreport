@@ -30,6 +30,8 @@ public class WebPages {
     public static final String REPLICATION_PAGE = BASE_APP_URL + "/replication.jsp";
     public static final String NETWORK_PAGE = BASE_APP_URL + "/network.jsp";
     public static final String DAILY_BI_EXTRACTS_PAGE = BASE_APP_URL + "/daily-bi-extracts.jsp";
+    public static final String DAILY_ITC_EXTRACTS_PAGE = BASE_APP_URL + "/daily-itc-extracts.jsp";
+    public static final String VIEW_ITC_BRANCHES = BASE_APP_URL + "/view-itc-branches.jsp";
     public static final String ITC_700_EXTRACTS_VERIFIER_PAGE = BASE_APP_URL + "/itc700extractsVerifier.jsp";
     public static final String DISK_SPACE_PAGE = BASE_APP_URL + "/disk-space.jsp";
     public static final String MONTHEND_PROD_PAGE = BASE_APP_URL + "/monthend-production.jsp";

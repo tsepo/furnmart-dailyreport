@@ -147,6 +147,10 @@ public interface SQLFactory {
                                                                 " AND {0} \n" +
                                                                 " ORDER BY br_cde, fpp_cde, daily_bi_extracts_hist_id, extract_type, start_time";
     
+    public static final String GET_DAILY_ITC_STATUS = "select * from daily_itc_status order by run_date limit 10";
+    
+    public static final String GET_DAILY_DEBTORS_STATUS = "select * from daily_debtors_status order by br_cde";
+    
     public static final String GET_DATE_EXTRACT_FILES_LAST_SENT = "SELECT br_cde, last_sent_time "
             + "FROM daily_bi_extracts_sent_files "
             //+ "WHERE AGE(last_sent_time) < '1 hour' "

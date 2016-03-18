@@ -29,10 +29,10 @@ public class ConnectionManager {
         
         if (connectionType == ConnectionType.CENTRAL && dbName == null)
             connectionUrl = CONNECTION_URL.replace("{0}", "c9901.fm.co.za").replace("{1}", "c9901");
-        
+            
         else if (connectionType == ConnectionType.CENTRAL && dbName != null)
-                connectionUrl = CONNECTION_URL.replace("{0}", "c9901.fm.co.za").replace("{1}", dbName);
-                
+            connectionUrl = CONNECTION_URL.replace("{0}", "c9901.fm.co.za").replace("{1}", dbName);
+                   
         else if (connectionType == ConnectionType.INSTORE)
             connectionUrl = CONNECTION_URL.replace("{0}", "c9901.fm.co.za").replace("{1}", dbName);
         

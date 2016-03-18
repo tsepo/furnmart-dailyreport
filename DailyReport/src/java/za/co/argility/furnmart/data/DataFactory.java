@@ -779,7 +779,128 @@ public class DataFactory {
         }
 
     }
+  
+    /**
+     * Get ITC Extract data from daily_itc_status table
+     * 
+     * @return
+     * @throws Exception 
+     */
+    public static List<ExtractHistory> getDailyITCExtractHistoryRun()
+            throws Exception {
 
+        List<ExtractHistory> bucket = null;
+        ExtractHistory history = null;
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            String query = null;
+            connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
+         
+            query = SQLFactory.GET_DAILY_ITC_STATUS;
+            ps = connection.prepareStatement(query);
+   
+            rs = ps.executeQuery();
+
+            bucket = new ArrayList<ExtractHistory>();
+
+            while (rs.next()) {
+                history = new ExtractHistory();
+                
+                history.setStartTime(rs.getTimestamp("run_date"));
+                history.setStatus(rs.getBoolean("is_successful"));
+                history.setReason(rs.getString("reason"));
+                
+                bucket.add(history);
+            }
+            return bucket;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+
+    }
+    
+    /**
+     * Gets ITC branch details from daily_debtors_status table
+     * 
+     * @return
+     * @throws Exception 
+     */
+     public static List<ExtractHistory> getITCBranchDetailsRun() 
+        throws Exception {
+        
+        List<ExtractHistory> list = null;
+        ExtractHistory history = null;
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String query = null;
+        int daysBehind = 0;
+        Date today = null;
+        SimpleDateFormat sdf = null;
+        
+        
+        try {
+            connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
+         
+            query = SQLFactory.GET_DAILY_DEBTORS_STATUS;
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+
+            today =  Calendar.getInstance().getTime();
+            list = new ArrayList<ExtractHistory>();
+            sdf = new SimpleDateFormat("yyyy-MM-dd");
+            
+            while (rs.next()) {
+                history = new ExtractHistory();
+                
+                history.setBranch(rs.getString("br_cde"));
+                history.setcheckpointAudit(rs.getString("checkpoint_audit"));
+                history.setCheckpointDate(rs.getDate("checkpoint_date"));
+                
+                daysBehind = dateDiffInDays(today, history.getCheckpointDate());
+   
+                history.setDaysBehind(daysBehind);
+               
+                Log.info("#############Today's date : " + sdf.format(today));
+                Log.info("#############Checkpoint date : " + history.getCheckpointDate());
+                Log.info("#############Days behind : " + daysBehind);
+                
+                list.add(history);
+            }
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+    }
+   
+     
+     /**
+      * Calculates difference between 2 dates
+      * 
+      * @param date1
+      * @param date2
+      * @return difference in days
+      */
+    public static int dateDiffInDays(Date date1 , Date date2){
+    
+        int diffInDays = 0;
+        long diff ;
+        
+        diff = date1.getTime() - date2.getTime();
+        diffInDays = (int)(diff / (24 * 60 * 60 * 1000));
+        
+        return diffInDays;
+    }
+   
     /**
      * Gets the current fpp code
      *

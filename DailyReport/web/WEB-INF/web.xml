@@ -52,6 +52,14 @@
         <servlet-name>MonthEndProcessStatus</servlet-name>
         <servlet-class>za.co.argility.furnmart.servlet.MonthEndProcessStatus</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DailyITCExtractsServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.DailyITCExtractsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewITCBranchesServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.ViewITCBranchesServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>OverviewServlet</servlet-name>
         <url-pattern>/overview</url-pattern>
@@ -103,6 +111,14 @@
     <servlet-mapping>
         <servlet-name>MonthEndProcessStatus</servlet-name>
         <url-pattern>/MonthEndProcessStatus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DailyITCExtractsServlet</servlet-name>
+        <url-pattern>/dailyITCExtracts</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewITCBranchesServlet</servlet-name>
+        <url-pattern>/viewITCBranches</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

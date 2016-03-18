@@ -69,6 +69,12 @@ function processMenuItem(option) {
         window.location.replace(BASE_URL + "/DiskSpace");
     }
     
+    // if the DAILY ITC EXTRACTS menu is clicked
+    else if (option == "dailyitcextracts") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/dailyITCExtracts");
+    }
+    
     else {
         
         alert("Sorry, that page is still under development.\n" + 

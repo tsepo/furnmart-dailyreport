@@ -18,6 +18,7 @@ public class ExtractType {
     public static final int PROMO_EXTRACT = 103;
     public static final int DEBTORS_EXTRACT = 104;
     
+    
     private int extractType;
     private String extractDescription;
     private boolean active;

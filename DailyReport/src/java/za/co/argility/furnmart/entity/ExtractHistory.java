@@ -26,8 +26,13 @@ public class ExtractHistory {
     private Date endTime;
     private ExtractError extractError;
     private Date filesLastSent;
+    private boolean status;
+    private String reason;
+    private String checkpointAudit;
+    private Date checkpointDate;
+    private int daysBehind;
     
-    private ExtractHistory() {
+    public ExtractHistory() {
         this.branch = null;
         this.period = null;
         this.processType = null;
@@ -36,7 +41,8 @@ public class ExtractHistory {
         this.endTime = null;
         this.extractError = null;
         this.filesLastSent = null;
-        
+        this.status = false;
+        this.reason = null;   
     }
     
     public ExtractHistory(int historyId) {
@@ -107,9 +113,49 @@ public class ExtractHistory {
     public Date getFilesLastSent() {
         return filesLastSent;
     }
-
+    
     public void setFilesLastSent(Date filesLastSent) {
         this.filesLastSent = filesLastSent;
+    }
+    
+    public boolean getStatus() {
+        return this.status;
+    }
+               
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+    
+    public String getReason() {
+        return this.reason;
+    }
+    
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+    
+    public String getCheckpointAudit() {
+        return this.checkpointAudit;
+    }
+    
+    public void setcheckpointAudit(String checkpointAudit) {
+        this.checkpointAudit = checkpointAudit;
+    }
+    
+    public Date getCheckpointDate() {
+        return this.checkpointDate;
+    }
+    
+    public void setCheckpointDate(Date checkpointDate) {
+        this.checkpointDate = checkpointDate;
+    }
+    
+    public int getDaysBehind() {
+        return daysBehind;
+    }
+    
+    public void setDaysBehind(int daysBehind) {
+        this.daysBehind = daysBehind;
     }
     
     public String toHtml() {
