@@ -286,7 +286,7 @@ public interface SQLFactory {
     
     public static final String GET_GL_SUMMARY_DETS = "SELECT br_cde, fpp_cde, gl_debtors, gl_instore_debtors, gl_stock, gl_instore_stock \n" +
                                                      "FROM new_gl_balancing \n" +
-                                                     "WHERE fpp_cde = ? \n" +
+                                                     "WHERE fpp_cde = ? \n" +    
                                                      "AND br_cde = ? ;" ;
     
     /*public static final String GET_PROD_CONS_ENTITIES = "SELECT prod_cons_id,prod_cons_desc, prod_cons_script, prod_cons_error, prod_cons_start_dte, \n " +
@@ -313,6 +313,8 @@ public interface SQLFactory {
     public static final String GET_BUCKETS = "select * from monthend_status where fpp_cde in(select fpp_cde from br_prof) and mendstat_process = 'Bucket Report Extract';";
     public static final String GET_POST_ME_PROCESSES = "select * from monthend_status where fpp_cde in(select fpp_cde from br_prof) and mendstat_process in ('Creditors', \n"
             + "'Cashbook','Debtors','New GL Extract','Bucket Report Extract');";
+    
+    public static final String GET_GL_FPP_LIST = "select distinct(fpp_cde) from new_gl_balancing order by fpp_cde desc;";
     
     
 }

@@ -42,7 +42,9 @@ public class MonthendData {
     private List<ProdConsScriptsEntity> prodConsSelectedEntities;
     private List<ProdConsScriptsEntity> prodConsEntities;
     private List<ProdConsViewEntity> prodConsViewEntities;
+    private List<String> fppCdeList;
     private boolean consRun;
+    private String selectedFppCde;
     
     public MonthendData() {
     }
@@ -284,6 +286,30 @@ public class MonthendData {
      */
     public void setIsAllStatementsSelected(boolean isAllStatementsSelected) {
         this.isAllStatementsSelected = isAllStatementsSelected;
+    }
+    
+    
+     public List<String> getFppCdeList() {
+        return fppCdeList;
+    }
+
+    /**
+     * @param glDeatilType the glDeatilType to set
+     */
+    public void setFppCdeList(List<String> fppCdeList) {
+        this.fppCdeList = fppCdeList;
+    }
+    
+    
+    public String getSelectedFppCde() {
+        return selectedFppCde;
+    }
+
+    /**
+     * @param glDeatilType the glDeatilType to set
+     */
+    public void setSelectedFppCde(String selectedFppCde) {
+        this.selectedFppCde = selectedFppCde;
     }
     
 }

@@ -4,6 +4,8 @@
     Author     : rnaidoo
 --%>
 
+<%@page import="za.co.argility.furnmart.entity.MonthendSearchEntity"%>
+<%@page import="za.co.argility.furnmart.entity.ReplicationSearchEntity"%>
 <%@page import="za.co.argility.furnmart.entity.GLDetailEntity"%>
 <%@page import="za.co.argility.furnmart.entity.GLEntity"%>
 <% 
@@ -19,6 +21,22 @@
     System.out.println("details-- > " + details.size());
     if (details == null)
         details = new ArrayList<GLEntity>();
+    
+    
+    List<String> branches = data.getMonthendBranchList();
+    if (branches == null)
+        branches = new ArrayList<String>(); 
+    branches.add("ALL");
+    branches.add("OUT OF BALANCE");
+    System.out.println("branches-- > " +  branches.size());
+    
+    // process types
+    List<String> fppCdes = data.getFppCdeList();
+    if (fppCdes == null)
+        fppCdes = new ArrayList<String>();
+    
+    String fppCode = data.getSelectedFppCde();
+    
     
  %>   
 
@@ -58,15 +76,17 @@
          </div>
         
         
-          <div class="header">
-                <div class="wrapper" ><p>GL Balancing Summary Page</p></div>
-          </div>
+        
          
          <br><br>
            <form name="glSummaryForm" method="get" action="MonthEndProduction">
-         
+       
+               
+               <hr></hr>
          <div style="margin-left: 10px">  
              <br><br>
+             <table><tr>
+             
              <table border="0" cellspacing="2" cellpadding="2" width="50%">
              <tr>
              <td valign="top">
@@ -77,15 +97,52 @@
               <td valign='bottom'>
              <input type="submit" value="search" name="submitForm" class="button"/>
               </td></tr></table>
-             <br><br><hr>
+                 <table border="0" cellspacing="2" cellpadding="2" width="50%">
+                     <tr>
+                     <td>
+                         
+                                       <%
+                                          MonthendSearchEntity search = data.getSearch();
+                                        if (search == null) {
+                                            search = new MonthendSearchEntity();
+                                        }    
+                                          String selectedFppCde = search.getFppCde();
+                                           if (selectedFppCde == null)
+                                               selectedFppCde = "";
+
+                                           %>
+                                       <select name="fppCde">
+                                           <% for (String fppCde : fppCdes) {
+                                               %>
+                                               <option value="<%=fppCde %>"
+                                                       <%  
+                                                            if (fppCde.equals(selectedFppCde))
+                                                                out.print("selected='selected'");
+                                                       %> 
+                                                       ><%=fppCde %></option>
+                                               <% } %>
+                                       </select>
+
+                     </td></tr>
+                 </table></tr> 
+                         
+             </table>                
+             <br><br>
              
         </div>
+                                       
+                                       
+          <div class="header">
+                <div class="wrapper" ><p>GL Balancing Summary Page (<%= fppCode %>)</p></div>
+           
+          </div>                               
         
         
-        <br><br>
-      
+        
+                
            <table border="0" cellspacing="2"padding="2" width="50%">
-                    
+               <tr></tr>
+               <tr></tr>
                   
                          <tr class="RowToClick"> 
                               <td style="text-align: center">Branch Code</td>

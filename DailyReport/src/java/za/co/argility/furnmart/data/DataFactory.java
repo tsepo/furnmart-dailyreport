@@ -848,6 +848,37 @@ public class DataFactory {
 
     }
     
+     public static String getMeconsFppCode() throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String period = null;
+
+        try {
+
+            //connection = ConnectionManager.getConnection(ConnectionType.INSTORE, "c" + branch);
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_BRANCH_ROLLED_FPP_CODE);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                period = rs.getString(1);
+            }
+
+            return period;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+
+    }
+    
+    
     
 
     public static String getBranchDescription(String branch) throws SQLException {
@@ -1167,13 +1198,15 @@ public class DataFactory {
     
     
     
-    public static List<GLEntity> getNewGLData()
+    public static List<GLEntity> getNewGLData(String fppCde)
             throws Exception {
 
         List<GLEntity> list = new ArrayList<GLEntity>();
-        String fppCde = getMeconFpp();
+        //String fppCde = getMeconFpp();
         List<String> meBranchList = getMonthendBranchList();
-               
+        //List<String> meBranchList = new ArrayList<String>();
+        //meBranchList.add("0002");
+        //meBranchList.add("0003");
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -1184,13 +1217,16 @@ public class DataFactory {
             try {
                  
                 try {
-                    connection = ConnectionManager.getConnection(ConnectionType.BATCH, "c" + branch);
+                    connection = ConnectionManager.getConnection(ConnectionType.BATCH,null);
                     validBranch = true;
                 } catch (SQLException sqle) {
+                    Log.info("Yens ---->" );
+                    sqle.printStackTrace();
                     validBranch = false;
                 }
                 
                 if(validBranch) {
+                     Log.info("branch ----> " + branch);
                     entity = new  GLEntity();
                     entity.setBranchCode(branch);
                     entity.setBranchDesc(getBranchDescription(branch));
@@ -1245,6 +1281,7 @@ public class DataFactory {
                    
                  
                     list.add(entity);
+                    //connection.close();
                     
                 }                
                 
@@ -1639,6 +1676,36 @@ public class DataFactory {
        
      }
      
+     public static List<String> getGLFppList() throws Exception {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        ArrayList<String> list = new ArrayList<String>();
+     
+         try {
+
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_GL_FPP_LIST);
+
+            rs = ps.executeQuery();
+            String fppCde = null;
+            
+            while (rs.next()) {                
+                fppCde = rs.getString("fpp_cde");
+                list.add(fppCde);
+            }
+             return list;
+         }catch(SQLException sqle){
+             sqle.printStackTrace();
+            throw new Exception(sqle);
+             
+         } finally {
+            ConnectionManager.close(connection);
+        }
+       
+     }
      
      
      

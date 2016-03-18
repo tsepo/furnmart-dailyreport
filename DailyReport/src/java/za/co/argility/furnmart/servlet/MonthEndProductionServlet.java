@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,7 @@ import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthEndTableType;
 import za.co.argility.furnmart.entity.MonthendEntity;
+import za.co.argility.furnmart.entity.MonthendSearchEntity;
 import za.co.argility.furnmart.servlet.helper.MeProdRunData;
 import za.co.argility.furnmart.servlet.helper.MonthendData;
 import za.co.argility.furnmart.servlet.helper.MonthendOverviewData;
@@ -69,6 +71,12 @@ public class MonthEndProductionServlet  extends GenericServlet {
         }
         
         try {
+            
+        if(request.getParameter("fppCde") != null){
+            Log.info("Found fpp ---> " + request.getParameter("fppCde"));
+        }else{
+            Log.info("Yeneetha ----> fpp not found.");
+        }    
         
         boolean hasParameters = (request.getParameterMap() == null || 
                  !request.getParameterMap().isEmpty());
@@ -194,40 +202,31 @@ public class MonthEndProductionServlet  extends GenericServlet {
           
           
         
-         if (request.getParameter("tab") != null &&
-                request.getParameter("tab").equals("gl")) {
+         if ((request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("gl")) || request.getParameter("fppCde") != null) {
             
             Log.info("... inside GL Balancing ...");
-            
+         
+        String fppCde = null;
+        
+        if(request.getParameter("fppCde") != null){
+            Log.info("Found fpp ---> " + request.getParameter("fppCde"));
+            fppCde = request.getParameter("fppCde");
+        }else{
+            fppCde = DataFactory.getMeconsFppCode();
+            Log.info("Initial fpp --->.");
+        }     
            
-            processGLData(request, response);
+            
+             
+            Log.info("Rajen ---> ");
+            processGLData(request, response,fppCde);
+            Log.info("Mbale ---> ");
             response.sendRedirect(WebPages.GL_MAIN_PAGE);
             return;
         }
         
-        boolean allGlSelected = true; 
-       
-        if(request.getParameter("glSelect") != null){
-            if (request.getParameter("glSelect").equals("all") ||  request.getParameter("glSelect").equals("unbalanced")) {  
-
-                MonthendData data = (MonthendData)getSessionData(request, 
-                            SessionAttribute.MONTHEND_DATA_TAG);
-
-                    if (data == null) {
-                        data = new MonthendData();
-                    }
-                    
-                if(request.getParameter("glSelect").equals("unbalanced")){                   
-                    data.setIsAllGLSelected(false);
-                  
-                 }else{
-                    data.setIsAllGLSelected(true);
-                }
-                  response.sendRedirect(WebPages.GL_MAIN_PAGE);
-            }     
-            
-            
-        }
+        boolean allGlSelected = glSelection(request, response); 
        
          if (request.getParameter("branchNo") != null) {
             
@@ -258,6 +257,34 @@ public class MonthEndProductionServlet  extends GenericServlet {
         }
         
         }
+
+    private boolean glSelection(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        boolean allGlSelected = true;
+        if(request.getParameter("glSelect") != null){
+            if (request.getParameter("glSelect").equals("all") ||  request.getParameter("glSelect").equals("unbalanced")) {
+                
+                MonthendData data = (MonthendData)getSessionData(request,
+                        SessionAttribute.MONTHEND_DATA_TAG);
+                
+                if (data == null) {
+                    data = new MonthendData();
+                }
+                
+                if(request.getParameter("glSelect").equals("unbalanced")){
+                    Log.info("Yaneetha 1--->");
+                    data.setIsAllGLSelected(false);
+                    
+                }else{
+                    Log.info("Yaneetha 2--->");
+                    data.setIsAllGLSelected(true);
+                }
+                response.sendRedirect(WebPages.GL_MAIN_PAGE);
+            }
+            
+            
+        }
+        return allGlSelected;
+    }
      private void buildProcessRunsHistory(HttpServletRequest request, HttpServletResponse response) throws Exception {
          DataFactory test = new DataFactory();
          
@@ -491,27 +518,59 @@ public class MonthEndProductionServlet  extends GenericServlet {
      
      
      protected void processGLData(HttpServletRequest request, 
-            HttpServletResponse response) throws Exception {
-        if (request.getParameter("tab") != null &&
-                request.getParameter("tab").equals("gl")) {
+            HttpServletResponse response, String fppCde) throws Exception {
+         
+         Log.info("In processGLData ---> Yaneetha");   
+        if ((request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("gl") || fppCde != null)) {
             
+            
+            
+           // boolean allGlSelected = glSelection(request, response); 
+            
+         
         MonthendData data = (MonthendData)getSessionData(request, 
                             SessionAttribute.MONTHEND_DATA_TAG);
 
         if (data == null) {
-            data = new MonthendData();
+            data = new MonthendData();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
         }
         
+        //Coenraad
+        
+       // boolean allGlSelected = true;
+        if(request.getParameter("glSelect") != null){
+            if(request.getParameter("glSelect").equals("unbalanced")){
+                Log.info("Yaneetha 1--->");
+                data.setIsAllGLSelected(false);
+                    
+            }else{
+                Log.info("Yaneetha 2--->");
+                data.setIsAllGLSelected(true);
+            }
+        }
+        data.setSelectedFppCde(fppCde);
+        data.setMonthendBranchList(DataFactory.getMonthendBranchList());
+        data.setFppCdeList(DataFactory.getGLFppList());
+        
+    
+        
+        
        
-        List<GLEntity>  glData = DataFactory.getNewGLData();                 
+        
+        
+        Log.info("fppCde ---> " + fppCde);
+        
+        List<GLEntity>  glData = DataFactory.getNewGLData(fppCde);                 
         data.setGlDetails(glData);
-
+        
+        
 
          // save the data to the session
          saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);
 
          // this can be changed later - just for now
-        // response.sendRedirect(WebPages.MONTHEND_PROD_PAGE);
+       
 
         }           
                 

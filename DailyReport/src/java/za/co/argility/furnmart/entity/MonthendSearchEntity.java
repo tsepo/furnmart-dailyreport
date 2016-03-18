@@ -13,6 +13,7 @@ package za.co.argility.furnmart.entity;
 public class MonthendSearchEntity {
       private String branchCode;
     private String process;
+    private String fppCde;
     
     public MonthendSearchEntity() {
     }
@@ -31,6 +32,14 @@ public class MonthendSearchEntity {
 
     public void setProcess(String process) {
         this.process = process;
+    }
+    
+    public String getFppCde() {
+        return fppCde;
+    }
+
+    public void setFppCde(String fppCde) {
+        this.fppCde = fppCde;
     }
     
 }
