@@ -23,6 +23,8 @@ public class MonthendEntity {
     private boolean isPWCExtractsDelivered;
     private boolean isBucketsRun;
     private boolean isStatementsRun;
+    private boolean isClaimsExtractsRun;
+    private boolean isPolicyExtractsRun;
     
     private int branchWarehouse;
     
@@ -207,6 +209,34 @@ public class MonthendEntity {
      */
     public void setIsStatementsRun(boolean isStatementsRun) {
         this.isStatementsRun = isStatementsRun;
+    }
+
+    /**
+     * @return the isClaimsExtractsRun
+     */
+    public boolean isIsClaimsExtractsRun() {
+        return isClaimsExtractsRun;
+    }
+
+    /**
+     * @param isClaimsExtractsRun the isClaimsExtractsRun to set
+     */
+    public void setIsClaimsExtractsRun(boolean isClaimsExtractsRun) {
+        this.isClaimsExtractsRun = isClaimsExtractsRun;
+    }
+
+    /**
+     * @return the isPolicyExtractsRun
+     */
+    public boolean isIsPolicyExtractsRun() {
+        return isPolicyExtractsRun;
+    }
+
+    /**
+     * @param isPolicyExtractsRun the isPolicyExtractsRun to set
+     */
+    public void setIsPolicyExtractsRun(boolean isPolicyExtractsRun) {
+        this.isPolicyExtractsRun = isPolicyExtractsRun;
     }
     
     

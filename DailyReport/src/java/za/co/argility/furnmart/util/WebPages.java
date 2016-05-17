@@ -28,6 +28,7 @@ public class WebPages {
     public static final String OVERVIEW_PAGE = BASE_APP_URL + "/overview.jsp";
     public static final String MONTHEND_OVERVIEW_PAGE = BASE_APP_URL + "/monthend-overview.jsp";
     public static final String REPLICATION_PAGE = BASE_APP_URL + "/replication.jsp";
+    public static final String FLASH_FIGURES_PAGE = BASE_APP_URL + "/flash-figures.jsp";
     public static final String NETWORK_PAGE = BASE_APP_URL + "/network.jsp";
     public static final String DAILY_BI_EXTRACTS_PAGE = BASE_APP_URL + "/daily-bi-extracts.jsp";
     public static final String DAILY_ITC_EXTRACTS_PAGE = BASE_APP_URL + "/daily-itc-extracts.jsp";

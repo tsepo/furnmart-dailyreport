@@ -17,7 +17,9 @@ public enum MonthEndTableType {
     CashBookExtract,
     NewGLTranExt,
     Buckets,
-    Statements
+    Statements,
+    PolicyExtract,
+    ClaimsExtract
   
     
 }

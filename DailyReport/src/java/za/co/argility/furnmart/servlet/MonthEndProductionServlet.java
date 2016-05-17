@@ -352,6 +352,8 @@ public class MonthEndProductionServlet  extends GenericServlet {
          DataFactory.getMonthendDetails(MonthEndTableType.CentralAccount, map,false);
          DataFactory.getMonthendDetails(MonthEndTableType.Creditors,map,false);
          DataFactory.getMonthendDetails(MonthEndTableType.Buckets,map,false);
+         DataFactory.getMonthendDetails(MonthEndTableType.PolicyExtract,map,false);
+         DataFactory.getMonthendDetails(MonthEndTableType.ClaimsExtract,map,false);
          
          
 

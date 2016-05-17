@@ -314,6 +314,12 @@ public class DataFactory {
                 case Statements:
                     tableName = "statement_mth_extract";
                     break;    
+                case PolicyExtract:
+                    tableName = "insurance_policy_extract";
+                    break; 
+                 case ClaimsExtract:
+                    tableName = "insurance_claims_extract";
+                    break;    
 
             }
 
@@ -397,7 +403,15 @@ public class DataFactory {
                     case Statements:
                         item.setIsStatementsRun(flag);
                         System.out.println("Hey dude 5 : " + count);
-                        break;        
+                        break;      
+                    case PolicyExtract:
+                        item.setIsPolicyExtractsRun(flag);
+                        System.out.println("Hey dude 6 : " + count);
+                        break;
+                    case ClaimsExtract:
+                        item.setIsClaimsExtractsRun(flag);
+                        System.out.println("Hey dude 7 : " + count);
+                        break;     
 
                 }
 
@@ -1345,6 +1359,7 @@ public class DataFactory {
                     sqle.printStackTrace();
                     validBranch = false;
                 }
+                connection.close();
                 
                 if(validBranch) {
                      Log.info("branch ----> " + branch);
@@ -1378,10 +1393,12 @@ public class DataFactory {
                                                
                         while(rs.next()){
                             latestGLStockAmt = rs.getDouble("stock_value");
+                            //connection.close();
                         }
                         
                         if(latestGLStockAmt != entity.getGlStock()){
                             entity.setGlAdjustedStock(latestGLStockAmt);
+                            //connection.close();
                         }
                         
                         ps = connection.prepareStatement(SQLFactory.GET_GL_DEBTORS_DATA);
@@ -1397,6 +1414,7 @@ public class DataFactory {
                          if(latestGLDebtorsAmt != entity.getGlDebtors()){
                             entity.setGlAdjustedDebtors(latestGLDebtorsAmt);
                         }
+                        //connection.close(); 
                         
                     }
                    
@@ -1405,7 +1423,7 @@ public class DataFactory {
                     //connection.close();
                     
                 }                
-                
+                 connection.close();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1415,7 +1433,7 @@ public class DataFactory {
             }
         }
 
-        System.out.println("list.size() ---> " + list.size());
+        System.out.println("Yaneetha list.size() ---> " + list.size());
 
         return list;
     }
