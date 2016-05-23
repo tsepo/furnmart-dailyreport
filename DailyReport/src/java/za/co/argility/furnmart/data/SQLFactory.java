@@ -50,6 +50,31 @@ public interface SQLFactory {
                                                         "\n" +
                                                         "order by br_cde";
     
+    public static final String GET_FLASH_FIGURES_DETAILS = "select br_cde, \n" +
+                                                        "br_desc, \n" +
+                                                        "check_audit_up_to as audit, \n" +
+                                                        "check_replicate_up_to as replicate, \n" +
+                                                        "(check_audit_up_to - check_replicate_up_to) as diff, \n" +
+                                                        "is_locked, \n" +
+                                                        "br_lock_date, \n" +
+                                                        "br_unlock_date, \n" +
+                                                        "process, \n" +
+                                                        "flash_up_to, \n" +
+                                                         "last_flash_aud_id, \n " +
+                                                         "last_flash_aud_ts, \n" +
+                                                         "error \n" +
+                                                        "\n" +
+                                                        "from checkpoint \n" +
+                                                        "join branch_is_replicate_locked using (br_cde) \n" +
+                                                        "join branch using (br_cde)  \n" +
+                                                        "join flash_figures_status using (br_cde)  \n" +
+                                                        "where br_active = true \n" +
+                                                        "and br_is_merch = false \n" +
+                                                        "and br_is_central = false \n" +
+                                                        "and br_central_brn = (select br_cde from br_prof) \n" +
+                                                        "\n" +
+                                                        "order by br_cde";
+    
     public static final String GET_MONTHEND_DETAILS =      "select branch, {1},  br_desc from ( \n" +
                                                                 "SELECT branch.br_cde branch, COUNT(*) as {0}, br_desc \n" + 
                                                                 "FROM {1} \n" +
@@ -118,6 +143,33 @@ public interface SQLFactory {
                                                         "and br_cde ilike '%{0}%' \n" +
                                                         "and process ilike '%{1}%' \n" +
                                                         "order by br_cde";
+     public static final String SEARCH_FLASH_FIGURES_DATA = "select br_cde, \n" +
+                                                        "br_desc, \n" +
+                                                        "check_audit_up_to as audit, \n" +
+                                                        "check_replicate_up_to as replicate, \n" +
+                                                        "(check_audit_up_to - check_replicate_up_to) as diff, \n" +
+                                                        "is_locked, \n" +
+                                                        "br_lock_date, \n" +
+                                                        "br_unlock_date, \n" +
+                                                        "process, \n" +
+                                                        "flash_up_to, \n" +
+                                                        "last_flash_aud_id, \n " +
+                                                        "last_flash_aud_ts, \n" +
+                                                        "error \n" +
+                                                        "\n" +
+                                                        "from checkpoint \n" +
+                                                        "join branch_is_replicate_locked using (br_cde) \n" +
+                                                        "join branch using (br_cde)  \n" +
+                                                        "join flash_figures_status using (br_cde)  \n" + 
+                                                        "where br_active = true \n" +
+                                                        "and br_is_merch = false \n" +
+                                                        "and br_is_central = false \n" +
+                                                        "and br_central_brn = (select br_cde from br_prof) \n" +
+                                                        "and br_cde ilike '%{0}%' \n" +
+                                                        "and process ilike '%{1}%' \n" +
+                                                        "order by br_cde";
+    
+    
     
     public static final String GET_PROCESS_LIST = "SELECT distinct(process) FROM branch_is_replicate_locked";
     

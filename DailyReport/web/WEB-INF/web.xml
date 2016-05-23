@@ -57,6 +57,10 @@
         <servlet-class>za.co.argility.furnmart.servlet.DailyITCExtractsServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>FlashFiguresServlet</servlet-name>
+        <servlet-class>za.co.argility.furnmart.servlet.FlashFiguresServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ViewITCBranchesServlet</servlet-name>
         <servlet-class>za.co.argility.furnmart.servlet.ViewITCBranchesServlet</servlet-class>
     </servlet>
@@ -117,9 +121,13 @@
         <url-pattern>/dailyITCExtracts</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>FlashFiguresServlet</servlet-name>
+        <url-pattern>/flashFigures</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ViewITCBranchesServlet</servlet-name>
         <url-pattern>/viewITCBranches</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>   
     <session-config>
         <session-timeout>
             30

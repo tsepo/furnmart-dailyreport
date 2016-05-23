@@ -48,6 +48,10 @@ TABLE.replicationDetails TD {
     background-color: #FFEF99;
 }
 
+.branchError {
+    background-color: #FC7C83;
+}
+
 .comments {
     font-size: 14px;
     margin: 0px;

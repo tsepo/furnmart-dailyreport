@@ -28,6 +28,7 @@ import org.joda.time.Hours;
 import za.co.argility.furnmart.entity.ExtractError;
 import za.co.argility.furnmart.entity.ExtractHistory;
 import za.co.argility.furnmart.entity.ExtractType;
+import za.co.argility.furnmart.entity.FlashFiguresEntity;
 import za.co.argility.furnmart.entity.GLDetailEntity;
 import za.co.argility.furnmart.entity.GLEntity;
 import za.co.argility.furnmart.entity.GLMapActTyp;
@@ -142,8 +143,9 @@ public class DataFactory {
             ConnectionManager.close(connection);
         }
     }
-
-    public static List<ReplicationEntity> getReplicationDetails() throws Exception {
+    
+    
+        public static List<ReplicationEntity> getReplicationDetails() throws Exception {
 
         Connection connection = null;
         PreparedStatement ps = null;
@@ -213,6 +215,119 @@ public class DataFactory {
 
                     if (hours >= 3) {
                         comments.add("Replication is passive on central for over " + hours + " hours.");
+                    }
+
+                }
+                
+                
+                item.setComments(comments);
+
+                if (comments.isEmpty()) {
+                    item.setIsBranchOk(true);
+                } else {
+                    item.setIsBranchOk(false);
+                }
+
+                // set the item's current fpp code
+                item.setPeriod(getCurrentFppCode(item.getBranchCode()));
+
+                list.add(item);
+
+            }
+
+            return list;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+
+    }
+    
+    
+    
+
+    public static List<FlashFiguresEntity> getFlashFiguresDetails() throws Exception {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        ArrayList<FlashFiguresEntity> list = new ArrayList<FlashFiguresEntity>();
+
+        try {
+
+            connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
+            ps = connection.prepareStatement(SQLFactory.GET_FLASH_FIGURES_DETAILS);
+
+            rs = ps.executeQuery();
+            FlashFiguresEntity item = null;
+
+            while (rs.next()) {
+
+                item = new FlashFiguresEntity();
+                item.setBranchCode(rs.getString("br_cde"));
+                item.setBranchName(rs.getString("br_desc"));
+                item.setAudit(rs.getInt("audit"));
+                item.setReplicate(rs.getInt("replicate"));
+                item.setDifference(rs.getInt("diff"));
+                item.setIsLocked(rs.getBoolean("is_locked"));
+                item.setLockedDate(rs.getTimestamp("br_lock_date"));
+                item.setUnlockedDate(rs.getTimestamp("br_unlock_date"));
+                item.setProcess(rs.getString("process"));
+                item.setFlashAudUpTo(rs.getInt("flash_up_to"));
+                item.setFlashLastAudSent(rs.getInt("last_flash_aud_id"));
+                item.setFlashAudDate(rs.getTimestamp("last_flash_aud_ts"));
+                int difference = item.getFlashAudUpTo() - item.getFlashLastAudSent();
+                item.setDifference(difference);
+                item.setError(rs.getBoolean("error"));
+                List<String> comments = new ArrayList<String>();
+
+                if (item.isLocked()) {
+                    comments.add("Branch is locked on replication.");
+                }
+                if (item.getLockedDate() == null) {
+                    comments.add("Branch never replicated to central.");
+                }
+                if (item.getProcess().contains("CRASHED")) {
+                    comments.add("Replication crashed on central.");
+                }
+
+                if (item.getLockedDate() != null) {
+
+                    java.util.Date now = new java.util.Date();
+
+                    int numberOfDays = Days.daysBetween(new DateTime(item.getLockedDate()),
+                            new DateTime(now)).getDays();
+                    if (numberOfDays >= 1) {
+                        comments.add("Branch has not replicated for over a day.");
+                    }
+
+                    int numberOfHours = Hours.hoursBetween(new DateTime(item.getLockedDate()),
+                            new DateTime(now)).getHours();
+
+                    if (numberOfHours > 1
+                            && (item.getProcess() != null && item.getProcess().contains("STARTED"))) {
+                        comments.add("Branch has been locked for too long, about " + numberOfHours + " hours ago.");
+                    }
+
+                }
+
+                //Yaneetha 
+                if (item.getUnlockedDate() != null) {
+
+                    java.util.Date now = new java.util.Date();
+
+                    /*
+                    int hours = Hours.hoursBetween(new DateTime(item.getUnlockedDate()),
+                            new DateTime(now)).getHours();*/
+                    int hours = Hours.hoursBetween(new DateTime(item.getFlashAudDate()),
+                            new DateTime(now)).getHours();
+
+                    if (hours >= 3) {
+                        comments.add("Flash figure is passive on central for over " + hours + " hours.");
                     }
 
                 }
@@ -657,6 +772,126 @@ public class DataFactory {
             ConnectionManager.close(connection);
         }
     }
+    
+    
+    public static List<FlashFiguresEntity> searchFlashFiguresDataByFilter(String branch, String process) throws Exception {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        ArrayList<FlashFiguresEntity> list = new ArrayList<FlashFiguresEntity>();
+
+        try {
+
+            connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
+            String query = SQLFactory.SEARCH_FLASH_FIGURES_DATA;
+
+            if (branch == null && process == null) {
+                query = query.replace("{0}", "").replace("{1}", "");
+            } else if (branch == null && process != null) {
+                query = query.replace("{0}", "").replace("{1}", process);
+            } else if (branch != null && process == null) {
+                query = query.replace("{0}", branch).replace("{1}", "");
+            } else if (branch != null && process != null) {
+                query = query.replace("{0}", branch).replace("{1}", process);
+            }
+
+            ps = connection.prepareStatement(query);
+            rs = ps.executeQuery();
+            FlashFiguresEntity item = null;
+
+            System.out.println(query);
+
+            while (rs.next()) {
+
+                item = new FlashFiguresEntity();
+                item.setBranchCode(rs.getString("br_cde"));
+                item.setBranchName(rs.getString("br_desc"));
+                item.setAudit(rs.getInt("audit"));
+                item.setReplicate(rs.getInt("replicate"));
+                item.setDifference(rs.getInt("diff"));
+                item.setIsLocked(rs.getBoolean("is_locked"));
+                item.setLockedDate(rs.getTimestamp("br_lock_date"));
+                item.setUnlockedDate(rs.getTimestamp("br_unlock_date"));
+                item.setFlashAudUpTo(rs.getInt("flash_up_to"));
+                item.setFlashLastAudSent(rs.getInt("last_flash_aud_id"));
+                item.setFlashAudDate(rs.getTimestamp("last_flash_aud_ts"));
+                int difference = item.getFlashAudUpTo() - item.getFlashLastAudSent();
+                item.setDifference(difference);
+                item.setError(rs.getBoolean("error"));
+                item.setProcess(rs.getString("process"));
+
+                List<String> comments = new ArrayList<String>();
+
+                if (item.isLocked()) {
+                    comments.add("Branch is locked on replication.");
+                }
+                if (item.getLockedDate() == null) {
+                    comments.add("Branch never replicated to central.");
+                }
+                if (item.getProcess().contains("CRASHED")) {
+                    comments.add("Replication crashed on central.");
+                }
+
+                if (item.getLockedDate() != null) {
+
+                    java.util.Date now = new java.util.Date();
+
+                    int numberOfDays = Days.daysBetween(new DateTime(item.getLockedDate()),
+                            new DateTime(now)).getDays();
+                    if (numberOfDays >= 1) {
+                        comments.add("Branch has not replicated for over a day.");
+                    }
+
+                    int numberOfHours = Hours.hoursBetween(new DateTime(item.getLockedDate()),
+                            new DateTime(now)).getHours();
+
+                    if (numberOfHours > 1
+                            && (item.getProcess() != null && item.getProcess().contains("STARTED"))) {
+                        comments.add("Branch has been locked for too long, about " + numberOfHours + " hours ago.");
+                    }
+
+                }
+
+                if (item.getUnlockedDate() != null) {
+
+                    java.util.Date now = new java.util.Date();
+
+                    int hours = Hours.hoursBetween(new DateTime(item.getFlashAudDate()),
+                            new DateTime(now)).getHours();
+
+                    if (hours >= 3) {
+                        comments.add("Flash figure is passive on central for over " + hours + " hours");
+                    }
+
+                }
+
+                item.setComments(comments);
+
+                if (comments.isEmpty()) {
+                    item.setIsBranchOk(true);
+                } else {
+                    item.setIsBranchOk(false);
+                }
+
+                // set the item's current fpp code
+                item.setPeriod(getCurrentFppCode(item.getBranchCode()));
+
+                list.add(item);
+
+            }
+
+            return list;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+    }
+    
 
     public static List<NetworkEntity> getNetworkStatistics(boolean withNetwork) throws Exception {
 

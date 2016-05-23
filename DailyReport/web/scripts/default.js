@@ -75,9 +75,14 @@ function processMenuItem(option) {
         window.location.replace(BASE_URL + "/dailyITCExtracts");
     }
     
+    else if (option == "flashfigures") {
+        toggleLoadingTopBar(true);
+        window.location.replace(BASE_URL + "/flashFigures");
+    }
+    
     else {
         
-        alert("Sorry, that page is still under development.\n" + 
+        alert("Sorery, that page is still under development.\n" + 
                 "Please try later.");
         
     }

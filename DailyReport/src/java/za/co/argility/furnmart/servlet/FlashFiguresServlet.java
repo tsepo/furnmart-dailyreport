@@ -19,8 +19,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import za.co.argility.furnmart.data.DataFactory;
+import za.co.argility.furnmart.entity.FlashFiguresEntity;
+import za.co.argility.furnmart.entity.FlashFiguresSearchEntity;
 import za.co.argility.furnmart.entity.ReplicationEntity;
 import za.co.argility.furnmart.entity.ReplicationSearchEntity;
+import za.co.argility.furnmart.servlet.helper.FlashFiguresData;
 import za.co.argility.furnmart.servlet.helper.ReplicationData;
 import za.co.argility.furnmart.util.GeneralUtils;
 import za.co.argility.furnmart.util.WebPages;
@@ -41,16 +44,16 @@ public class FlashFiguresServlet extends GenericServlet {
             return;
         }
         
-        ReplicationData data = (ReplicationData)getSessionData(request, 
+        FlashFiguresData data = (FlashFiguresData)getSessionData(request, 
                 SessionAttribute.FLASH_FIGURES_DATA_TAG);
         
         try {
             if (data == null) {
 
-                data = new ReplicationData();
+                data = new FlashFiguresData();
 
                 // get the details for replication
-                data.setReplicationDetails(DataFactory.getReplicationDetails());
+                data.setReplicationDetails(DataFactory.getFlashFiguresDetails());
 
                 // get the replication branch list
                 data.setReplicationBranchList(DataFactory.getReplicationBranchList()); 
@@ -73,14 +76,14 @@ public class FlashFiguresServlet extends GenericServlet {
                 if (request.getParameter("type") != null && 
                     request.getParameter("type").equals("filter")) {
                 
-                    processExportReplicationSummary(data, ReplicationData.EXPORT_TYPE_FILTER, response);
+                    processExportReplicationSummary(data, FlashFiguresData.EXPORT_TYPE_FILTER, response);
                     return;
                 }
                 
                 if (request.getParameter("type") != null && 
                     request.getParameter("type").equals("unhealthy")) {
                     
-                    processExportReplicationSummary(data, ReplicationData.EXPORT_TYPE_UNHEALTHY_BRANCHES, response);
+                    processExportReplicationSummary(data, FlashFiguresData.EXPORT_TYPE_UNHEALTHY_BRANCHES, response);
                     return;
                     
                 }
@@ -108,9 +111,10 @@ public class FlashFiguresServlet extends GenericServlet {
         if (response.isCommitted()) {
             return;
         }
+        System.out.println("Yani page ");
         
-         ReplicationData data = (ReplicationData)getSessionData(request, 
-                SessionAttribute.REPLICATION_DATA_TAG);
+         FlashFiguresData data = (FlashFiguresData)getSessionData(request, 
+                SessionAttribute.FLASH_FIGURES_DATA_TAG);
         
         try {
             // check for the search data
@@ -120,9 +124,9 @@ public class FlashFiguresServlet extends GenericServlet {
             
             
             // save the data to the session
-            saveSession(request, data, SessionAttribute.REPLICATION_DATA_TAG);
+            saveSession(request, data, SessionAttribute.FLASH_FIGURES_DATA_TAG);
             
-            response.sendRedirect(WebPages.REPLICATION_PAGE); 
+            response.sendRedirect(WebPages.FLASH_FIGURES_PAGE); 
         }
         
         catch (Exception e) {
@@ -133,22 +137,23 @@ public class FlashFiguresServlet extends GenericServlet {
     }
 
     
-    private void processSearchFilterRequest(ReplicationData data, 
+    private void processSearchFilterRequest(FlashFiguresData data, 
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         
         if (data == null) {
             return;
         }
         
-        ReplicationSearchEntity search = null;
+        FlashFiguresSearchEntity search = null;
         
         if (data.getSearch() == null) {
-            search = new ReplicationSearchEntity();
+            search = new FlashFiguresSearchEntity();
         }
         else {
             search = data.getSearch();
         }
         
+         System.out.println("yani is  chatting ");
         //set the branch code
         String branchCode = request.getParameter("searchByBranchCode");
         search.setBranchCode(branchCode);
@@ -156,6 +161,8 @@ public class FlashFiguresServlet extends GenericServlet {
         // set branch code to null if ALL
         if (branchCode != null && search.getBranchCode().equals("ALL"))
             search.setBranchCode(null); 
+        
+        System.out.println("branch yani ---> "  + branchCode);
         
         // set the process type
         String processType = request.getParameter("processType");
@@ -165,7 +172,7 @@ public class FlashFiguresServlet extends GenericServlet {
             search.setProcess(null);
         
         // search the data
-        data.setReplicationDetails(DataFactory.searchReplicationDataByFilter
+        data.setReplicationDetails(DataFactory.searchFlashFiguresDataByFilter
                     (search.getBranchCode(), search.getProcess()));
         
         data.setSearch(search);
@@ -174,7 +181,7 @@ public class FlashFiguresServlet extends GenericServlet {
     }
 
    
-    private void processExportReplicationSummary(ReplicationData data, int exportType, 
+    private void processExportReplicationSummary(FlashFiguresData data, int exportType, 
             HttpServletResponse response) throws Exception {
         
         if (data == null)
@@ -184,21 +191,21 @@ public class FlashFiguresServlet extends GenericServlet {
         final String LINE_FEED = "\r\n";
         final String DATE_FORMAT = "yyyy MMMM dd HH:mm:ss";
         
-        List<ReplicationEntity> details = null;
+        List<FlashFiguresEntity> details = null;
         
         // read up all the replication details
-        if (exportType == ReplicationData.EXPORT_TYPE_FILTER) {
+        if (exportType == FlashFiguresData.EXPORT_TYPE_FILTER) {
             details = data.getReplicationDetails();
             if (details == null)
-                details = DataFactory.getReplicationDetails();
+                details = DataFactory.getFlashFiguresDetails();
         }
         
         else if (exportType == ReplicationData.EXPORT_TYPE_UNHEALTHY_BRANCHES) {
             
-            List<ReplicationEntity> temp = DataFactory.getReplicationDetails();
-            details = new ArrayList<ReplicationEntity>();
+            List<FlashFiguresEntity> temp = DataFactory.getFlashFiguresDetails();
+            details = new ArrayList<FlashFiguresEntity>();
             
-            for (ReplicationEntity item : temp){
+            for (FlashFiguresEntity item : temp){
                 if (!item.isBranchOk()) {
                     details.add(item);
                 }
@@ -227,7 +234,7 @@ public class FlashFiguresServlet extends GenericServlet {
         
         if (details != null && !details.isEmpty()) {
             
-            for (ReplicationEntity item : details) {
+            for (FlashFiguresEntity item : details) {
                 
                 builder.append(item.getBranchCode()).append(DELIMITER);
                 builder.append(item.getAudit()).append(DELIMITER);

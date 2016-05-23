@@ -87,7 +87,8 @@
                             <td>New GL Tran</td>
                             <td>Buckets</td>
                             <td>PWC Extracts</td>
-                       
+                            <td>Policy Extracts</td>
+                            <td>Claims Extracts</td>
                         </tr>
                        
                  
@@ -126,6 +127,13 @@
                                 String pwcFlag = "images/ok.png";
                                 if (entity.isIsPWCExtractsDelivered()== false)
                                     pwcFlag = "images/error.png";     
+                                
+                                String policyExtractsFlag = "images/ok.png";
+                                if (entity.isIsPolicyExtractsRun()== false)
+                                     policyExtractsFlag = "images/error.png";
+                                String claimsExtractsFlag = "images/ok.png";
+                                if (entity.isIsClaimsExtractsRun()== false)
+                                     claimsExtractsFlag = "images/error.png";     
                                        %>                          
                             
                             
@@ -136,8 +144,10 @@
                                 <td style="text-align: center"><img src="<%= creditorsFlag %>" style="width:36px" title="Creditors" /></td>
                                 <td style="text-align: center"><img src="<%= cashBookFlag %>" style="width:36px" title="Cash Book"/></td>
                                 <td style="text-align: center"><img src="<%= newGLTranFlag %>" style="width:36px" title="GL" /></td> 
-                                 <td style="text-align: center"><img src="<%= newBucketsFlag %>" style="width:36px" title="Buckets" /></td> 
+                                <td style="text-align: center"><img src="<%= newBucketsFlag %>" style="width:36px" title="Buckets" /></td> 
                                 <td style="text-align: center"><img src="<%= pwcFlag %>" style="width:36px" title="GL" /></td> 
+                                <td style="text-align: center"><img src="<%= policyExtractsFlag %>" style="width:36px" title="Policy Extracts" /></td> 
+                                <td style="text-align: center"><img src="<%= claimsExtractsFlag %>" style="width:36px" title="Claims Extracts" /></td> 
                             </tr>
                             
                                     

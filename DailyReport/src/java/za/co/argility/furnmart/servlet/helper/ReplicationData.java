@@ -16,10 +16,13 @@ import za.co.argility.furnmart.entity.ReplicationSearchEntity;
  */
 public class ReplicationData  {
     
-    public static final String BRANCK_OK_IMAGE_URL = 
+   public static final String BRANCK_OK_IMAGE_URL = 
             "http://i879.photobucket.com/albums/ab359/tmaleka/ARGILITY/correct_2_zpsf7b3590b.png";
-    public static final String BRANCH_WARNING_IMAGE_URL = 
+   public static final String BRANCH_WARNING_IMAGE_URL = 
             "http://i879.photobucket.com/albums/ab359/tmaleka/ARGILITY/warning_2_zps4954eb85.png";
+   public static final String BRANCH_ERROR_IMAGE_URL =  
+            "\"images/error.png\"";
+    
     
     public static final int EXPORT_TYPE_FILTER = 0;
     public static final int EXPORT_TYPE_UNHEALTHY_BRANCHES = 1;

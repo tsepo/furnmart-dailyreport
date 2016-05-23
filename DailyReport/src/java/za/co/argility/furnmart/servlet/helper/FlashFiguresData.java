@@ -7,8 +7,8 @@
 package za.co.argility.furnmart.servlet.helper;
 
 import java.util.List;
-import za.co.argility.furnmart.entity.ReplicationEntity;
-import za.co.argility.furnmart.entity.ReplicationSearchEntity;
+import za.co.argility.furnmart.entity.FlashFiguresEntity;
+import za.co.argility.furnmart.entity.FlashFiguresSearchEntity;
 
 /**
  *
@@ -24,19 +24,19 @@ public class FlashFiguresData  {
     public static final int EXPORT_TYPE_FILTER = 0;
     public static final int EXPORT_TYPE_UNHEALTHY_BRANCHES = 1;
     
-    private List<ReplicationEntity> replicationDetails;
+    private List<FlashFiguresEntity> replicationDetails;
     private List<String> replicationBranchList;
-    private ReplicationSearchEntity search;
+    private FlashFiguresSearchEntity search;
     private List<String> processes;
     
     public FlashFiguresData() {
     }
 
-    public List<ReplicationEntity> getReplicationDetails() {
+            public List<FlashFiguresEntity> getReplicationDetails() {
         return replicationDetails;
     }
 
-    public void setReplicationDetails(List<ReplicationEntity> replicationDetails) {
+    public void setReplicationDetails(List<FlashFiguresEntity> replicationDetails) {
         this.replicationDetails = replicationDetails;
     }
 
@@ -48,11 +48,11 @@ public class FlashFiguresData  {
         this.replicationBranchList = replicationBranchList;
     }
 
-    public ReplicationSearchEntity getSearch() {
+    public FlashFiguresSearchEntity getSearch() {
         return search;
     }
 
-    public void setSearch(ReplicationSearchEntity search) {
+    public void setSearch(FlashFiguresSearchEntity search) {
         this.search = search;
     }
 
