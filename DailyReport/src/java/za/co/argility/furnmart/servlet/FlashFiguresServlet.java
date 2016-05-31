@@ -215,19 +215,18 @@ public class FlashFiguresServlet extends GenericServlet {
                 
         }
             
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder2 = new StringBuilder();
         
         // prepare the headings of the CSV file
        
-        builder.append("Branch").append(DELIMITER)
-               .append("Audit Up to").append(DELIMITER)
-               .append("Replicate Up to").append(DELIMITER)
+        builder2.append("Branch").append(DELIMITER)
+               .append("Period").append(DELIMITER)
+               .append("Replicate Up To").append(DELIMITER)
+               .append("Flash Up To").append(DELIMITER)
                .append("Difference").append(DELIMITER)
                .append("Locked").append(DELIMITER)
-               .append("Locked Date").append(DELIMITER)
-               .append("Unlocked Date").append(DELIMITER)
-               .append("Process").append(DELIMITER)
-               .append("Comments").append(LINE_FEED);
+               .append("Last Flash").append(DELIMITER)
+               .append("Comment").append(LINE_FEED);
         
         
         // append each detail to the CSV content
@@ -236,15 +235,14 @@ public class FlashFiguresServlet extends GenericServlet {
             
             for (FlashFiguresEntity item : details) {
                 
-                builder.append(item.getBranchCode()).append(DELIMITER);
-                builder.append(item.getAudit()).append(DELIMITER);
-                builder.append(item.getReplicate()).append(DELIMITER);
-                builder.append(item.getDifference()).append(DELIMITER);
-                builder.append(GeneralUtils.parseBooleanForUI(item.isLocked())).append(DELIMITER);
-                builder.append(GeneralUtils.formatDate(item.getLockedDate(), DATE_FORMAT)).append(DELIMITER);
-                builder.append(GeneralUtils.formatDate(item.getUnlockedDate(), DATE_FORMAT)).append(DELIMITER);
-                builder.append(item.getProcess()).append(DELIMITER);
-                
+                builder2.append(item.getBranchCode()).append(DELIMITER);
+                builder2.append(item.getPeriod()).append(DELIMITER);
+                builder2.append(item.getReplicate()).append(DELIMITER);
+                builder2.append(item.getFlashAudUpTo()).append(DELIMITER);
+                builder2.append(item.getDifference()).append(DELIMITER);
+                builder2.append(GeneralUtils.parseBooleanForUI(item.isLocked())).append(DELIMITER);
+                builder2.append(GeneralUtils.formatDate(item.getFlashAudDate(), DATE_FORMAT)).append(DELIMITER);
+                        
                 if (item.getComments() != null && !item.getComments().isEmpty()) {
                     StringBuilder comments = new StringBuilder();
       
@@ -252,10 +250,10 @@ public class FlashFiguresServlet extends GenericServlet {
                         comments.append(comment).append(" ");
                     }
                     
-                    builder.append(comments.toString()).append(LINE_FEED);
+                    builder2.append(comments.toString()).append(LINE_FEED);
                 }
                 else
-                    builder.append("").append(LINE_FEED);
+                    builder2.append("").append(LINE_FEED);
             }
             
             // write the CSV content to the file to be downloaded
@@ -275,7 +273,7 @@ public class FlashFiguresServlet extends GenericServlet {
             
             BufferedWriter writer = new BufferedWriter(
                     new FileWriter(downloadFile, true));
-            writer.write(builder.toString());
+            writer.write(builder2.toString());
             writer.flush();
             writer.close();
             

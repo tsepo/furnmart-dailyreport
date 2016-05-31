@@ -134,9 +134,9 @@
                 <p><%= resultsDisplay %></p>
                 
                 <p>
-                    <strong>Export to CSV options: </strong> <a href="<%= WebPages.BASE_APP_URL + "/replication?export=csv&type=filter" %>" target="_blank" 
+                    <strong>Export to CSV options: </strong> <a href="<%= WebPages.BASE_APP_URL + "/flashFigures?export=csv&type=filter" %>" target="_blank" 
                        title="Export replication summary as per filter to CSV file">current results</a> | 
-                    <a href="<%= WebPages.BASE_APP_URL + "/replication?export=csv&type=unhealthy" %>" target="_blank" 
+                    <a href="<%= WebPages.BASE_APP_URL + "/flashFigures?export=csv&type=unhealthy" %>" target="_blank" 
                        title="Export yellow stores on replication to a CSV file">unhealthy stores</a>
                 </p>
                 
