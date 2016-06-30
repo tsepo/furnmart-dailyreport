@@ -340,7 +340,11 @@ public interface SQLFactory {
                                                           "group by act_typ \n" + 
                                                           "order by act_typ ";  
     
-    public static final String GET_GL_SUMMARY_DETS = "SELECT br_cde, fpp_cde, gl_debtors, gl_instore_debtors, gl_stock, gl_instore_stock \n" +
+          
+    
+    public static final String GET_GL_SUMMARY_DETS = "SELECT br_cde, fpp_cde, gl_debtors, gl_instore_debtors, gl_stock, gl_instore_stock, \n" +
+                                                     "phys_stock_cf, phys_stock_bf,debtors_cf, debtors_bf, fin_stock_cf,  \n" +
+                                                     "fin_stock_bf,instore_debtors_cf,instore_fin_stock_cf, instore_phys_stock_cf, gl_instore_stock_physical \n" +  
                                                      "FROM new_gl_balancing \n" +
                                                      "WHERE fpp_cde = ? \n" +    
                                                      "AND br_cde = ? ;" ;

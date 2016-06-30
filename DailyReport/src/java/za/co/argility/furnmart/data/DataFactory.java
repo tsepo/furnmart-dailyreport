@@ -6,12 +6,15 @@
 package za.co.argility.furnmart.data;
 
 import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -1573,7 +1576,7 @@ public class DataFactory {
 
         List<GLEntity> list = new ArrayList<GLEntity>();
         //String fppCde = getMeconFpp();
-        List<String> meBranchList = getMonthendBranchList();
+       List<String> meBranchList = getMonthendBranchList();
         //List<String> meBranchList = new ArrayList<String>();
         //meBranchList.add("0002");
         //meBranchList.add("0003");
@@ -1597,27 +1600,58 @@ public class DataFactory {
                 connection.close();
                 
                 if(validBranch) {
-                     Log.info("branch ----> " + branch);
+                    Log.info("branch ----> " + branch);
                     entity = new  GLEntity();
                     entity.setBranchCode(branch);
                     entity.setBranchDesc(getBranchDescription(branch));
                     connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
                     ps = connection.prepareStatement(SQLFactory.GET_GL_SUMMARY_DETS);
                     ps.setString(1,fppCde);
-                    ps.setString(2, branch);                                    
+                    ps.setString(2, branch); 
+                    System.out.println("Yens Query ---> " + SQLFactory.GET_GL_SUMMARY_DETS);
                     rs = ps.executeQuery();
                     entity.setGlDebtors(0.0);
                     entity.setInstoreDebtors(0.0);
                     entity.setGlStock(0.0);
                     entity.setInstoreStock(0.0);
+                    entity.setDebtorsBF(0);
+                    entity.setDebtorsCF(0);
+                    entity.setFinStockBF(0.0);
+                    entity.setFinStockCF(0.0); 
+                    entity.setInstoreDebtorsCF(0.0);
+                    entity.setInstorePhysStockCF(0.0);
+                    entity.setInstoreStockPhysical(0.0);
+                    entity.setPhysStockBF(0.00);
+                    entity.setPhysStockCF(0.0);
+                    entity.setInstorePhysStockCF(0.0);
+                    
+                            
                     
                     while (rs.next()) {                        
                         entity.setGlDebtors(rs.getDouble("gl_debtors"));
                         entity.setInstoreDebtors(rs.getDouble("gl_instore_debtors"));
+                        System.out.println("GL Stock Result Set ---> " + rs.getDouble("gl_stock"));
                         entity.setGlStock(rs.getDouble("gl_stock"));
-                        entity.setInstoreStock(rs.getDouble("gl_instore_stock"));
+                        entity.setInstoreStock(rs.getDouble("gl_instore_stock")); 
+                        System.out.println("Debtors BF Result Set ---> " + rs.getDouble("debtors_bf"));
+                        System.out.println("Debtors CF Result Set---> " +  rs.getDouble("debtors_cf"));
+                        entity.setDebtorsCF(rs.getDouble("debtors_cf"));
+                        entity.setDebtorsBF(rs.getDouble("debtors_bf"));
+                        entity.setFinStockCF(rs.getDouble("fin_stock_cf"));
+                        entity.setFinStockBF(rs.getDouble("fin_stock_bf"));
+                        entity.setPhysStockCF(rs.getDouble("phys_stock_cf"));
+                        System.out.println("Physical Stock BF ---> " +  rs.getDouble("phys_stock_bf"));
+                        entity.setPhysStockBF(rs.getDouble("phys_stock_bf"));
+                        entity.setInstoreDebtorsCF(rs.getDouble("instore_debtors_cf"));
+                        entity.setInstoreFinStockCF(rs.getDouble("instore_fin_stock_cf"));
+                        entity.setInstorePhysStockCF(rs.getDouble("instore_phys_stock_cf"));
+                        entity.setInstoreStockPhysical(rs.getDouble("gl_instore_stock_physical"));
+                       
                         
+                        
+                         boolean inBalance = isGLInBalance(entity);
                         //GET_GL_STOCK_DATA
+                        entity.setGlInBalance(inBalance);
                         double latestGLStockAmt = 0.0d;
                         double latestGLDebtorsAmt = 0.0d;
                         ps = connection.prepareStatement(SQLFactory.GET_GL_STOCK_DATA);
@@ -1672,6 +1706,105 @@ public class DataFactory {
 
         return list;
     }
+    
+    
+    
+     public static boolean isGLInBalance(GLEntity entity){
+         
+          boolean isGlInBalance = false;
+          if(entity.getInstoreDebtors() != entity.getGlDebtors() || 
+                                            entity.getInstoreStock() != entity.getGlStock()){                                       
+                isGlInBalance = false; 
+          }else{
+              isGlInBalance = true;                                     
+              
+          }
+          
+          if((entity.getInstoreDebtors() == 0.00) && (entity.getGlDebtors() == 0.00) 
+                  && (entity.getInstoreStock() == 0.00) && (entity.getGlStock() == 0.00)){
+              isGlInBalance = false;
+          }
+          
+       
+          BigDecimal debtorsCalcVal = new BigDecimal(entity.getDebtorsCF() - entity.getDebtorsBF()).setScale(2, BigDecimal.ROUND_HALF_UP);
+          BigDecimal debtorsBF = new BigDecimal(entity.getDebtorsBF()).setScale(2, BigDecimal.ROUND_HALF_UP);
+          BigDecimal debtorsCF = new BigDecimal(entity.getDebtorsCF()).setScale(2, BigDecimal.ROUND_HALF_UP);
+          BigDecimal finStockCF = new BigDecimal(entity.getFinStockCF()).setScale(2, BigDecimal.ROUND_HALF_UP);
+          BigDecimal finStockBF = new BigDecimal(entity.getFinStockBF()).setScale(2, BigDecimal.ROUND_HALF_UP);
+          BigDecimal phyStockCF = new BigDecimal(entity.getPhysStockCF()).setScale(2, BigDecimal.ROUND_HALF_UP);
+          BigDecimal phyStockBF = new BigDecimal(entity.getPhysStockBF()).setScale(2, BigDecimal.ROUND_HALF_UP);
+          BigDecimal instoreDebtorsCF = new BigDecimal(entity.getInstoreDebtorsCF()).setScale(2, BigDecimal.ROUND_HALF_UP);
+          BigDecimal instorePhyStockCF = new BigDecimal(entity.getInstorePhysStockCF()).setScale(2, BigDecimal.ROUND_HALF_UP);
+          BigDecimal instoreFinStockCF = new BigDecimal(entity.getInstoreFinStockCF()).setScale(2, BigDecimal.ROUND_HALF_UP);
+          
+          
+          
+           entity.setStrDebtorsBF(debtorsBF.toString());
+           entity.setStrDebtorsCF(debtorsCF.toString());
+           entity.setStrFinStockBF(finStockBF.toString());
+           entity.setStrFinStockCF(finStockCF.toString());
+           entity.setStrPhysStockBF(phyStockBF.toString());
+           entity.setStrPhysStockCF(phyStockCF.toString());
+           entity.setStrInstoreDebtorsCF(instoreDebtorsCF.toString());
+           entity.setStrInstorePhysStockCF(instorePhyStockCF.toString());
+           entity.setStrInstoreFinStockCF(instoreFinStockCF.toString());
+           
+          DecimalFormat twoDForm = new DecimalFormat("#.00");
+          double newVal = Double.parseDouble(debtorsCalcVal.toString()); 
+          double finalValue = Double.parseDouble(twoDForm.format(newVal));
+          
+           entity.setDebtorsFinancialMovement(finalValue);
+           BigDecimal debtorsFinancialMovement = new BigDecimal(entity.getDebtorsFinancialMovement()).setScale(2, BigDecimal.ROUND_HALF_UP);
+           entity.setStrDebtorsFinancialMovement(debtorsFinancialMovement.toString());
+           if(finalValue!=  entity.getInstoreDebtors()){
+               isGlInBalance = false;
+           }
+                             
+         
+          
+              
+          
+           finalValue = Double.parseDouble(twoDForm.format(entity.getFinStockCF() - entity.getFinStockBF()));
+           entity.setStockFinancialMovement(finalValue);
+           BigDecimal stockFinancialMovement = new BigDecimal(entity.getStockFinancialMovement()).setScale(2, BigDecimal.ROUND_HALF_UP);
+           entity.setStrStockFinancialMovement(stockFinancialMovement.toString());
+           System.out.println("Final Value---> " + finalValue); 
+                
+           
+           if(finalValue != entity.getInstoreStock()){
+               isGlInBalance = false;
+          }
+          
+        
+          
+           
+          finalValue = Double.parseDouble(twoDForm.format(entity.getPhysStockCF() - entity.getPhysStockBF()));
+          System.out.println("Final Value---> " + finalValue);  
+           
+          if(finalValue != entity.getInstoreStockPhysical()){
+               isGlInBalance = false;
+          }
+          
+         
+          
+          if(!entity.getStrDebtorsCF().equals(entity.getStrInstoreDebtorsCF())){
+               isGlInBalance = false;
+          }
+          
+          
+          if(entity.getFinStockCF()  != entity.getInstoreFinStockCF()){
+               isGlInBalance = false;
+          }
+          
+          
+                 
+          if(entity.getPhysStockCF()  != entity.getInstorePhysStockCF()){
+               isGlInBalance = false;
+          }
+          
+          
+         return isGlInBalance;
+     }
 
     public static String getActDesc(int actType)
             throws Exception {

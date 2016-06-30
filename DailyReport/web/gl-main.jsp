@@ -151,6 +151,17 @@
                             <td>Gl Debtors</td>
                             <td>Instore Stock</td>
                             <td>GL Stock</td>
+                            <td>Opening Debtors</td>
+                            <td>Closing Debtors</td>
+                            <td>Opening Financial Stock</td>
+                            <td>Closing Financial Stock</td>
+                            <td>Opening Physical Stock</td>
+                            <td>Closing Physical Stock</td>
+                            <td>ME Debtors Balance</td>
+                            <td>ME Physical Stock</td>
+                            <td>ME Financial Stock</td>
+                            <td>Debtors Financial Movement</td>
+                            <td>Stock Financial Movement</td>
                             <td>Status</td>
                             
                        
@@ -162,16 +173,14 @@
                                 boolean isEven = (count % 2 == 0);  
                                 String status = "images/ok.png"; 
                                 if(!data.isIsAllGLSelected()){
-                                    if(entity.getInstoreDebtors() == entity.getGlDebtors() && 
-                                            entity.getInstoreStock() == entity.getGlStock()){                                       
+                                    if(entity.isGlInBalance()){                                       
                                             continue; 
                                     }else{
                                         status = "images/error.png";
                                         ++count2;
                                     }
                                 }else{
-                                     if(entity.getInstoreDebtors() == entity.getGlDebtors() && 
-                                            entity.getInstoreStock() == entity.getGlStock()){
+                                     if(entity.isGlInBalance()){
                                             status = "images/ok.png";                                        
                                     }else{
                                         status = "images/error.png";
@@ -187,6 +196,17 @@
                                 <td><a title="Click on link for detailed detobrs balancing." href="MonthEndProduction?branchNo=<%= entity.getBranchCode()  %>&type=debtors" ><%= entity.getGlDebtors() %></a></td>
                                 <td><a title="Click on link for detailed stock balancing." href="MonthEndProduction?branchNo=<%= entity.getBranchCode()  %>&type=stock" ><%= entity.getInstoreStock() %></a></td>
                                 <td><a title="Click on link for detailed stock balancing." href="MonthEndProduction?branchNo=<%= entity.getBranchCode()  %>&type=stock" ><%= entity.getGlStock() %></a></td>
+                                <td><%= entity.getStrDebtorsBF() %></td>
+                                <td><%= entity.getStrDebtorsCF() %></td>
+                                <td><%= entity.getStrFinStockBF() %></td>
+                                <td><%= entity.getStrFinStockCF() %></td>
+                                <td><%= entity.getStrPhysStockBF() %></td>
+                                <td><%= entity.getStrPhysStockCF() %></td>
+                                <td><%= entity.getStrInstoreDebtorsCF() %></a></td>
+                                <td><%= entity.getStrInstorePhysStockCF() %></a></td>
+                                <td><%= entity.getStrInstoreFinStockCF() %></a></td>
+                                <td><%= entity.getStrDebtorsFinancialMovement() %></a></td>
+                                <td><%= entity.getStrStockFinancialMovement() %></a></td>
                                 <td style="text-align: center"><img src="<%= status %>" style="width:36px" /></td> 
                              </tr>
                             
