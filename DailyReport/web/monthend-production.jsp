@@ -145,7 +145,7 @@
                                 <td style="text-align: center"><img src="<%= cashBookFlag %>" style="width:36px" title="Cash Book"/></td>
                                 <td style="text-align: center"><img src="<%= newGLTranFlag %>" style="width:36px" title="GL" /></td> 
                                 <td style="text-align: center"><img src="<%= newBucketsFlag %>" style="width:36px" title="Buckets" /></td> 
-                                <td style="text-align: center"><img src="<%= pwcFlag %>" style="width:36px" title="GL" /></td> 
+                                <td style="text-align: center"><img src="<%= pwcFlag %>" style="width:36px" title="PWC" /></td> 
                                 <td style="text-align: center"><img src="<%= policyExtractsFlag %>" style="width:36px" title="Policy Extracts" /></td> 
                                 <td style="text-align: center"><img src="<%= claimsExtractsFlag %>" style="width:36px" title="Claims Extracts" /></td> 
                             </tr>
