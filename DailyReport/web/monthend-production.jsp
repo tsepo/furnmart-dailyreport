@@ -133,7 +133,9 @@
                                      policyExtractsFlag = "images/error.png";
                                 String claimsExtractsFlag = "images/ok.png";
                                 if (entity.isIsClaimsExtractsRun()== false)
-                                     claimsExtractsFlag = "images/error.png";     
+                                     claimsExtractsFlag = "images/error.png";
+                                 if (entity.isHasNoClaimsData() == true)
+                                     claimsExtractsFlag = "images/noData.png";
                                        %>                          
                             
                             

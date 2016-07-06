@@ -483,6 +483,9 @@ public class DataFactory {
                 item.setBranchCode(rs.getString("branch"));
                 //item.setFppCde(rs.getString("fpp_cde"));
                 item.setBranchDesc(rs.getString("br_desc"));
+                //Yaneetha
+                
+                item.setCtryCde(getBranchCtryCde(item.getBranchCode()));
                 count = rs.getInt(tableName);
                 /*
                 System.out.println("me.getKey() ---> " + tableName);
@@ -493,6 +496,10 @@ public class DataFactory {
                     flag = true;
                 } else {
                     flag = false;
+                }
+                
+                if (count == 0 && item.getCtryCde().equalsIgnoreCase("ZAF")){
+                    item.setHasNoClaimsData(true);
                 }
 
                 switch (type) {
@@ -1283,6 +1290,37 @@ public class DataFactory {
         }
 
     }
+    
+    public static String getBranchCtryCde(String branch) throws SQLException {
+
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String ctryCde = null;
+
+        try {
+
+            connection = ConnectionManager.getConnection(ConnectionType.CENTRAL, null);
+            ps = connection.prepareStatement(SQLFactory.GET_BRANCH_CTRY_CDE);
+            ps.setString(1, branch);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ctryCde = rs.getString(1);
+            }
+
+            return ctryCde;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+
+    }
+    
 
     public static List<GLSubType> getGlSubTypeMissingList()
             throws Exception {

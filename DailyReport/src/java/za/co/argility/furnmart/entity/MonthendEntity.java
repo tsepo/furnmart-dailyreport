@@ -12,7 +12,8 @@ import java.util.List;
 
 public class MonthendEntity {
     private boolean isBranchOk;
-    private String branchCode;    
+    private String branchCode; 
+    private String ctryCde;
     private List<String> comments;
     private String branchDesc;
     private String fppCde;
@@ -25,6 +26,7 @@ public class MonthendEntity {
     private boolean isStatementsRun;
     private boolean isClaimsExtractsRun;
     private boolean isPolicyExtractsRun;
+    private boolean hasNoClaimsData;
     
     private int branchWarehouse;
     
@@ -238,6 +240,38 @@ public class MonthendEntity {
     public void setIsPolicyExtractsRun(boolean isPolicyExtractsRun) {
         this.isPolicyExtractsRun = isPolicyExtractsRun;
     }
+
+    /**
+     * @return the hasNoClaimsData
+     */
+    public boolean isHasNoClaimsData() {
+        return hasNoClaimsData;
+    }
+
+    /**
+     * @param hasNoClaimsData the hasNoClaimsData to set
+     */
+    public void setHasNoClaimsData(boolean hasNoClaimsData) {
+        this.hasNoClaimsData = hasNoClaimsData;
+    }
+
+    /**
+     * @return the ctryCde
+     */
+    public String getCtryCde() {
+        return ctryCde;
+    }
+
+    /**
+     * @param ctryCde the ctryCde to set
+     */
+    public void setCtryCde(String ctryCde) {
+        this.ctryCde = ctryCde;
+    }
+
+    
+
+    
     
     
     
