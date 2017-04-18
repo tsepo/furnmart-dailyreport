@@ -31,8 +31,10 @@ import za.co.argility.furnmart.entity.GLEntity;
 import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthEndTableType;
+import za.co.argility.furnmart.entity.MonthendDetailStatusEntity;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.MonthendSearchEntity;
+import za.co.argility.furnmart.entity.MonthendStatusEntity;
 import za.co.argility.furnmart.servlet.helper.MeProdRunData;
 import za.co.argility.furnmart.servlet.helper.MonthendData;
 import za.co.argility.furnmart.servlet.helper.MonthendOverviewData;
@@ -73,7 +75,8 @@ public class MonthEndProductionServlet  extends GenericServlet {
         try {
             
         if(request.getParameter("fppCde") != null){
-            Log.info("Found fpp ---> " + request.getParameter("fppCde"));
+            Log.info("Found fpp doGet ---> " + request.getParameter("fppCde"));
+            Log.info("Tab = " + request.getParameter("tab"));
         }else{
             Log.info("Yeneetha ----> fpp not found.");
         }    
@@ -125,29 +128,47 @@ public class MonthEndProductionServlet  extends GenericServlet {
             return;
         }
         
+        // BEGIN Nyeleti===============================================================
+        
           if (request.getParameter("tab") != null &&
                 request.getParameter("tab").equals("prod")) {
             
             Log.info("... Testing new change ...");
-             //Log.info("...  newest development.......Luthando");
-            
-            
-            
-                try {
-                    buildProcessRunsHistory(request, response);
-                } catch (Exception ex) {
-                    Logger.getLogger(TestServlet.class.getName()).log(Level.SEVERE, null, ex);
-                    
-                     Logger.getLogger("Error occured :" + ex.getMessage());
-                }
-            
-            processMonthEndProductionData(request, response);
-            response.sendRedirect(WebPages.TEST_PAGE);
-            //Luthando
-           //DataFactory.viewMeProdRun();
-            return;
-        }
+              String fppCde = null;
         
+        if(request.getParameter("fppCde") != null){
+            Log.info("Found fpp Bliksim---> " + request.getParameter("fppCde"));
+            fppCde = request.getParameter("fppCde");
+        }else{
+            fppCde = DataFactory.getMeconsFppCode();
+            Log.info("Initial fpp --->.");
+        }     
+                      
+             
+            Log.info("Rajen ---> ");
+            buildProcessRunsHistory(request, response, fppCde);
+            Log.info("Mbale ---> ");
+            response.sendRedirect(WebPages.PROCESS_STATUS_PAGE);
+           
+          }
+          
+          
+          
+        boolean allStatusSelected = statusSelection(request, response); 
+       
+         if (request.getParameter("branchNo") != null) {
+            
+            Log.info("... going to process status details ...");            
+            
+            processDetailStatusData(request, response,allStatusSelected);
+            
+            response.sendRedirect(WebPages.PROCESS_STATUS_DETAIL_PAGE);
+            return;
+        } 
+         
+          
+        
+          // END ==================================================================
         
           if (request.getParameter("tab") != null &&
                 request.getParameter("tab").equals("processes")) {
@@ -279,34 +300,90 @@ public class MonthEndProductionServlet  extends GenericServlet {
                     data.setIsAllGLSelected(true);
                 }
                 response.sendRedirect(WebPages.GL_MAIN_PAGE);
-            }
-            
+            }            
             
         }
         return allGlSelected;
     }
-     private void buildProcessRunsHistory(HttpServletRequest request, HttpServletResponse response) throws Exception {
-         DataFactory test = new DataFactory();
-         
-         Log.info("...  newest development.......Luthando");
-         //test.viewMeProdRun(1);
-         //test.viewMeProdRun(2);
-         test.viewMeProdRun(2,0);
-         test.viewMeProdRun(2,1);
-         test.viewMeProdRun(2,2);
-         test.viewMeProdRun(2,3);
-         test.viewMeProdRun(2,4);
-         test.viewMeProdRun(2,5);
-          MeProdRunData data = (MeProdRunData)getSessionData(request, SessionAttribute.MONTHEND_DATA_TAG);
-
-            if (data == null) {
-                data = new MeProdRunData();
-            }   
+    
+    
+    private boolean statusSelection(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        boolean allStatusSelected = true;
+        if(request.getParameter("processStatusSelect") != null){
+            if (request.getParameter("processStatusSelect").equals("all") ||  request.getParameter("processStatusSelect").equals("errors")) {
+                
+                MonthendStatusEntity data = (MonthendStatusEntity)getSessionData(request,
+                        SessionAttribute.MONTHEND_DATA_TAG);
+                
+                if (data == null) {
+                    data = new MonthendStatusEntity();
+                }
+                
+                if(request.getParameter("processStatusSelect").equals("errors")){
+                    Log.info("Yaneetha 1--->");
+                    data.setAllDataSelected(false);
+                    
+                }else{
+                    Log.info("Yaneetha 2--->");
+                    data.setAllDataSelected(true);
+                }
+                response.sendRedirect(WebPages.PROCESS_STATUS_PAGE);
+            }
             
+            
+        }
+        return allStatusSelected;
+    }
+    
+    
+    
+     private void buildProcessRunsHistory(HttpServletRequest request, HttpServletResponse response, String fppCde) throws Exception {
+        
+         
+         
+         if (request.getParameter("tab") != null &&
+                request.getParameter("tab").equals("prod")) { 
              
-                           
-             
-            saveSession(request, data);
+         
+         MonthendData data = (MonthendData)getSessionData(request, 
+                            SessionAttribute.MONTHEND_DATA_TAG);
+
+        if (data == null) {
+            data = new MonthendData();
+        }
+        
+        //String fppCde  = DataFactory.getMeconsFppCode();
+     
+        
+        Log.info("fppCde  buildProcessRunsHistory---> " + fppCde);
+        List<MonthendStatusEntity> finalProcessStatusList = new ArrayList<MonthendStatusEntity>();
+        List<MonthendStatusEntity>  getMonthendStatusList = DataFactory.getMonthendStatusList(); 
+        String tmpBranchCode = getMonthendStatusList.get(0).getBrCde();
+       
+        
+        
+        
+        for(int r=0;r<getMonthendStatusList.size();r++){
+           if(r==0){
+                 System.out.println("Nyl 1");
+               finalProcessStatusList.add(getMonthendStatusList.get(r));
+           } 
+           if(r>=1){
+               if(!tmpBranchCode.equals(getMonthendStatusList.get(r).getBrCde())){
+                   finalProcessStatusList.add(getMonthendStatusList.get(r));
+                   tmpBranchCode = getMonthendStatusList.get(r).getBrCde();
+                   System.out.println("Nyl 2");
+               }
+           }
+            
+        }
+        
+        System.out.println("Tana 9 ----> " + getMonthendStatusList.size());
+        data.setMonthendStatusEntity(finalProcessStatusList);
+         
+         
+          saveSession(request, data);
+         }
     }
     
     protected void processMonthEndOverviewData(HttpServletRequest request, 
@@ -645,6 +722,41 @@ public class MonthEndProductionServlet  extends GenericServlet {
             data.setGlDets(instoreDetailDebtorsList);
             data.setGlDetailBranchCode(branchNo);
             data.setGlDeatilType(type);
+        
+         // save the data to the session
+        saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);
+
+           
+        }         
+                      
+        
+    }
+     
+     protected void processDetailStatusData(HttpServletRequest request, 
+            HttpServletResponse response, Boolean allGlSelected) throws Exception {
+        
+        System.out.println("allGlSelected ----> " + allGlSelected);
+        if (request.getParameter("branchNo") != null) {
+            String branchNo =  request.getParameter("branchNo");
+        
+                  
+            
+        System.out.println("branch no ----> " + branchNo);    
+       
+            
+        MonthendData data = (MonthendData)getSessionData(request, 
+                            SessionAttribute.MONTHEND_DATA_TAG);
+
+        if (data == null) {
+            data = new MonthendData();
+        }     
+        
+            data.setIsAllGLSelected(allGlSelected);
+            data.setProcessStatusDetailBranchCode(branchNo);
+           
+        List<MonthendDetailStatusEntity>  getMonthendDetailStatusList = DataFactory.getMonthendDetailStatusList(branchNo);  
+        
+        data.setMonthendDetailStatusEntity(getMonthendDetailStatusList);
         
          // save the data to the session
         saveSession(request, data, SessionAttribute.MONTHEND_DATA_TAG);

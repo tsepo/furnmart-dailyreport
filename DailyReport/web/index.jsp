@@ -72,7 +72,7 @@
                        
                 </li>
                 <li>
-                    <a href="<%= WebPages.BASE_APP_URL %>/MonthEndProduction?tab=overview" title="Month End Production and Extracts">
+                    <a href="<%= WebPages.BASE_APP_URL %>/MonthEndProduction" title="Month End Production and Extracts">
                         Month End Production and Extracts</a>
                 </li>
                 

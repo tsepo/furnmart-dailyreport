@@ -163,6 +163,7 @@
                             <td>Debtors Financial Movement</td>
                             <td>Stock Financial Movement</td>
                             <td>Status</td>
+                            <td>Error Messages</td>
                             
                        
                         </tr>
@@ -207,7 +208,11 @@
                                 <td><%= entity.getStrInstoreFinStockCF() %></a></td>
                                 <td><%= entity.getStrDebtorsFinancialMovement() %></a></td>
                                 <td><%= entity.getStrStockFinancialMovement() %></a></td>
-                                <td style="text-align: center"><img src="<%= status %>" style="width:36px" /></td> 
+                                <td style="text-align: center"><img src="<%= status %>" style="width:36px" /></td>
+                                <% String message = "This is an error" + "\nFor real !!!"; %>
+                                <% for(String errorMessage : entity.getErrorMessages()){ %> 
+                                <td style="white-space: nowrap" title="<%= message %>"><%= errorMessage %></a></td>
+                                <% } %>        
                              </tr>
                             
                             <%}                       

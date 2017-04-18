@@ -11,8 +11,10 @@ import za.co.argility.furnmart.entity.GLDetailEntity;
 import za.co.argility.furnmart.entity.GLEntity;
 import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
+import za.co.argility.furnmart.entity.MonthendDetailStatusEntity;
 import za.co.argility.furnmart.entity.MonthendEntity;
 import za.co.argility.furnmart.entity.MonthendSearchEntity;
+import za.co.argility.furnmart.entity.MonthendStatusEntity;
 import za.co.argility.furnmart.entity.ProdConsScriptsEntity;
 import za.co.argility.furnmart.entity.ProdConsViewEntity;
 import za.co.argility.furnmart.util.BucketMap;
@@ -36,13 +38,17 @@ public class MonthendData {
     private List<GLEntity> glDetails;
     private List<GLDetailEntity> glDets;
     private String glDetailBranchCode;
+    private String processStatusDetailBranchCode;
     private String glDeatilType; 
     private boolean isAllGLSelected = true;
+    private boolean isAllProcessStatusSelected = true;
     private boolean isAllStatementsSelected = true;
     private List<ProdConsScriptsEntity> prodConsSelectedEntities;
     private List<ProdConsScriptsEntity> prodConsEntities;
     private List<ProdConsViewEntity> prodConsViewEntities;
     private List<String> fppCdeList;
+    private List<MonthendStatusEntity> monthendStatusEntity;
+    private List<MonthendDetailStatusEntity> monthendDetailStatusEntity;
     private boolean consRun;
     private String selectedFppCde;
     
@@ -310,6 +316,62 @@ public class MonthendData {
      */
     public void setSelectedFppCde(String selectedFppCde) {
         this.selectedFppCde = selectedFppCde;
+    }
+
+    /**
+     * @return the monthendStatusEntity
+     */
+    public List<MonthendStatusEntity> getMonthendStatusEntity() {
+        return monthendStatusEntity;
+    }
+
+    /**
+     * @param monthendStatusEntity the monthendStatusEntity to set
+     */
+    public void setMonthendStatusEntity(List<MonthendStatusEntity> monthendStatusEntity) {
+        this.monthendStatusEntity = monthendStatusEntity;
+    }
+
+    /**
+     * @return the isAllProcessStatusSelected
+     */
+    public boolean isIsAllProcessStatusSelected() {
+        return isAllProcessStatusSelected;
+    }
+
+    /**
+     * @param isAllProcessStatusSelected the isAllProcessStatusSelected to set
+     */
+    public void setIsAllProcessStatusSelected(boolean isAllProcessStatusSelected) {
+        this.isAllProcessStatusSelected = isAllProcessStatusSelected;
+    }
+
+    /**
+     * @return the monthendDetailStatusEntity
+     */
+    public List<MonthendDetailStatusEntity> getMonthendDetailStatusEntity() {
+        return monthendDetailStatusEntity;
+    }
+
+    /**
+     * @param monthendDetailStatusEntity the monthendDetailStatusEntity to set
+     */
+    public void setMonthendDetailStatusEntity(List<MonthendDetailStatusEntity> monthendDetailStatusEntity) {
+        this.monthendDetailStatusEntity = monthendDetailStatusEntity;
+    }
+
+    /**
+     * @return the processStatusDetailBranchCode
+     */
+    public String getProcessStatusDetailBranchCode() {
+        return processStatusDetailBranchCode;
+    }
+
+    /**
+     * @param processStatusDetailBranchCode the processStatusDetailBranchCode to set
+     */
+    public void setProcessStatusDetailBranchCode(String processStatusDetailBranchCode) {
+        this.processStatusDetailBranchCode = processStatusDetailBranchCode;
     }
     
 }

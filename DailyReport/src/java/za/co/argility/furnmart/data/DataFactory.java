@@ -37,7 +37,9 @@ import za.co.argility.furnmart.entity.GLEntity;
 import za.co.argility.furnmart.entity.GLMapActTyp;
 import za.co.argility.furnmart.entity.GLSubType;
 import za.co.argility.furnmart.entity.MonthEndTableType;
+import za.co.argility.furnmart.entity.MonthendDetailStatusEntity;
 import za.co.argility.furnmart.entity.MonthendEntity;
+import za.co.argility.furnmart.entity.MonthendStatusEntity;
 import za.co.argility.furnmart.entity.NetworkEntity;
 import za.co.argility.furnmart.entity.ProcessType;
 import za.co.argility.furnmart.entity.ProdConsScriptsEntity;
@@ -1756,13 +1758,8 @@ public class DataFactory {
           }else{
               isGlInBalance = true;                                     
               
-          }
-          
-          if((entity.getInstoreDebtors() == 0.00) && (entity.getGlDebtors() == 0.00) 
-                  && (entity.getInstoreStock() == 0.00) && (entity.getGlStock() == 0.00)){
-              isGlInBalance = false;
-          }
-          
+          }          
+                    
        
           BigDecimal debtorsCalcVal = new BigDecimal(entity.getDebtorsCF() - entity.getDebtorsBF()).setScale(2, BigDecimal.ROUND_HALF_UP);
           BigDecimal debtorsBF = new BigDecimal(entity.getDebtorsBF()).setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -1775,8 +1772,7 @@ public class DataFactory {
           BigDecimal instorePhyStockCF = new BigDecimal(entity.getInstorePhysStockCF()).setScale(2, BigDecimal.ROUND_HALF_UP);
           BigDecimal instoreFinStockCF = new BigDecimal(entity.getInstoreFinStockCF()).setScale(2, BigDecimal.ROUND_HALF_UP);
           
-          
-          
+                    
            entity.setStrDebtorsBF(debtorsBF.toString());
            entity.setStrDebtorsCF(debtorsCF.toString());
            entity.setStrFinStockBF(finStockBF.toString());
@@ -1787,6 +1783,9 @@ public class DataFactory {
            entity.setStrInstorePhysStockCF(instorePhyStockCF.toString());
            entity.setStrInstoreFinStockCF(instoreFinStockCF.toString());
            
+          
+          List<String> errorMessages = new ArrayList<String>();
+          String errorMessage = null; 
           DecimalFormat twoDForm = new DecimalFormat("#.00");
           double newVal = Double.parseDouble(debtorsCalcVal.toString()); 
           double finalValue = Double.parseDouble(twoDForm.format(newVal));
@@ -1796,11 +1795,13 @@ public class DataFactory {
            entity.setStrDebtorsFinancialMovement(debtorsFinancialMovement.toString());
            if(finalValue!=  entity.getInstoreDebtors()){
                isGlInBalance = false;
-           }
-                             
-         
-          
+               errorMessage = "Debtors financial movement not in balance with instore debtors";
+               errorMessages.add(errorMessage);
+           }                         
+             
               
+          
+           //Yaneetha
           
            finalValue = Double.parseDouble(twoDForm.format(entity.getFinStockCF() - entity.getFinStockBF()));
            entity.setStockFinancialMovement(finalValue);
@@ -1809,38 +1810,45 @@ public class DataFactory {
            System.out.println("Final Value---> " + finalValue); 
                 
            
-           if(finalValue != entity.getInstoreStock()){
+          if(finalValue != entity.getInstoreStock()){
                isGlInBalance = false;
-          }
-          
-        
-          
+               errorMessage = "Stock financial movement not in balance with instore stock";
+               errorMessages.add(errorMessage);
+          }          
+                  
            
           finalValue = Double.parseDouble(twoDForm.format(entity.getPhysStockCF() - entity.getPhysStockBF()));
           System.out.println("Final Value---> " + finalValue);  
            
           if(finalValue != entity.getInstoreStockPhysical()){
                isGlInBalance = false;
+               errorMessage = "Physical stock not in balance with instore physical stock.";
+               errorMessages.add(errorMessage);
           }
           
          
           
           if(!entity.getStrDebtorsCF().equals(entity.getStrInstoreDebtorsCF())){
                isGlInBalance = false;
+               errorMessage = "Debtors closing financial not in balance with instore debtors closing financial.";
+               errorMessages.add(errorMessage);
           }
           
           
           if(entity.getFinStockCF()  != entity.getInstoreFinStockCF()){
                isGlInBalance = false;
+               errorMessage = "Stock closing financial not in balance with instore stock closing financial.";
+               errorMessages.add(errorMessage);
           }
-          
-          
+                    
                  
           if(entity.getPhysStockCF()  != entity.getInstorePhysStockCF()){
                isGlInBalance = false;
+               errorMessage = "Physical stock closing financial not in balance with instore stock closing financial.";
+               errorMessages.add(errorMessage);
           }
           
-          
+         entity.setErrorMessages(errorMessages);
          return isGlInBalance;
      }
 
@@ -1980,6 +1988,102 @@ public class DataFactory {
         }
 
     }
+    
+    
+    public static final List<MonthendStatusEntity> getMonthendStatusList() throws Exception {
+
+        List<MonthendStatusEntity> list = new ArrayList<MonthendStatusEntity>();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String fppCde = getMeconFpp();
+        System.out.println("fpp cde ----> " + fppCde);
+        
+        try {
+
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            System.out.println("Tana 1 ----> " + fppCde);
+                ps = connection.prepareStatement(SQLFactory.GET_SATUS_PROCESS_SUMMARY_LIST);
+          
+            
+            System.out.println("Tana 2 ----> " + fppCde);
+            ps.setString(1,fppCde);
+            rs = ps.executeQuery();
+            
+             System.out.println("Tana 3 ----> " + fppCde);
+
+            MonthendStatusEntity entity = null;
+
+            while (rs.next()) {
+               System.out.println("Tana 4 ----> " + fppCde);  
+               entity = new MonthendStatusEntity();
+               entity.setBrCde(rs.getString("br_cde"));
+               entity.setBrDesc(rs.getString("description"));
+               entity.setStatus(rs.getString("status"));
+               list.add(entity);
+            }
+
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+
+    }
+    
+     public static final List<MonthendDetailStatusEntity> getMonthendDetailStatusList(String brCde) throws Exception {
+
+        List<MonthendDetailStatusEntity> list = new ArrayList<MonthendDetailStatusEntity>();
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String fppCde = getMeconFpp();
+        System.out.println("fpp cde ----> " + fppCde);
+        
+        try {
+
+            connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+            ps = connection.prepareStatement(SQLFactory.GET_SATUS_PROCESS_DETAIL_LIST);
+          
+                        
+            ps.setString(1,brCde);
+            ps.setString(2,fppCde);
+            
+            rs = ps.executeQuery();
+            
+             System.out.println("Tana 3 ----> " + fppCde);
+
+            MonthendDetailStatusEntity entity = null;
+
+            while (rs.next()) {
+               System.out.println("Tana 4 ----> " + fppCde);  
+               entity = new MonthendDetailStatusEntity();
+               entity.setBrCde(rs.getString("br_cde"));
+               entity.setMonthendProcess(rs.getString("mendstat_process"));
+               entity.setProcessStartDte(rs.getTimestamp("mendstat_start"));
+               entity.setProcessEndDte(rs.getTimestamp("mendstat_end"));
+               entity.setErrorCde(rs.getInt("mendstat_error_id"));
+               list.add(entity);
+            }
+
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e);
+        } finally {
+            ConnectionManager.close(connection);
+        }
+
+    }
+    
+    
+    
+    
+    
+    
+    
     
     public static final List<GLDetailEntity> getInstoreDetailDebtorsList(String branch, String type) throws Exception {
 

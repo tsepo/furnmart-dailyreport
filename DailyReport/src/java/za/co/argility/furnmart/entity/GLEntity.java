@@ -6,6 +6,9 @@
 
 package za.co.argility.furnmart.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author rnaidoo
@@ -33,8 +36,7 @@ public class GLEntity {
     private String  strFinStockBF ;
     private String  strPhysStockCF;
     private String  strPhysStockBF;
-    
-    
+        
     private double  instoreDebtorsCF  = 0.0d;
     private double  instoreFinStockCF  = 0.0d;
     private String  strInstoreFinStockCF;
@@ -46,6 +48,7 @@ public class GLEntity {
     private double  stockFinancialMovement = 0.0d;  
     private String  strDebtorsFinancialMovement;
     private String  strStockFinancialMovement;  
+    private List<String> errorMessages = new ArrayList<String>();
     
     
     
@@ -494,6 +497,24 @@ public class GLEntity {
         this.strPhysStockBF = strPhysStockBF;
     }
 
+    /**
+     * @return the errorMessages
+     */
+    public List<String> getErrorMessages() {
+        return errorMessages;
+    }
+
+    /**
+     * @param errorMessages the errorMessages to set
+     */
+    public void setErrorMessages(List<String> errorMessages) {
+        this.errorMessages = errorMessages;
+    }
+
+    /**
+     * @return the errorMessages
+     */
+   
     
     
     /**

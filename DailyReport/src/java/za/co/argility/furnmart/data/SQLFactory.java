@@ -299,6 +299,8 @@ public interface SQLFactory {
                                                                 "group by act_typ \n" +
                                                                 "order by act_typ; ";
 
+        
+     
      
       public static final String GET_INSTORE_DETAIL_DEBTORS_LIST = "SELECT \n" + 
                                                                 "act_typ, sum(hptran_amt) as value \n" +  
@@ -378,5 +380,49 @@ public interface SQLFactory {
     
     public static final String GET_GL_FPP_LIST = "select distinct(fpp_cde) from new_gl_balancing order by fpp_cde desc;";
     
+    
+    public static final String GET_SATUS_PROCESS_SUMMARY_LIST = "select distinct(br_cde),  (select br_desc from branch where branch.br_cde = monthend_status.br_cde) as description, \n " +
+                                                                "CASE WHEN mendstat_error_id = 0 THEN true ELSE false END as status \n " +
+                                                                 "from monthend_status where fpp_cde = ? \n" +
+                                                                 "group by br_cde, fpp_cde, mendstat_error_id order by br_cde;"  ;
+    
+    public static final String GET_SATUS_PROCESS_DETAIL_LIST = "select br_cde, mendstat_process, mendstat_start, mendstat_start, mendstat_end, mendstat_error_id from monthend_status \n " +  ""
+            + "where br_cde =  ? \n " +
+            "and fpp_cde = ? ;";
+    
+    public static final String GET_ME_POCESS_STATUS_LIST =  "select col1,sum(col2) as col2,col3,sum(col4) as col4,col5,sum(col6) as col6,col7,sum(col8) as col8,col9,sum(col10) as col10,col11,sum(col12) as col12, \n" +
+            "col13,sum(col14) as col14,col15,sum(col16) as col16 from ( \n" +
+            "select mendstat_process as col1, mendstat_error_id as col2,'Cashbook' as col3,0 as col4,'Cheques' as col5,0 as col6,'Creditors' as col7,0 as col8,'Debtors' as col9,0 as col10, \n " +
+            "'Deposits' as col11,0 as col12,'Insurance Extracts' as col13,0 as col14,'New GL Extract' as col15,0 as col16 \n" +
+            "from monthend_status where fpp_cde = ? and br_cd and mendstat_process = 'Bucket Report Extract' \n" +
+            "union all \n" +
+            "select 'Bucket Report Extract' as col1, 0 as col2,mendstat_process as col3,mendstat_error_id as col4,'Cheques' as col5,0 as col6,'Creditors' as col7,0 as col8,'Debtors' as col9,0 as col10, \n" +
+            "'Deposits' as col11,0 as col12,'Insurance Extracts' as col13,0 as col14,'New GL Extract' as col14,0 as col15 \n" +
+            "from monthend_status where fpp_cde = ?  and mendstat_process = 'Cashbook' \n" +
+            "union all \n" +
+            "select 'Bucket Report Extract' as col1, 0 as col2,'Cashbook' as col3,0 as col4,mendstat_process as col5,mendstat_error_id as col6,'Creditors' as col7,0 as col8,'Debtors' as col9,0 as col10, \n" +
+            "'Deposits' as col11,0 as col12,'Insurance Extracts' as col13,0 as col14,'New GL Extract' as col14,0 as col15 \n" +
+            "from monthend_status where fpp_cde = ?  and mendstat_process = 'Cheques' \n" +
+            "union all \n" +
+            "select 'Bucket Report Extract' as col1, 0 as col2,'Cashbook' as col3,0 as col4,'Cheques' as col5,0 as col6,mendstat_process as col7,mendstat_error_id as col8,'Debtors' as col9,0 as col10, \n" +
+            "'Deposits' as col11,0 as col12,'Insurance Extracts' as col13,0 as col14,'New GL Extract' as col14,0 as col15 \n" +
+            "from monthend_status where fpp_cde = ? and mendstat_process = 'Creditors' \n" +
+            "union all \n" +
+            "select 'Bucket Report Extract' as col1, 0 as col2,'Cashbook' as col3,0 as col4,'Cheques' as col5,0 as col6,'Creditors' as col7,0 as col8,mendstat_process as col9,mendstat_error_id as col10, \n" +
+            "'Deposits' as col11,0 as col12,'Insurance Extracts' as col13,0 as col14,'New GL Extract' as col14,0 as col15 \n" +
+            "from monthend_status where fpp_cde = ? and mendstat_process = 'Debtors' \n" +
+            "union all \n" +
+            "select 'Bucket Report Extract' as col1, 0 as col2,'Cashbook' as col3,0 as col4,'Cheques' as col5,0 as col6,'Creditors' as col7,0 as col8,'Debtors' as col9,0 as col10, \n" +
+            "mendstat_process as col11,mendstat_error_id as col12,'Insurance Extracts' as col13,0 as col14,'New GL Extract' as col14,0 as col15 \n" +
+            "from monthend_status where fpp_cde = ? and mendstat_process = 'Deposits' \n" +
+            "union all \n" +
+            "select 'Bucket Report Extract' as col1, 0 as col2,'Cashbook' as col3,0 as col4,'Cheques' as col5,0 as col6,'Creditors' as col7,0 as col8,'Debtors' as col9,0 as col10, \n" +
+            "'Deposits' as col11,0 as col12,mendstat_process as col13,mendstat_error_id as col14,'New GL Extract' as col14,0 as col15 \n" +
+            "from monthend_status where fpp_cde = ? and mendstat_process = 'Insurance Extracts' \n" +
+            "union all \n" +
+            "select 'Bucket Report Extract' as col1, 0 as col2,'Cashbook' as col3,0 as col4,'Cheques' as col5,0 as col6,'Creditors' as col7,0 as col8,'Debtors' as col9,0 as col10, \n" +
+            "'Deposits' as col11,0 as col12,'Insurance Extracts' as col13,0 as col14,mendstat_process as col14,mendstat_error_id as col15 \n" +
+            "from monthend_status where fpp_cde = ? and mendstat_process = 'New GL Extract' \n" +
+            ") as try group by col1, col3, col5, col7, col9, col11, col13, col15 ;";
     
 }
