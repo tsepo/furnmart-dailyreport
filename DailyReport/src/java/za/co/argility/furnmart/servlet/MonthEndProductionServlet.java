@@ -149,14 +149,14 @@ public class MonthEndProductionServlet  extends GenericServlet {
             buildProcessRunsHistory(request, response, fppCde);
             Log.info("Mbale ---> ");
             response.sendRedirect(WebPages.PROCESS_STATUS_PAGE);
-           
+            return; 
           }
           
           
           
         boolean allStatusSelected = statusSelection(request, response); 
        
-         if (request.getParameter("branchNo") != null) {
+         if (request.getParameter("branchNumber") != null) {
             
             Log.info("... going to process status details ...");            
             
@@ -736,8 +736,8 @@ public class MonthEndProductionServlet  extends GenericServlet {
             HttpServletResponse response, Boolean allGlSelected) throws Exception {
         
         System.out.println("allGlSelected ----> " + allGlSelected);
-        if (request.getParameter("branchNo") != null) {
-            String branchNo =  request.getParameter("branchNo");
+        if (request.getParameter("branchNumber") != null) {
+            String branchNo =  request.getParameter("branchNumber");
         
                   
             

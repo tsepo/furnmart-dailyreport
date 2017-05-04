@@ -35,7 +35,7 @@
       System.out.println("cOwabunga-- > ");
     
     List<MonthendStatusEntity> details = data.getMonthendStatusEntity();
-    System.out.println("details-- > " + details.size());
+ 
     if (details == null)
         details = new ArrayList<MonthendStatusEntity>();
     
@@ -169,7 +169,7 @@
                                                             
 
                             <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
-                               <td span class="bigText"  style="text-align: center" ><a title="Click on link for process details." href="MonthEndProduction?branchNo=<%= entity.getBrCde() %>" ><%= entity.getBrCde() %></a></td>  
+                               <td span class="bigText"  style="text-align: center" ><a title="Click on link for process details." href="MonthEndProduction?branchNumber=<%= entity.getBrCde() %>" ><%= entity.getBrCde() %></a></td>  
                                 <td span class="smallText" style="text-align: center"><%= entity.getBrDesc()%></td>
                                 <td style="text-align: center"><img src="<%= status %>" style="width:36px" /></td> 
                              </tr>
