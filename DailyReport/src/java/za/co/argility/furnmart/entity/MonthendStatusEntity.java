@@ -6,7 +6,9 @@
 
 package za.co.argility.furnmart.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -22,6 +24,8 @@ public class MonthendStatusEntity {
     private int    errorId; 
     private boolean allDataSelected;
     private String status;
+    private List<String> missingProcessList = new ArrayList<String>();
+    private boolean allProcessesRun;
 
     /**
      * @return the brCde
@@ -133,6 +137,34 @@ public class MonthendStatusEntity {
      */
     public void setBrDesc(String brDesc) {
         this.brDesc = brDesc;
+    }
+
+    /**
+     * @return the missingProcessList
+     */
+    public List<String> getMissingProcessList() {
+        return missingProcessList;
+    }
+
+    /**
+     * @param missingProcessList the missingProcessList to set
+     */
+    public void setMissingProcessList(List<String> missingProcessList) {
+        this.missingProcessList = missingProcessList;
+    }
+
+    /**
+     * @return the allProcessesRun
+     */
+    public boolean isAllProcessesRun() {
+        return allProcessesRun;
+    }
+
+    /**
+     * @param allProcessesRun the allProcessesRun to set
+     */
+    public void setAllProcessesRun(boolean allProcessesRun) {
+        this.allProcessesRun = allProcessesRun;
     }
 
     /**

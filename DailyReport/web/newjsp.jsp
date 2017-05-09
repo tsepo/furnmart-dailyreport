@@ -148,7 +148,8 @@
                   
                          <tr class="RowToClick"> 
                               <td style="text-align: center">Branch Code</td>
-                              <td style="text-align: center">Branch Name</td>                              
+                              <td style="text-align: center">Branch Name</td> 
+                               <td style="text-align: center">All Processes Run</td> 
                               <td>Status</td>                                                  
                         </tr>
                         <% int count = 0; 
@@ -157,36 +158,38 @@
                                 ++count;
                                 boolean isEven = (count % 2 == 0);  
                                 String status = "images/ok.png"; 
+                                String missingActions = "images/ok.png"; 
+                                List<String> missingActionsList = entity.getMissingProcessList();
                                 if(entity.getStatus().equals("f")){
+                                    missingActions = "images/error.png"; 
+                                }
+                                
+                                if(!entity.isAllProcessesRun()){
                                     status = "images/error.png"; 
                                 }
+                                
                                 if(!data.isIsAllProcessStatusSelected()){
                                        System.out.println("I is here 1");
                                 }else{
                                        System.out.println("I is here 2");        
                                 } 
-                        %>
-                                                            
-
+                        %>                                                            
                             <tr class="<%= isEven ? "dataRowEven" : "dataRowOdd" %>">
                                <td span class="bigText"  style="text-align: center" ><a title="Click on link for process details." href="MonthEndProduction?branchNumber=<%= entity.getBrCde() %>" ><%= entity.getBrCde() %></a></td>  
                                 <td span class="smallText" style="text-align: center"><%= entity.getBrDesc()%></td>
+                                <td style="text-align: center"><img src="<%= missingActions %>" style="width:36px" title="<%= missingActionsList %>"/></td>
                                 <td style="text-align: center"><img src="<%= status %>" style="width:36px" /></td> 
-                             </tr>
-                            
-                            <%}                       
-                           
-                        %>
-              
-          </table>
-        
-               
+                             </tr> 
+                              <% } %> 
+                        </table>            
+                   
+                     
+                        
          <div style="margin-left: 10px">  
                             <br><br><hr>
-            <h3>Returned batch process status results for <strong> <%= count2 %></strong> stores.</h3>
+            <h3>Returned batch process status results for <strong> <%= count %></strong> stores.</h3>
         </div>
                         
-           </form>         
          
              
            

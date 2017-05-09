@@ -61,12 +61,15 @@
          <br><br>
         
                 <table border="0" cellspacing="2"padding="2" width="50%">
+                     <tr></tr>
+                           <tr></tr>
                           <tr class="RowToClick"> 
                             <td  span class="bigText" style="text-align: center">Branch</td>
                             <td  span class="bigText" style="text-align: center">Process</td>                              
                             <td  span class="bigText" style="text-align: center">Proc Start Date</td>
                             <td  span class="bigText" style="text-align: center">Proc End Date</td>  
-                            <td  span class="bigText" style="text-align: center">Proc Error Code</td>  
+                            <td  span class="bigText" style="text-align: center">Proc Error Code</td> 
+                            <td  span class="bigText" style="text-align: center">Status</td> 
                           <tr></tr>
                            <tr></tr>
                             </tr>
@@ -75,9 +78,7 @@
                               <% int count = 0;    
                             for (MonthendDetailStatusEntity entity : details){ 
                                 ++count;
-                                boolean isEven = (count % 2 == 0);  
-                               
-                                  
+                                boolean isEven = (count % 2 == 0);                                                                
                               %>
                             
                             
@@ -89,18 +90,33 @@
                                     <td  span class="smallText" style="text-align: center"> <font color="red"><%= entity.getProcessStartDte()%></font></td>
                                     <td  span class="smallText" style="text-align: center"> <font color="red"><%= entity.getProcessEndDte() %></font></td>
                                     <td  span class="smallText" style="text-align: right"> <font color="red"><%= entity.getErrorCde() %></font></td>
-                                <% }else{ %> 
-                                    <td  span class="smallText" style="text-align: center"><%= entity.getBrCde()%></td>
-                                    <td  span class="smallText" style="text-align: left"><%= entity.getMonthendProcess()%></td>
-                                    <td  span class="smallText" style="text-align: center"><%= entity.getProcessStartDte()%></td>
-                                    <td  span class="smallText" style="text-align: center"><%= entity.getProcessEndDte() %></td>
-                                    <td  span class="smallText" style="text-align: right"><%= entity.getErrorCde() %></td>
-                                <% } %> 
-                            </tr>
+                                    <td  span class="smallText" style="text-align: right"><font color="red"><%= entity.getStatus() %></font></td>
+                                <% }else if(entity.getProcessEndDte() != null){ %> 
+                                    <td  span class="smallText" style="text-align: center"><font color="green"><%= entity.getBrCde()%></font></td>
+                                    <td  span class="smallText" style="text-align: left"><font color="green"><%= entity.getMonthendProcess()%></font></td>
+                                    <td  span class="smallText" style="text-align: center"><font color="green"><%= entity.getProcessStartDte()%></font></td>
+                                    <td  span class="smallText" style="text-align: center"><font color="green"><%= entity.getProcessEndDte() %><font></td>
+                                    <td  span class="smallText" style="text-align: right"><font color="green"><%= entity.getErrorCde() %></font></td>
+                                    <td  span class="smallText" style="text-align: right"><font color="green"><%= entity.getStatus() %></font></td>
+                                <% }else{ %>
+                                    <td  span class="smallText" style="text-align: center"><font color="orange"><%= entity.getBrCde()%></font></td>
+                                    <td  span class="smallText" style="text-align: left"><font color="orange"><%= entity.getMonthendProcess()%></font></td>
+                                    <td  span class="smallText" style="text-align: center"><font color="orange"><%= entity.getProcessStartDte()%></font></td>
+                                    <td  span class="smallText" style="text-align: center"><font color="orange"><%= entity.getProcessEndDte() %><font></td>
+                                    <td  span class="smallText" style="text-align: right"><font color="orange"><%= entity.getErrorCde() %></font></td>
+                                    <td  span class="smallText" style="text-align: right"><font color="orange"><%= entity.getStatus() %></font></td>
+                                 <% }%>     
+                            </tr> 
                             
-                            <%}                       
+                            <%}                
                            
                         %>
          </table>
+              </form> 
+                <br><br><hr><br><br>
+          <div style="margin-left: 10px">  
+              <center><input type="button" value="back" name="back" class="button" onclick="window.history.back()"/></center>
+        </div>  
+         
     </body>
 </html>

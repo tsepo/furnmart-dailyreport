@@ -381,14 +381,27 @@ public interface SQLFactory {
     public static final String GET_GL_FPP_LIST = "select distinct(fpp_cde) from new_gl_balancing order by fpp_cde desc;";
     
     
-    public static final String GET_SATUS_PROCESS_SUMMARY_LIST = "select distinct(br_cde),  (select br_desc from branch where branch.br_cde = monthend_status.br_cde) as description, \n " +
-                                                                "CASE WHEN mendstat_error_id = 0 THEN true ELSE false END as status \n " +
-                                                                 "from monthend_status where fpp_cde = ? \n" +
-                                                                 "group by br_cde, fpp_cde, mendstat_error_id order by br_cde;"  ;
+        public static final String GET_SATUS_PROCESS_SUMMARY_LIST = "select distinct(br_cde),  (select br_desc from branch where branch.br_cde = monthend_status.br_cde) as description, \n " +
+                                                                    "CASE WHEN mendstat_error_id = 0 THEN true ELSE false END as status \n " +
+                                                                     "from monthend_status where fpp_cde = ? \n" +
+                                                                     "group by br_cde, fpp_cde, mendstat_error_id order by br_cde;"  ;
+         
+    
     
     public static final String GET_SATUS_PROCESS_DETAIL_LIST = "select br_cde, mendstat_process, mendstat_start, mendstat_start, mendstat_end, mendstat_error_id from monthend_status \n " +  ""
             + "where br_cde =  ? \n " +
             "and fpp_cde = ? ;";
+    
+    
+    
+     public static final String GET_MISSING_PROCESSES_LIST = "SELECT prod_class_desc \n" +
+                                                             "FROM  prod_class \n" +
+                                                             "JOIN prod_run using (prod_cde) \n" + 
+                                                             "WHERE prod_active AND prod_class_desc NOT IN (SELECT mendstat_process \n" +
+                                                             "FROM  monthend_status \n" +
+                                                             "WHERE br_cde = ? \n" +
+                                                             "AND fpp_cde = ?);";
+
     
     public static final String GET_ME_POCESS_STATUS_LIST =  "select col1,sum(col2) as col2,col3,sum(col4) as col4,col5,sum(col6) as col6,col7,sum(col8) as col8,col9,sum(col10) as col10,col11,sum(col12) as col12, \n" +
             "col13,sum(col14) as col14,col15,sum(col16) as col16 from ( \n" +

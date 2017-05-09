@@ -1993,17 +1993,22 @@ public class DataFactory {
     public static final List<MonthendStatusEntity> getMonthendStatusList() throws Exception {
 
         List<MonthendStatusEntity> list = new ArrayList<MonthendStatusEntity>();
+        List<MonthendDetailStatusEntity>  detailList = null;
+        List<String> missingProcessList = new ArrayList<String>();
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         String fppCde = getMeconFpp();
         System.out.println("fpp cde ----> " + fppCde);
         
-        try {
-
+        try {            
+            
             connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
             System.out.println("Tana 1 ----> " + fppCde);
-                ps = connection.prepareStatement(SQLFactory.GET_SATUS_PROCESS_SUMMARY_LIST);
+           
+            
+            
+            ps = connection.prepareStatement(SQLFactory.GET_SATUS_PROCESS_SUMMARY_LIST);
           
             
             System.out.println("Tana 2 ----> " + fppCde);
@@ -2018,10 +2023,28 @@ public class DataFactory {
                System.out.println("Tana 4 ----> " + fppCde);  
                entity = new MonthendStatusEntity();
                entity.setBrCde(rs.getString("br_cde"));
+               detailList =  getMonthendDetailStatusList(entity.getBrCde());
                entity.setBrDesc(rs.getString("description"));
                entity.setStatus(rs.getString("status"));
+               for(MonthendDetailStatusEntity medse:detailList){
+                      if(medse.getProcessEndDte() == null){
+                          entity.setStatus("f");
+                      }
+               }
+               boolean isAllProcessRun = true;
+               isAllProcessRun = isMissingProcesses(entity.getBrCde(),fppCde,entity);
+               entity.setAllProcessesRun(isAllProcessRun);
+               if(!isAllProcessRun){
+                  entity.setStatus("f");
+               }
                list.add(entity);
             }
+            
+            
+             //Yaneetha       
+          
+            
+            
 
             return list;
         } catch (Exception e) {
@@ -2031,6 +2054,41 @@ public class DataFactory {
             ConnectionManager.close(connection);
         }
 
+    }
+    
+    
+    public static boolean isMissingProcesses(String branch, String fppCde,MonthendStatusEntity entity){
+        Connection connection = null;
+        PreparedStatement ps = null;
+        List<String> missingProcessList = new ArrayList<String>();
+        ResultSet rs = null;        
+        System.out.println("fpp cde ----> " + fppCde);
+        boolean missingProcesses = true;
+        try{
+               connection = ConnectionManager.getConnection(ConnectionType.BATCH, null);
+               System.out.println("Yens 1 ----> " + fppCde);           
+               ps = connection.prepareStatement(SQLFactory.GET_MISSING_PROCESSES_LIST);
+               ps.setString(1,entity.getBrCde());
+               ps.setString(2,fppCde );
+               rs = ps.executeQuery();
+               while (rs.next()) {
+                 missingProcessList.add(rs.getString("prod_class_desc"));
+               }
+               entity.setMissingProcessList(missingProcessList);
+               if(entity.getMissingProcessList().size() > 0){
+                    entity.setStatus("f");
+                    missingProcesses = false;
+               }
+               
+                  
+          } catch (Exception e) {
+            e.printStackTrace();
+           
+        } finally {
+            ConnectionManager.close(connection);
+        }             
+        return missingProcesses;
+        
     }
     
      public static final List<MonthendDetailStatusEntity> getMonthendDetailStatusList(String brCde) throws Exception {
@@ -2065,6 +2123,18 @@ public class DataFactory {
                entity.setProcessStartDte(rs.getTimestamp("mendstat_start"));
                entity.setProcessEndDte(rs.getTimestamp("mendstat_end"));
                entity.setErrorCde(rs.getInt("mendstat_error_id"));
+               if(entity.getErrorCde() == 0){
+                     entity.setStatus("Done");
+               }
+               
+               if(entity.getErrorCde() > 0){
+                    entity.setStatus("Crashed");
+               }
+                
+               if(entity.getProcessEndDte() == null){
+                    entity.setStatus("Running");
+               }               
+               
                list.add(entity);
             }
 
@@ -2076,13 +2146,9 @@ public class DataFactory {
             ConnectionManager.close(connection);
         }
 
-    }
+    }  
     
-    
-    
-    
-    
-    
+      
     
     
     public static final List<GLDetailEntity> getInstoreDetailDebtorsList(String branch, String type) throws Exception {
@@ -2091,9 +2157,7 @@ public class DataFactory {
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-
-        GLDetailEntity entity = null;
-            
+        GLDetailEntity entity = null;            
                 
         try {
 
@@ -2143,12 +2207,7 @@ public class DataFactory {
                 item = new ProdConsScriptsEntity();
                 item.setProdConsId(rs.getInt("prod_cons_id"));
                 item.setProdConsDesc(rs.getString("prod_cons_desc"));
-                 item.setProdConsScript(rs.getString("prod_cons_script"));
-                /*         
-                item.setProdConsError(rs.getString("prod_cons_error"));
-                item.setProdConsStartDte(rs.getTimestamp("prod_cons_start_dte"));
-                item.setProdConsEndDte(rs.getTimestamp("prod_cons_end_dte"));
-                item.setProdConsActive(rs.getBoolean("prod_cons_active"));*/
+                item.setProdConsScript(rs.getString("prod_cons_script"));                
                 list.add(item);
             }
              return list;
