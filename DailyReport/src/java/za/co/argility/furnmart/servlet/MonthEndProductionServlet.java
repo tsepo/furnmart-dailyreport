@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import static javax.swing.JOptionPane.showMessageDialog;
 import za.co.argility.furnmart.data.DataFactory;
 import za.co.argility.furnmart.entity.GLDetailEntity;
 import za.co.argility.furnmart.entity.GLDeteailGLEntity;
@@ -144,12 +145,15 @@ public class MonthEndProductionServlet  extends GenericServlet {
             Log.info("Initial fpp --->.");
         }  
                  
-             
+             try{
             Log.info("Rajen ---> ");
             buildProcessRunsHistory(request, response, fppCde);
-            Log.info("Mbale ---> ");
-            response.sendRedirect(WebPages.PROCESS_STATUS_PAGE);
-            return; 
+           response.sendRedirect(WebPages.PROCESS_STATUS_PAGE);
+           return;
+       }catch (Exception e) {
+         showMessageDialog(null,"Currently no data for this financial period : " + fppCde +"");
+         response.sendRedirect(WebPages.MONTHEND_OVERVIEW_PAGE);
+       }
           }
           
           
