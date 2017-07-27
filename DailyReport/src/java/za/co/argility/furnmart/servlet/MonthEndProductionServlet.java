@@ -146,7 +146,7 @@ public class MonthEndProductionServlet  extends GenericServlet {
         }  
                  
              try{
-            Log.info("Rajen ---> ");
+            Log.info("Rajen --> ");
             buildProcessRunsHistory(request, response, fppCde);
            response.sendRedirect(WebPages.PROCESS_STATUS_PAGE);
            return;
